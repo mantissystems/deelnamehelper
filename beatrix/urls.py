@@ -2,6 +2,7 @@ from django.urls import path
 
 from beatrix.views import( 
 PersonListView,PersonUpdateView,
+events,
     # recurrent_event,events,
 # maandlistview,
 # personenlijst,
@@ -13,7 +14,7 @@ PersonListView,PersonUpdateView,
 
 app_name = 'beatrix'
 urlpatterns = [
-    # path('', events, name='events'),
+    path('', events, name='events'),
     # # path('events', events, name='events'),
     path('', PersonListView.as_view(), name='aanmelden'),
     path('aanmelden', PersonListView.as_view(), name='aanmelden'),
