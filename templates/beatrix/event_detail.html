@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+{% comment %} {% load static %} {% endcomment %}
+{% csrf_token %}
+<div class="mobile">
+  <div class="phone">
+     <div class="phone-mirror">
+<table class="beatrix-table">
+  <thead>
+    <tr>
+      <th> <a href="/" class="fa fa-home fa-2x" ></a></th>
+      {% comment %} <th> <a href="{% url 'person:person_changelist' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'kalender:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <a> meld je aan en klik de oranje button als je al wilt aanmelden 
+           voordeel is dat we sneller op het water zijn
+          </a>
+    </tr>
+  </tbody>
+</table>
+
+{% comment %} <div class="card card-body">
+    <input id="search-input" class="form-control" type="text">
+</div> {% endcomment %}
+           
+            <form action="{% url 'beatrix:deelnemen' flexevent.id %}" method="post">
+                <input type="submit" value="Aanmelden/Afmelden">
+                {% comment %} <div class="content-table"></div> {% endcomment %}
+                <table class="beatrix-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  {% comment %} <th><input class="search-input" placeholder="Naam@" type="text"></th> {% endcomment %}
+                  <th>Selectie</th>
+                  <th>Bij / Af </th>
+                </tr>
+              </thead>
+                    <tbody id ="Deelnemers">
+                        <td>{% for t in flexevent.lid.all %}
+                            <tr>
+                        </td>
+                        <td>
+                        <td> {{ forloop.counter }}. {{t.name}}</td>
+                        <td>
+                            <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
+                        </td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+                <table class='beatrix-table'>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Naam</th>
+                  <th>Selectie</th>
+                  <th>Bij / Af </th>
+                </tr>
+              </thead>
+
+                    <tbody id = Kandidaten>
+                        <td>{% for t in deelnemers %}<tr> </td>
+                        <td> <td> {{ forloop.counter }}. {{t.name}}</td>
+                        <td>  <input type="checkbox" name="host" id="host{{ forloop.counter }}" value="{{ t.id }}">  </td> </td>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+                </div>
+</div>
+</div>
+
+            </form>
+{% endblock %}

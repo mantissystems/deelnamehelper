@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<form>
+ {% csrf_token %}
+{% load static %}
+<div class="mobile">
+  <div class="phone">
+     <div class="phone-mirror">
+<table class="beatrix-table">
+  <thead>
+    <tr>
+      <th> <a href="/" class="fa fa-home fa-2x" ></a></th>
+      <th> <a href="{% url 'beatrix:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th>
+      {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <a> meld je aan en klik de oranje button als je al wilt aanmelden 
+           voordeel is dat we sneller op het water zijn
+          </a>
+    </tr>
+  </tbody>
+</table>
+<table class="beatrix-table">
+    <thead>
+      <thead>
+        <tr>
+          <th >Schema</th>
+          <th >Geplande Dag Host</th>
+        </tr>
+      </thead>
+   
+    </thead>
+    
+    <tbody>
+      {% for cc in rooster %}
+    <tr class="active-row">
+          <td><label>{{cc.pub_date}} {{cc.pub_time}} </label></td>
+          <td><label>{{cc.flexhost}} {{cc.flexhost2}} </label></td>                                        
+        </tr>
+      {% endfor %}
+      </div>
+  </div>
+</div>
+</form>
+{% endblock  %}

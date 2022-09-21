@@ -1,0 +1,22 @@
+pl/url; import settings; collect static
+pyhton3 manage.py collectstatic => staticfiles
+.env env=production
+base.hrml ; dashy css; fonts
+runtime.txt #dit werkt voor geen meter
+pip freeze; dit maakt requirements.txt aan; aangepast naar 'normale' requirementsfile uit backup
+.env django_env=production
+logout redirect='/'
+query="; redirect 'ploeg:events' ;mogelijk css problemen
+thom sessie ============
+opmaak van tabellen netter en juist
+herhalende teksten vermijden in forms
+titles ipv headers
+nettere opmaaknavigator is ok. 
+awesome font pencil is beschikbaar
+deploy scriptje
+form teksten ctrl+ etc
+form empty field opmaak
+logout en login in navigator balk
+home in navigator balk
+homepage met awesome icons is catchy
+link in de homepage als a tag maken niet als tr href

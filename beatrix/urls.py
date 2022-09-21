@@ -1,19 +1,21 @@
 from django.urls import path
 
-# from beatrix.views import( recurrent_event,events,
+from beatrix.views import( 
+PersonListView
+    # recurrent_event,events,
 # maandlistview,
 # personenlijst,
 # event_detail,
 # flexlistview,
 # deelname,
 # assign,
-# )
+)
 
 app_name = 'beatrix'
 urlpatterns = [
     # path('', events, name='events'),
     # # path('events', events, name='events'),
-    # path('aanmelden', personenlijst, name='aanmelden'),
+    path('aanmelden', PersonListView.as_view(), name='aanmelden'),
     # path('recurrent/', recurrent_event, name='recurrent'),
     # path('kal/<slug:slug>/' , maandlistview, name='kal'),     
     # path('<int:event_id>/event_detail/', event_detail, name='event_detail'),

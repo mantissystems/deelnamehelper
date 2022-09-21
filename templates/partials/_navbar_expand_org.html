@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-sm bg-light navbar-light" style="background-color: #e3f2fd;">
+    <div class="container">
+      {% comment %} <h5>Flexibel Roeien</h5> {% endcomment %}
+      <a href="{% url 'login' %}" class="fa fa-flag fa-2x"  ></a>
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'person:person_changelist' %}" class="fa fa-users fa-2x"  ></a>
+      <a href="{% url 'ploeg:ploeglijst' %}" class="fa fa-list fa-2x"  ></a>
+      {% endif %}
+      <a href="{% url 'ploeg:flexevents' %}" class="fa fa-link fa-2x"  ></a>
+      <a href="{% url 'ploeg:events' %}" class="fa fa-calendar fa-2x"  ></a>
+      <a href="{% url 'ploeg:collect' %}" class="fa-solid fa-user"  ></a>
+      {% comment %} {% if request.user.is_authenticated %}
+      { title: 'Opmerkingen', url: 'blog/blog', icon: 'comments w3-text-blue w3-large', color: 'yellow' },
+      { title: 'Collect', url: 'ploeg/collect', icon: 'archive', color: 'blue' },
+      { title: 'Poule instellen', url: 'ploeg/flex', icon: 'upload', color: 'yellow' }, {% endcomment %}
+      <a href="/" class="fa fa-home fa-2x" ></a>
+      <!-- <form action="{% url 'ploeg:zoek' %}" method="get"> -->
+        <input name="q" type="text" placeholder="Ingedeelde leden Search..." />
+        <button type="submit"><i class="fa fa-search"></i></button>
+        <a href="{% url 'logout' %}" class="fa fa-ban fa-2x" ></a>
+      </form>
+      {% else %}
+      <a href="/" class="fa fa-home fa-2x" ></a>
+      {% endif %}
+    </div>
+  </nav>  

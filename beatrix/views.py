@@ -1,4 +1,11 @@
 from django.shortcuts import render
+import datetime
+from datetime import date
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person
+from django.views.generic import(ListView)
 
 def events(request):
     q1 = Flexevent.objects.all()
@@ -29,3 +36,40 @@ def events(request):
         'namen':namen,
        }
     return render(request, template_name, context)
+
+class PersonListView (ListView):
+    model=Person
+    # template_name='person/personlistview.html'
+    # template_name='person/aanmeldview.html'
+    def get_context_data(self, **kwargs):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        # sql="select id, name,substr(name,1,1) HL from person_person GROUP BY substr(name,1,1) order by HL"
+        # cursor = connection.cursor() 
+        # cursor.execute(sql)
+        # results = recurrent.namedtuplefetchall(cursor)
+        rooster = Flexevent.objects.all()
+
+        context={
+        # 'hoofdletters':results,
+        # 'object_list':results,
+        'rooster':rooster,
+       }
+        return context
+
+    def get_queryset(self): # new
+        # criterion2 = Q(is_host=True)
+        # criterion1 = Q(is_flex=True)
+        # hosts = Person.objects.all().filter(criterion2)        
+        flexpool = Person.objects.all()           
+        # query = self.request.GET.get('slug')
+        # print(query)
+        # paginate_by = 10
+        # sql="select id, name,is_present,substr(name,1,1) HL from person_person GROUP BY substr(name,1,1) order by HL"
+        # cursor = connection.cursor() 
+        # cursor.execute(sql)
+        # results = recurrent.namedtuplefetchall(cursor)
+        # template_name='person/person_list.html'            
+        results=flexpool
+        # template_name='beatrix/aanmeldview.html'
+        return results
