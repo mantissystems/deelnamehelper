@@ -1,114 +1,45 @@
-{% extends 'base.html' %} {% block content %}
-{% csrf_token %} 
-{% comment %} {% load zoekfilters %} {% endcomment %}
 
-  </head>
-  <body>
-  
-  <ul>
-  {% for h in hoofdletters %}
-  {% comment %} <li><a href="{% url 'person:hl' h.HL %}">{{h.HL}}</a></li> {% endcomment %}
-  {% endfor %}   
-    {% comment %} <li><a href="{% url 'beatrix:person_changelist' %}">LIJST</a></li> {% endcomment %}
-
-</ul>
-  
-
-   <title>{% block title %} Ploegleden{% endblock %}</title>
-    <table class=" table-bordered" style="width:100% ">
-      <style>
-        table, th, td {
-          border: 1px solid black;
-          border-collapse: collapse;
-        }
-        th, td {
-          padding: 4px;
-        }
-        th {
-          text-align: left;
-        }
-        #myDIV {
-          height:40px;
-          background-color:#FFFFFF;
-          padding:4px;
-          text-decoration: underline;
-          text-decoration-color: rgba(0, 255, 0, 0.5);
-        }  #myDIV {
-      height:40px;
-      background-color:#FFFFFF;
-      padding:4px;
-      text-decoration: underline;
-      text-decoration-color: rgba(0, 255, 0, 0.5);
-    }  
-        </style>
-        <div class="activiteiten">
-          <div id="myDIV">
-            <h5>Ploegleden</h5>
-            {% comment %} <h1>PLOEGLEDEN</h5> {% endcomment %}
-            </div>
-      <colgroup>
-        <col span="1" style="width: 25%;">
-        <col span="1" style="width: 25%;">
-        <col span="1" style="width: 25%;">
-     </colgroup>
-      <thead>
-        <tr>
-          <th style="background-color:powderblue">#</th>
-          <th style="background-color:powderblue">Ploegleden</th>
-          <th style="background-color:powderblue">Stuur</th>
-          <th style="background-color:powderblue">Slag</th>
-          <th style="background-color:powderblue">Drie</th>
-          <th style="background-color:powderblue">Twee</th>
-          <th style="background-color:powderblue">Boeg</th>
-          <th style="background-color:powderblue">Edit</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for p in object_list %}
-      <tr>
-        <td style="background-color: powderblue"> {{p.id}}</td>
-        <td style="background-color: powderblue"> {{ p.name }}</td>
-        <td style="background-color: powderblue">{{p.pos5}}</td>
-        <td style="background-color: powderblue">{{p.pos4}}</td>
-        <td style="background-color: powderblue">{{p.pos3}}</td>
-        <td style="background-color: powderblue">{{p.pos2}}</td>
-        <td style="background-color: powderblue">{{p.pos1}}</td>
-        <td style="background-color: powderblue" > <a href="{% url 'person:person_change' p.id %}" class="fa fa-pencil fa-lg"  ></a></td>  
-      {% endfor %}   
-      </tr>
-    </table>
-    <nav aria-label="Page navigation example">
-      {% if is_paginated %}
-      <ul class="pagination">
-        {% if page_obj.has_previous %}
-                 <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>                   
-        {% else %}
-        <li class="page-item disabled">
-          <a class="page-link" href="#">&laquo;</a>
-        </li>
-        {% endif %} 
-        {% for i in paginator.page_range %} {% if page_obj.number == i %}
-             <li class="page-item"><a class="page-link" href="page={{ i }}">{{ i }}</a></li>
-		 {% else %}
-                  <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %}
-          {% endfor %}
-          {% if page_obj.has_next %}
-               <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
-        <li class="page-item">
-          <a href="?page={{page_obj.next_page_number}}" class="page-link"
-            ></a
-          >
-        </li>
-        {% else %}
-          <li class="disabled"><span>&raquo;</li>
-
-        </li>
-        {% endif %}
-      </ul>
-      {% endif %}
-    </nav>
-  </div>
+{% extends 'base.html' %}
+{% block content %}
+<form>
+{% csrf_token %}
+{% load static %}
+<div class="mobile">
+<div class="phone">
+<div class="phone-mirror">
+<table class="beatrix-table">
+  <thead>
+    <tr>
+      <th> <a href="/" class="fa fa-home fa-3x" ></a></th>
+      {% comment %} <th> <a href="{% url 'person:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'beatrix:rooster' %}" class="fa fa-list fa-3x"  ></a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'beatrix:hoofdhost' %}" class="fa fa-user fa-3x"  ></a></th> {% endcomment %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+         <table class="beatrix-table">
+              <thead>
+                <tr>
+                  <th>Maand</th>
+                  <th>Host</th>
+                </tr>
+              </thead>
+                   <tbody>
+                     {% for h in rooster %}
+                     <tr class="active-row">
+                    <td> {{h.pub_date}} </td>
+                    <td> {{h.flexhost}} </td>
+                             {% comment %} <td><a href="{% url 'ploeg:kal' h.pub_date %}">maand {{h.pub_date}}</a></td>  {% endcomment %}
+                             {% endfor %}   
+                         </tr>
+                      </tbody>
+     </table>
 </div>
-
-{% endblock %}
+</div>
+</div>
+</form>
+{% endblock  %}

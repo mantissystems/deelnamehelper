@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block content %}
+<div class="mobile">
+  <div class="phone">
+    <div class="phone-mirror">
+      <table class="beatrix-table">
+        <thead>
+          <tr>
+            <th><a href="/" class="fa fa-home fa-2x"></a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr></tr>
+        </tbody>
+      </table>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <table>
+          {{ form.as_table }}
+        </table>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

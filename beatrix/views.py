@@ -3,9 +3,9 @@ import datetime
 from datetime import date
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person
-from django.views.generic import(ListView)
+from django.views.generic import(ListView,UpdateView)
 
 def events(request):
     q1 = Flexevent.objects.all()
@@ -39,7 +39,7 @@ def events(request):
 
 class PersonListView (ListView):
     model=Person
-    # template_name='person/personlistview.html'
+    template_name='beatrix/personlistview.html'
     # template_name='person/aanmeldview.html'
     def get_context_data(self, **kwargs):
         queryset = super().get_queryset()
@@ -49,10 +49,11 @@ class PersonListView (ListView):
         # cursor.execute(sql)
         # results = recurrent.namedtuplefetchall(cursor)
         rooster = Flexevent.objects.all()
+        flexpool = Person.objects.all()           
 
         context={
         # 'hoofdletters':results,
-        # 'object_list':results,
+        'object_list':flexpool,
         'rooster':rooster,
        }
         return context
@@ -70,6 +71,15 @@ class PersonListView (ListView):
         # cursor.execute(sql)
         # results = recurrent.namedtuplefetchall(cursor)
         # template_name='person/person_list.html'            
+        rooster = Flexevent.objects.all()
         results=flexpool
         # template_name='beatrix/aanmeldview.html'
-        return results
+        return flexpool,rooster
+
+
+class PersonUpdateView(UpdateView):
+    template_name = 'beatrix/person_form.html'
+    model = Person
+    fields = ('name','email' , 'is_host', 'is_flex','keuzes',)
+    # form_class = PersonForm
+    success_url = reverse_lazy('beatrix:person_changelist')
