@@ -15,6 +15,7 @@ app_name = 'beatrix'
 urlpatterns = [
     # path('', events, name='events'),
     # # path('events', events, name='events'),
+    path('', PersonListView.as_view(), name='aanmelden'),
     path('aanmelden', PersonListView.as_view(), name='aanmelden'),
     path('<int:pk>/', PersonUpdateView.as_view(), name='person_change'),
     # path('recurrent/', recurrent_event, name='recurrent'),

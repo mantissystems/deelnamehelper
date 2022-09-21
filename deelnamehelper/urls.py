@@ -19,5 +19,5 @@ from beatrix.views import events
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('beatrix.urls')),
-    path('', events, name='events'),    
+    # path('', events, name='events'),    
 ]
