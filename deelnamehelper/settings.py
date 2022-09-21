@@ -17,7 +17,9 @@ SECRET_KEY = 'django-insecure-^-pi9ng(&g=zaka8r3%0))5n!27^_-%@-&76cu#29(zlt2ui&+
 DEBUG = False
 
 ALLOWED_HOSTS = ['*', '127.0.0.1','https://mantisapp.azurewebsites.net']
-
+CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*',
+'https://mantisapp.azurewebsites.net',
+]
 
 
 # Application definition
