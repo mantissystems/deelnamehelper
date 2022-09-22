@@ -145,16 +145,16 @@ def maak_activiteiten():
     # x=0
     p=Person.objects.all().first()
     f=Flexevent.objects.first()
-    Flexevent.objects.all().update_or_create(
-    dagnaam=dagnaam, 
-    flexhost='Michiel',
-    pub_date=date.today(),
-    pub_time='10:00',
-    # flexpoule='stedelijk',
-    )
     Flexlid.objects.all().update_or_create(
     member=p, 
     flexevent=f,
     )
+    # Flexevent.objects.all().update_or_create(
+    # dagnaam=dagnaam, 
+    # flexhost='Michiel',
+    # pub_date=date.today(),
+    # pub_time='10:00',
+    # # flexpoule='stedelijk',
+    # )
 
     return
