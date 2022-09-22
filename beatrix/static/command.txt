@@ -1,9 +1,0 @@
-+m,(plus m komma) Kees Langerwerf, Janneke Nap, Mark Ruys, Steven Nieberg, Chris Fentener van Vlissingen, Ad Lengkeek @Early Birds
-+m,elise,wilma,wim,corn@flex => voegt geselecteerde namen toe aan flexpoule
-
-!!v75 :verwijder uit selectie van v75
--m!: verwijder selectie uit flexpoule EN aankruisen; uit te breiden naar per ploeg; aanpassen
-+f  :aanwezigheid aankruisen
-
-search
-wim@v75: voeg wimmen toe aan v75

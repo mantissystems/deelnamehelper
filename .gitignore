@@ -1,11 +1,7 @@
-
-
 # Node.js related
 # See https://help.github.com/ignore-files/ for more about ignoring files.
-
 # dependencies
 node_modules/
-
 # testing
 coverage/
 
@@ -89,7 +85,7 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-*.sqlite3
+# *.sqlite3
 
 # Flask stuff:
 instance/

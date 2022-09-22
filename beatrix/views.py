@@ -11,6 +11,23 @@ class FlexeventsView(ListView):
     template_name='beatrix/events.html'
     queryset=Flexevent.objects.all()
 
+    def get_context_data(self, **kwargs):
+        year=int(date.today().strftime('%Y'))
+        month = int(date.today().strftime('%m'))
+        monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+        einde=monthend[month]
+        start=date(year,month,1)
+        end=date(year,month,einde)
+        namen=Person.objects.all()
+        rooster=Flexevent.objects.filter(pub_date__range=[start, end])
+        # rooster=Flexevent.objects.all()
+        context = {
+            'rooster': rooster,
+        } 
+        return context
+
+
+
 def events(request):
     q1 = Flexevent.objects.all()
     # print(request)
@@ -87,3 +104,51 @@ class PersonUpdateView(UpdateView):
     fields = ('name','email' , 'is_host', 'is_flex','keuzes',)
     # form_class = PersonForm
     success_url = reverse_lazy('beatrix:person_changelist')
+
+def recurrent_event(request):
+    template_name = 'beatrix/event_list.html'
+    maak_activiteiten()
+    return render(request, template_name, {})
+
+def maak_activiteiten():
+    start_date = datetime.date.today()
+    tomorrow = start_date + datetime.timedelta(days=1)
+    dagnaam=datetime.datetime.now().strftime('%A')
+    weekdag=datetime.datetime.now().strftime('%w')
+    dagnummer=int(weekdag)
+    day_delta = datetime.timedelta(days=1)
+    for d in range(7):
+        tomorrow = start_date + datetime.timedelta(days=d)
+    weekdag=int(start_date.strftime('%w'))
+    Flexevent.objects.all().delete()
+    taak=[]
+    taak.append('training');dn=5
+    trainingsweken=8 #45
+    for j in range(trainingsweken):
+        day_delta = datetime.timedelta(days=7) 
+        datum2=start_date + j * day_delta   
+        weekdag=datum2.strftime('%w')
+        dagnaam=datum2.strftime('%A')
+        week=datum2.strftime('%W'),
+        for t in range(1,7,1):
+            tijd2="20:30"
+            Flexevent.objects.all().update_or_create(
+              dagnaam=dagnaam, 
+              flexhost='Michiel',
+              pub_date=datum2,
+              pub_time=tijd2,
+                # datum=datum2,
+            flexpoule='stedelijk', #'groep ' + str(j).zfill(2),
+                )
+            print(t,datum2,tijd2)
+    # ch1=Flexevent.objects.all().values_list('id',flat=True)
+    # x=0
+    Flexevent.objects.all().update_or_create(
+    dagnaam=dagnaam, 
+    flexhost='Michiel',
+    pub_date=date.today(),
+    pub_time='10:00',
+    flexpoule='stedelijk',
+    )
+
+    return
