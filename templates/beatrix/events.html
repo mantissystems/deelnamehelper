@@ -26,7 +26,8 @@
       <thead>
         <tr>
           <th >Schema deze maand</th>
-          <th >Geplande Dag Host</th>
+          <th >Host</th>
+          <th >Deelname</th>
         </tr>
       </thead>
    
@@ -36,7 +37,18 @@
       {% for cc in rooster %}
     <tr class="active-row">
           <td><label>{{cc.pub_date}} {{cc.pub_time}} </label></td>
-          <td><label>{{cc.flexhost}} {{cc.flexhost2}} </label></td>                                        
+          <td><label>{{cc.flexhost}} </label></td>          
+              <td>{% for t in rooster.lid.all %}
+                            <tr>
+                        </td>
+                        <td>
+                        <td> {{ forloop.counter }}. {{t.name}}</td>
+                        <td>
+                            <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
+                        </td>
+                        </td>
+
+                        {% endfor %}                              
         </tr>
       {% endfor %}
       </div>

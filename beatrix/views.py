@@ -18,7 +18,7 @@ class FlexeventsView(ListView):
         einde=monthend[month]
         start=date(year,month,1)
         end=date(year,month,einde)
-        namen=Person.objects.all()
+        # namen=Person.objects.all()
         rooster=Flexevent.objects.filter(pub_date__range=[start, end])
         # rooster=Flexevent.objects.all()
         context = {
@@ -140,15 +140,21 @@ def maak_activiteiten():
                 # datum=datum2,
             flexpoule='stedelijk', #'groep ' + str(j).zfill(2),
                 )
-            print(t,datum2,tijd2)
+            # print(t,datum2,tijd2)
     # ch1=Flexevent.objects.all().values_list('id',flat=True)
     # x=0
+    p=Person.objects.all().first()
+    f=Flexevent.objects.first()
     Flexevent.objects.all().update_or_create(
     dagnaam=dagnaam, 
     flexhost='Michiel',
     pub_date=date.today(),
     pub_time='10:00',
     flexpoule='stedelijk',
+    )
+    Flexlid.objects.all().update_or_create(
+    member=p, 
+    flexevent=f,
     )
 
     return
