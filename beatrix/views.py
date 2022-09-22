@@ -138,7 +138,7 @@ def maak_activiteiten():
               pub_date=datum2,
               pub_time=tijd2,
                 # datum=datum2,
-            flexpoule='stedelijk', #'groep ' + str(j).zfill(2),
+            # flexpoule='stedelijk', #'groep ' + str(j).zfill(2),
                 )
             # print(t,datum2,tijd2)
     # ch1=Flexevent.objects.all().values_list('id',flat=True)
@@ -150,7 +150,7 @@ def maak_activiteiten():
     flexhost='Michiel',
     pub_date=date.today(),
     pub_time='10:00',
-    flexpoule='stedelijk',
+    # flexpoule='stedelijk',
     )
     Flexlid.objects.all().update_or_create(
     member=p, 
