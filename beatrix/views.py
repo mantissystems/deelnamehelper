@@ -133,6 +133,7 @@ def maak_activiteiten():
         for t in range(1,7,1):
             tijd2="20:30"
             Flexevent.objects.all().update_or_create(
+                event_text='training_' + str(j),
               dagnaam=dagnaam, 
               flexhost='Michiel',
               pub_date=datum2,

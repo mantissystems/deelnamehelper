@@ -134,4 +134,4 @@ lib/
 /site
 
 # mypy
-.mypy_cache/
+.mypy_cache/venv/

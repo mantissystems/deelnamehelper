@@ -1,4 +1,3 @@
-
 # https://docs.djangoproject.com/en/4.1/topics/settings/
 # https://docs.djangoproject.com/en/4.1/ref/settings/
 
@@ -38,11 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'beatrix',
     'user',
-    # 'rest_framework',
+    'rest_framework',
     ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",  #22-09-22
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
