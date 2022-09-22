@@ -14,17 +14,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^-pi9ng(&g=zaka8r3%0))5n!27^_-%@-&76cu#29(zlt2ui&+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', '127.0.0.1','https://mantisapp.azurewebsites.net']
 ALLOWED_ORIGINS = ['http://*', 'https://*',
-'https://mantisapp.azurewebsites.net/admin',
+'https://mantisapp.azurewebsites.net/admin/*',
 'https://mantisapp.azurewebsites.net/aanmelden',
 'https://mantisapp.azurewebsites.net/events']
-CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
-# CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*',
-# 'https://mantisapp.azurewebsites.net',
-# ]
+# CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
+CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*',
+'https://mantisapp.azurewebsites.net',
+]
 
 
 # Application definition
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'beatrix',
     'user',
-    'rest_framework',]
+    # 'rest_framework',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -7,6 +7,10 @@ from django.urls import reverse,reverse_lazy
 from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person
 from django.views.generic import(ListView,UpdateView)
 
+class FlexeventsView(ListView):
+    template_name='beatrix/events.html'
+    queryset=Flexevent.objects.all()
+
 def events(request):
     q1 = Flexevent.objects.all()
     # print(request)
@@ -39,6 +43,7 @@ def events(request):
 
 class PersonListView (ListView):
     model=Person
+    queryset = Person.objects.all()           
     template_name='beatrix/personlistview.html'
     # template_name='person/aanmeldview.html'
     def get_context_data(self, **kwargs):
@@ -50,7 +55,6 @@ class PersonListView (ListView):
         # results = recurrent.namedtuplefetchall(cursor)
         rooster = Flexevent.objects.all()
         flexpool = Person.objects.all()           
-
         context={
         # 'hoofdletters':results,
         'object_list':flexpool,
