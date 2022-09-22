@@ -33,7 +33,7 @@
                      <tr class="active-row">
                     <td> {{h.pub_date}} </td>
                     <td> {{h.flexhost}} </td>
-                             <td><a href="{% url 'beatrix:kal' h.pub_date %}">maand {{h.pub_date}}</a></td> 
+                             <td><a href="{% url 'beatrix:kal' h.id %}">training {{h.pub_date}}</a></td> 
                              {% endfor %}   
                          </tr>
                       </tbody>

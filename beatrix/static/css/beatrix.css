@@ -1,6 +1,19 @@
 :root {
 font-family: sans-serif; /* Change your font family */
    }
+   .person-table {
+    border-collapse: collapse;
+    margin: 9px 0;
+    font-size: 0.7em;
+    min-width: 310px;
+    border-radius: 15px 15px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+  .person-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+    line-height: 5px;
+  }
    
    .beatrix-table {
      border-collapse: collapse;

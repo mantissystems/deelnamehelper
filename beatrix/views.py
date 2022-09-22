@@ -1,14 +1,75 @@
 from django.shortcuts import render
 import datetime
 from datetime import date
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse,reverse_lazy
 from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person
+from beatrix.forms import Personform
 from django.views.generic import(ListView,UpdateView)
 
 class FlexeventsView(ListView):
     template_name='beatrix/events.html'
+    # template_name='beatrix/maand_list.html'
+    queryset=Flexevent.objects.all()
+
+    def get_context_data(self, **kwargs):
+        sl_ = self.kwargs.get("slug")
+        # mnd_ = self.kwargs.get("mnd")
+        print(sl_)
+        template_name='beatrix/maand_list.html'
+        year=int(date.today().strftime('%Y'))
+        month = int(date.today().strftime('%m'))
+        monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+        einde=monthend[month]
+        start=date(year,month,1)
+        end=date(year,month,einde)
+        rooster=Flexevent.objects.filter(pub_date__range=[start, end])
+        # rooster=Flexevent.objects.all()
+        context = {
+        'rooster': rooster,
+        } 
+        return context
+
+class FlexdetailView(ListView):
+    template_name='beatrix/event_detail.html'
+    # template_name='beatrix/maand_list.html'
+    queryset=Flexevent.objects.all()
+
+    def get_context_data(self, **kwargs):
+        sl_ = self.kwargs.get("slug")
+        # mnd_ = self.kwargs.get("mnd")
+        print('event:', sl_)
+        flexevent=Flexevent.objects.get(id=sl_)
+        # template_name='beatrix/maand_list.html'
+        year=int(date.today().strftime('%Y'))
+        month = int(date.today().strftime('%m'))
+        monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+        einde=monthend[month]
+        start=date(year,month,1)
+        end=date(year,month,einde)
+        rooster=Flexevent.objects.filter(pub_date__range=[start, end])
+        reedsingedeeld=Flexlid.objects.all()
+        ri=[]
+        for f in reedsingedeeld:
+            ri.append(f)
+        print(len(reedsingedeeld))
+        ri=len(reedsingedeeld)
+        reedsingedeeld=reedsingedeeld.values_list('member_id', flat=True)
+        # kandidaten=Person.objects.all().exclude(id__in=reedsingedeeld)
+        kandidaten=Person.objects.all()[0:ri]
+
+        context = {
+        'rooster': rooster,
+        'flexevent':flexevent,
+        'deelnemers':kandidaten
+        } 
+        return context
+
+class AanmeldView(ListView):
+    template_name='beatrix/aanmeldview.html'
+    # template_name='beatrix/maand_list.html'
     queryset=Flexevent.objects.all()
 
     def get_context_data(self, **kwargs):
@@ -18,14 +79,12 @@ class FlexeventsView(ListView):
         einde=monthend[month]
         start=date(year,month,1)
         end=date(year,month,einde)
-        # namen=Person.objects.all()
         rooster=Flexevent.objects.filter(pub_date__range=[start, end])
         # rooster=Flexevent.objects.all()
         context = {
-            'rooster': rooster,
+        'rooster': rooster,
         } 
         return context
-
 
 
 def events(request):
@@ -61,29 +120,53 @@ def events(request):
 class PersonListView (ListView):
     model=Person
     queryset = Person.objects.all()           
-    template_name='beatrix/personlistview.html'
-    # template_name='person/aanmeldview.html'
-    def get_context_data(self, **kwargs):
-        queryset = super().get_queryset()
-        query = self.request.GET.get('q')
-        # sql="select id, name,substr(name,1,1) HL from person_person GROUP BY substr(name,1,1) order by HL"
-        # cursor = connection.cursor() 
-        # cursor.execute(sql)
-        # results = recurrent.namedtuplefetchall(cursor)
-        rooster = Flexevent.objects.all()
-        flexpool = Person.objects.all()           
-        context={
-        # 'hoofdletters':results,
-        'object_list':flexpool,
-        'rooster':rooster,
-       }
-        return context
+    # template_name='beatrix/personlistview.html'
+    template_name='person/aanmeldview.html'
+def get_name(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = Personform(request.POST)
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/')
 
-    def get_queryset(self): # new
-        # criterion2 = Q(is_host=True)
-        # criterion1 = Q(is_flex=True)
-        # hosts = Person.objects.all().filter(criterion2)        
-        flexpool = Person.objects.all()           
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = Personform()
+
+    return render(request, 'person_form.html', {'form': form})
+
+# def get_context_data(self, **kwargs):
+# # ===
+#         dn = Flexevent.objects.none()
+#         flexevents = Flexevent.objects.all()
+#         reedsingedeeld=Flexlid.objects.all()
+#         ri=[]
+#         for f in reedsingedeeld:
+#             ri.append(f)
+#         print(len(reedsingedeeld))
+#         ri=len(reedsingedeeld)
+#         reedsingedeeld=reedsingedeeld.values_list('member_id', flat=True)
+#         kandidaten=Person.objects.all().exclude(id__in=reedsingedeeld)
+#         kandidaten=Person.objects.all()[0:ri]
+# # ===
+#         # queryset = super().get_queryset()
+#         # rooster = Flexevent.objects.all()
+#         # flexpool = Person.objects.all()           
+#         context={
+#         'object_list':kandidaten,
+#         'rooster':flexevents,
+#        }
+#         return context
+
+# def get_queryset(self): # new
+#         # criterion2 = Q(is_host=True)
+#         # criterion1 = Q(is_flex=True)
+#         # hosts = Person.objects.all().filter(criterion2)        
+#         flexpool = Person.objects.all()           
         # query = self.request.GET.get('slug')
         # print(query)
         # paginate_by = 10
@@ -92,18 +175,25 @@ class PersonListView (ListView):
         # cursor.execute(sql)
         # results = recurrent.namedtuplefetchall(cursor)
         # template_name='person/person_list.html'            
-        rooster = Flexevent.objects.all()
-        results=flexpool
+        # rooster = Flexevent.objects.all()
+        # results=flexpool
         # template_name='beatrix/aanmeldview.html'
-        return flexpool,rooster
+        # return flexpool,rooster
 
 
 class PersonUpdateView(UpdateView):
     template_name = 'beatrix/person_form.html'
     model = Person
     fields = ('name','email' , 'is_host', 'is_flex','keuzes',)
-    # form_class = PersonForm
+    form_class = Personform
     success_url = reverse_lazy('beatrix:person_changelist')
+    def get_context_data(self, **kwargs):
+        print (**kwargs)
+        context={
+        # 'object_list':kandidaten,
+        # 'rooster':flexevents,
+       }
+        return context
 
 def recurrent_event(request):
     template_name = 'beatrix/event_list.html'

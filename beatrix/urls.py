@@ -1,9 +1,9 @@
 from django.urls import path
 
 from beatrix.views import( 
-FlexeventsView, PersonListView,PersonUpdateView,
+AanmeldView, FlexdetailView, FlexeventsView, PersonListView,PersonUpdateView,
 recurrent_event,
-# events,
+events,
 # maandlistview,
 # personenlijst,
 # event_detail,
@@ -15,13 +15,14 @@ recurrent_event,
 app_name = 'beatrix'
 urlpatterns = [
     path('', FlexeventsView.as_view(), name='trainingen'),
-    # # path('events', events, name='events'),
+    path('events', AanmeldView.as_view(), name='aanmelden'),
+    # path('events', events, name='aanmelden'),
     # path('', PersonListView.as_view(), name='aanmelden'),
-    path('aanmelden', PersonListView.as_view(), name='aanmelden'),
+    # path('aanmelden', PersonListView.as_view(), name='aanmelden'),
     path('<int:pk>/', PersonUpdateView.as_view(), name='person_change'),
     path('recurrent/', recurrent_event, name='recurrent'),
-    # path('kal/<slug:slug>/' , maandlistview, name='kal'),     
-    # path('<int:event_id>/event_detail/', event_detail, name='event_detail'),
+    path('kal/<slug:slug>/' , FlexdetailView.as_view(), name='kal'),     
+    # path('<int:event_id>/event_detail/', FlexdetailView.as_view(), name='event_detail'),
     # path('rooster/', flexlistview, name='rooster'),
     # # path('deelnemen/', deelname, name='deelnemen'),
     # path('<int:event_id>/deelnemen/', deelname, name='deelnemen'),  

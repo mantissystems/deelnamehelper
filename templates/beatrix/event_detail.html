@@ -14,20 +14,14 @@
       {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <a> meld je aan en klik de oranje button als je al wilt aanmelden 
-           voordeel is dat we sneller op het water zijn
-          </a>
-    </tr>
-  </tbody>
+
 </table>
 
 {% comment %} <div class="card card-body">
     <input id="search-input" class="form-control" type="text">
 </div> {% endcomment %}
            
-            <form action="{% url 'beatrix:deelnemen' flexevent.id %}" method="post">
+            {% comment %} <form action="{% url 'beatrix:deelnemen' flexevent.id %}" method="post"> {% endcomment %}
                 <input type="submit" value="Aanmelden/Afmelden">
                 {% comment %} <div class="content-table"></div> {% endcomment %}
                 <table class="beatrix-table">
