@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% comment %} {% load static %} {% endcomment %}
-{% csrf_token %}
+{% comment %} {% csrf_token %} {% endcomment %}
 <div class="mobile">
   <div class="phone">
      <div class="phone-mirror">
@@ -21,10 +21,19 @@
     <input id="search-input" class="form-control" type="text">
 </div> {% endcomment %}
            
-            {% comment %} <form action="{% url 'beatrix:deelnemen' flexevent.id %}" method="post"> {% endcomment %}
-                <input type="submit" value="Aanmelden/Afmelden">
-                {% comment %} <div class="content-table"></div> {% endcomment %}
-                <table class="beatrix-table">
+<form action="{% url 'beatrix:vote' flexevent.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ flexevent.pub_date }}</h1></legend>
+    {% comment %} {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} {% endcomment %}
+    {% for choice in lid.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Vote">
+</form>
+  <table class="beatrix-table">
               <thead>
                 <tr>
                   <th>#</th>

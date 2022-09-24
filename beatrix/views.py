@@ -5,9 +5,10 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse,reverse_lazy
-from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person
+from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person,Question,Choice
 from beatrix.forms import Personform
-from django.views.generic import(ListView,UpdateView)
+from django.views.generic import(ListView,UpdateView,DetailView)
+from django.http import HttpResponse
 
 class FlexeventsView(ListView):
     template_name='beatrix/events.html'
@@ -32,6 +33,62 @@ class FlexeventsView(ListView):
         } 
         return context
 
+
+class IndexView(ListView):
+    template_name = 'beatrix/index.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Question.objects.order_by('-pub_date')[:5]
+
+def vote(request, event_id):
+    print('vote')
+    question = get_object_or_404(Flexevent, pk=event_id)
+    try:
+        selected_choice = Flexevent.lid.get(pk=request.POST['choice'])
+    except (KeyError, Flexevent.DoesNotExist):
+        # Redisplay the question voting form.
+        return render(request, 'beatrix/event_detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        return HttpResponseRedirect(reverse('polls:results', args=(event_id,)))
+
+class DetailView(DetailView):
+    model = Question
+    template_name = 'beatrix/detail.html'
+
+
+class ResultsView(DetailView):
+    model = Question
+    template_name = 'beatrix/results.html'
+
+
+def vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        # Redisplay the question voting form.
+        return render(request, 'beatrix/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        return HttpResponseRedirect(reverse('bea:results', args=(question.id,)))
+
 class FlexdetailView(ListView):
     template_name='beatrix/event_detail.html'
     # template_name='beatrix/maand_list.html'
@@ -40,7 +97,7 @@ class FlexdetailView(ListView):
     def get_context_data(self, **kwargs):
         sl_ = self.kwargs.get("slug")
         # mnd_ = self.kwargs.get("mnd")
-        print('event:', sl_)
+        print('flexdetailview:', sl_)
         flexevent=Flexevent.objects.get(id=sl_)
         # template_name='beatrix/maand_list.html'
         year=int(date.today().strftime('%Y'))
@@ -138,6 +195,38 @@ def get_name(request):
         form = Personform()
 
     return render(request, 'person_form.html', {'form': form})
+
+def deelname(request, event_id):
+    print('deelname')
+    event = get_object_or_404(Flexevent, pk=event_id)
+    selected_event = Flexevent.objects.all().filter(id=event_id)
+    leden = []
+    afmeldingen=[]
+    for l in request.POST.getlist('aanmelding'):
+        leden.append(l)
+    print(leden)
+    for af in request.POST.getlist('host'):
+        afmeldingen.append(af)        
+    print(afmeldingen)
+    aanwezig=Person.objects.all().filter(id__in=leden)
+    for l in leden:
+        Flexlid.objects.all().update_or_create(
+            member_id=l,
+            taak_id=event_id,
+        )
+        p=Person.objects.get(id=l)
+        p.keuzes+=1
+        p.save()
+    for af in afmeldingen:
+        p = Person.objects.get(id=af)
+        if p:
+            m = Flexlid.objects.filter(taak=event.id,
+                                       member_id=p,)
+            m.delete()
+        pp=Person.objects.get(id=p.id)
+        pp.keuzes-=1
+        pp.save()
+    return HttpResponseRedirect(reverse('beatrix:kal', args=(event_id,)))
 
 # def get_context_data(self, **kwargs):
 # # ===

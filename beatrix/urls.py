@@ -3,30 +3,33 @@ from django.urls import path
 from beatrix.views import( 
 AanmeldView, FlexdetailView, FlexeventsView, PersonListView,PersonUpdateView,
 recurrent_event,
-events,
+# events,
 # maandlistview,
 # personenlijst,
 # event_detail,
 # flexlistview,
-# deelname,
+deelname, ResultsView, vote,DetailView,IndexView
 # assign,
 )
 
-app_name = 'beatrix'
+app_name = 'bea'
 urlpatterns = [
     path('', FlexeventsView.as_view(), name='trainingen'),
+    path('', IndexView.as_view(), name='index'),
+    path('<int:pk>/', DetailView.as_view(), name='detail'),
+    path('<int:question_id>/vote/', vote, name='vote'),  
+    path('<int:pk>/results/', ResultsView.as_view(), name='results'),
     path('events', AanmeldView.as_view(), name='aanmelden'),
+    # path('kal/<slug:slug>/' , FlexdetailView.as_view(), name='kal'),     
+    path('<int:event_id>/deelnemen/', deelname, name='deelnemen'),  
     # path('events', events, name='aanmelden'),
     # path('', PersonListView.as_view(), name='aanmelden'),
     # path('aanmelden', PersonListView.as_view(), name='aanmelden'),
     path('<int:pk>/', PersonUpdateView.as_view(), name='person_change'),
     path('recurrent/', recurrent_event, name='recurrent'),
-    path('kal/<slug:slug>/' , FlexdetailView.as_view(), name='kal'),     
     # path('<int:event_id>/event_detail/', FlexdetailView.as_view(), name='event_detail'),
     # path('rooster/', flexlistview, name='rooster'),
-    # # path('deelnemen/', deelname, name='deelnemen'),
-    # path('<int:event_id>/deelnemen/', deelname, name='deelnemen'),  
-    # path('<int:event_id>/host/', assign, name='assign'),  
+    # path('deelnemen/', deelname, name='deelnemen'),
     # path('api/person/', PersonenLijstMaken.as_view()),
     # path('<int:event_id>/host/', assign, name='assign'),    
     # path('<int:event_id>/deelname/', deelname, name='deelname'),    

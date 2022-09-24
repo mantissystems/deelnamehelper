@@ -5,11 +5,11 @@
 <div class="mobile">
   <div class="phone">
      <div class="phone-mirror">
-<table class="beatrix-table">
+<table class="datum-table">
   <thead>
     <tr>
       <th> <a href="/" class="fa fa-home fa-2x" ></a></th>
-      <th> <a href="{% url 'beatrix:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th>
+      <th> <a href="{% url 'bea:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th>
       {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
     </tr>
@@ -21,7 +21,7 @@
     </tr>
   </tbody>
 </table>
-<table class="beatrix-table">
+<table class="datum-table">
     <thead>
       <thead>
         <tr>
@@ -34,22 +34,13 @@
     </thead>
     
     <tbody>
-      {% for cc in rooster %}
-    <tr class="active-row">
-          <td><label>{{cc.pub_date}} {{cc.pub_time}} </label></td>
-          <td><label>{{cc.flexhost}} </label></td>          
-              <td>{% for t in rooster.lid.all %}
-                            <tr>
-                        </td>
-                        <td>
-                        <td> {{ forloop.counter }}. {{t.name}}</td>
-                        <td>
-                            <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
-                        </td>
-                        </td>
+            {% for cc in rooster%}
+        <tr>
+          <td > {{cc.pub_date}}</td>
+          <td >{{cc.flexhost}}</td>
+          <td>{% for t in cc.lid.all %}{{ t.name }}<br>{% endfor %}</td>
+          {% comment %} <td  > <a href="{% url 'kalender:event_detail' cc.id %}" class="fa fa-pencil fa-lg"  ></a></td> {% endcomment %}
 
-                        {% endfor %}                              
-        </tr>
       {% endfor %}
       </div>
   </div>

@@ -21,7 +21,7 @@
     </tr>
   </tbody>
 </table>
-         <table class="beatrix-table">
+         <table class="datum-table">
               <thead>
                 <tr>
                   <th>Maand</th>
@@ -33,7 +33,7 @@
                      <tr class="active-row">
                     <td> {{h.pub_date}} </td>
                     <td> {{h.flexhost}} </td>
-                             <td><a href="{% url 'beatrix:kal' h.id %}">training {{h.pub_date}}</a></td> 
+                             <td><a href="{% url 'bea:vote' h.id %}">training {{h.pub_date}}</a></td> 
                              {% endfor %}   
                          </tr>
                       </tbody>
