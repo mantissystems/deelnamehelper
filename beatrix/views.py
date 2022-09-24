@@ -19,17 +19,30 @@ class FlexeventsView(ListView):
         sl_ = self.kwargs.get("slug")
         # mnd_ = self.kwargs.get("mnd")
         print(sl_)
+
         template_name='beatrix/maand_list.html'
         year=int(date.today().strftime('%Y'))
         month = int(date.today().strftime('%m'))
         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
         einde=monthend[month]
+        x=0
         start=date(year,month,1)
         end=date(year,month,einde)
-        rooster=Flexevent.objects.filter(pub_date__range=[start, end])
-        # rooster=Flexevent.objects.all()
+        x=10
+        rooster=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        for r in rooster:
+            aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
+            ingedeelden=aanwezig.values_list('member_id', flat=True)
+            print(len(aanwezig))
+            x+=len(aanwezig)
+            print(x)
+            y=int(x/4)
+            # y=8
+        roostergedeelte=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
         context = {
         'rooster': rooster,
+        'roostergedeelte': roostergedeelte,
+        'regels':y,
         } 
         return context
 
@@ -60,22 +73,26 @@ def vote(request, question_id):
         afmeldingen.append(af)
     for l in request.POST.getlist('aanmelding'):
         leden.append(l)
-    print(afmeldingen)
+    print(afmeldingen,leden)
     for l in leden:
         Flexlid.objects.all().update_or_create(
             member_id=l,
             flexevent_id=question_id,
         )
-    event = get_object_or_404(Flexevent, pk=question_id)
-    # selected_event = Flexevent.objects.all().filter(id=question_id)
-    aanwezig=Flexlid.objects.all() ##.filter(id__in=leden)
-    ingedeelden=Flexlid.objects.all().exclude(flexevent_id=event.id)
+    for af in afmeldingen:
+        p = Person.objects.get(id=af)
+        if p:
+            m = Flexlid.objects.filter(flexevent_id=question_id,
+                                       member_id=p,)
+            m.delete()
+        pp=Person.objects.get(id=p.id)
+        pp.keuzes-=1
+        pp.save()
+    aanwezig=Flexlid.objects.all().filter(flexevent_id=question_id)
     ingedeelden=aanwezig.values_list('member_id', flat=True)
     persons = list(Person.objects.all())
-    # print(ingedeelden)
     kandidaten=Person.objects.all().exclude(id__in=ingedeelden)
     aanwezig=Person.objects.all().filter(id__in=ingedeelden)
-
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
@@ -84,6 +101,8 @@ def vote(request, question_id):
     except (KeyError, Choice.DoesNotExist):
         print('vote choice, except')
         # Redisplay the form.
+        print(len(aanwezig))
+        print(len(kandidaten))
         return render(request, 'beatrix/detail.html', {
             'question': event,
             'kandidaten':kandidaten,

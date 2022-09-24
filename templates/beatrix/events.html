@@ -34,16 +34,16 @@
     </thead>
     
     <tbody>
-            {% for cc in rooster%}
+            {% for cc in rooster %}
         <tr>
           <td > {{cc.pub_date}}</td>
           <td >{{cc.flexhost}}</td>
-          <td>{% for t in cc.lid.all %}{{ t.name }}<br>{% endfor %}</td>
-          {% comment %} <td  > <a href="{% url 'kalender:event_detail' cc.id %}" class="fa fa-pencil fa-lg"  ></a></td> {% endcomment %}
 
-      {% endfor %}
-      {% comment %} </div>
-  </div>
-</div> {% endcomment %}
+          <td>{% for t in cc.lid.all %}
+            {% if forloop.counter0 < regels %}              
+          {{ t.name }}<br>
+        {% endif %} 
+          {% endfor %}</td>
+        {% endfor %}
 </form>
 {% endblock  %}
