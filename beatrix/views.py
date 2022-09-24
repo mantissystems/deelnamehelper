@@ -39,7 +39,7 @@ class IndexView(ListView):
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """Return the last five published questions."""
+        """Return the last five published questions."""  
         return Question.objects.order_by('-pub_date')[:5]
 
 def vote(request, event_id):
@@ -72,16 +72,34 @@ class ResultsView(DetailView):
 
 
 def vote(request, question_id):
+    print('vote question_id')
+    event = get_object_or_404(Flexevent, pk=question_id)
+    leden = []
+    afmeldingen=[]
+    for l in request.POST.getlist('aanmelding'):
+        leden.append(l)
+    print(leden)
+    event = get_object_or_404(Flexevent, pk=question_id)
+    selected_event = Flexevent.objects.all().filter(id=question_id)
+    kandidaten=Person.objects.all() ##.filter(id__in=leden)
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        kk = question.choice_set.get(pk=request.POST['choice'])
+        print('vote question_id, try')
+        # print(selected_choice)
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the question voting form.
         return render(request, 'beatrix/detail.html', {
             'question': question,
+            'kandidaten':kandidaten,
             'error_message': "You didn't select a choice.",
         })
     else:
+        print('vote question_id, else')
+        # kk = selected_event.all(pk=request.POST['host'])
+        # print(kk)    
+        # print(event,selected_event,selected_choice,kk)
         selected_choice.votes += 1
         selected_choice.save()
         # Always return an HttpResponseRedirect after successfully dealing

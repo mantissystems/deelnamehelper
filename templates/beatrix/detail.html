@@ -1,12 +1,48 @@
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% block content %}
 <form action="{% url 'bea:vote' question.id %}" method="post">
 {% csrf_token %}
+<div class="mobile">
+<div class="phone">
+<div class="phone-mirror">
 <fieldset>
     <legend><h1>{{ question.question_text }}</h1></legend>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% comment %} {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} {% endcomment %}
     {% for choice in question.choice_set.all %}
         <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
         <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
     {% endfor %}
+    
 </fieldset>
+    <table class='content-table'>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Kandidaten</th>
+                  {% comment %} <th>Selectie</th> {% endcomment %}
+                  <th>Bij / Af </th>
+                </tr>
+              </thead>
+
+                    <tbody id = myTable>
+                        <td>{% for t in kandidaten %}
+                            <tr>
+                        </td>
+                        <td>{{t.id }}</td>
+                        <td>{{ forloop.counter }}. {{t.name}}</td>
+                        <td>
+                        <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
+                        </td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
 <input type="submit" value="Vote">
+</div>
+</div>
+</div>
 </form>
+{% endblock %}
