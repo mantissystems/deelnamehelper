@@ -1,26 +1,30 @@
-{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% extends 'base.html' %}
 {% block content %}
-<form action="{% url 'bea:vote' question.id %}" method="post">
+<form action="{% url 'flex:vote' question.id %}" method="post">
 {% csrf_token %}
-<div class="mobile">
-<div class="phone">
-<div class="phone-mirror">
-<fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
-    {% comment %} {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} {% endcomment %}
-    {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-    {% endfor %}
-    
-</fieldset>
-    <table class='content-table'>
+                <table class="person-table">
+              <thead>
+                <tr>
+                  <th> aanwezig op {{question.pub_date}}</th>
+                </tr>
+              </thead>
+                    <tbody>
+                        <td>{% for aa in aanwezig %}
+                            <tr>
+                        </td>
+                        <td>{{aa.name }}</td>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+    <table class='person-table'>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Kandidaten</th>
-                  {% comment %} <th>Selectie</th> {% endcomment %}
+                  <th>Kandidaten voor {{question.pub_date}}</th>
                   <th>Bij / Af </th>
+                  <th><input type="submit" value="Selecteer"> </th>
                 </tr>
               </thead>
 
@@ -40,9 +44,9 @@
                     </tbody>
 
                 </table>
-<input type="submit" value="Vote">
+{% comment %} <input type="submit" value="Vote"> {% endcomment %}
+{% comment %} </div>
 </div>
-</div>
-</div>
+</div> {% endcomment %}
 </form>
 {% endblock %}

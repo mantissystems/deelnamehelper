@@ -4,7 +4,7 @@ font-family: sans-serif; /* Change your font family */
    .person-table {
     border-collapse: collapse;
     margin: 9px 0;
-    font-size: 0.7em;
+    font-size: 0.8em;
     min-width: 310px;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
@@ -12,7 +12,7 @@ font-family: sans-serif; /* Change your font family */
   }
   .person-table tbody tr {
     border-bottom: 1px solid #dddddd;
-    line-height: 5px;
+    line-height: 8px;
   }
   .datum-table {
     border-collapse: collapse;

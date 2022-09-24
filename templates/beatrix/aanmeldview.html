@@ -4,13 +4,13 @@
 <form>
 {% csrf_token %}
 {% load static %}
-<div class="mobile">
+{% comment %} <div class="mobile">
 <div class="phone">
 <div class="phone-mirror">
 <table class="beatrix-table">
   <thead>
     <tr>
-      <th> <a href="/" class="fa fa-home fa-3x" ></a></th>
+      <th> <a href="/" class="fa fa-home fa-3x" ></a></th> {% endcomment %}
       {% comment %} <th> <a href="{% url 'person:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-3x"  ></a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-3x"  ></a></th> {% endcomment %}
@@ -33,13 +33,13 @@
                      <tr class="active-row">
                     <td> {{h.pub_date}} </td>
                     <td> {{h.flexhost}} </td>
-                             <td><a href="{% url 'bea:vote' h.id %}">vote {{h.pub_date}}</a></td> 
+                             <td><a href="{% url 'flex:vote' h.id %}">vote {{h.pub_date}}</a></td> 
                              {% endfor %}   
                          </tr>
                       </tbody>
      </table>
+{% comment %} </div>
 </div>
-</div>
-</div>
+</div> {% endcomment %}
 </form>
 {% endblock  %}

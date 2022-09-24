@@ -2,14 +2,14 @@
 {% block content %}
 <form>
  {% csrf_token %}
-<div class="mobile">
+{% comment %} <div class="mobile">
   <div class="phone">
-     <div class="phone-mirror">
+     <div class="phone-mirror"> {% endcomment %}
 <table class="datum-table">
   <thead>
     <tr>
-      <th> <a href="/" class="fa fa-home fa-2x" ></a></th>
-      <th> <a href="{% url 'bea:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th>
+      {% comment %} <th> <a href="/" class="fa fa-home fa-2x" ></a></th> {% endcomment %}
+      {% comment %} <th> <a href="{% url 'flex:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
     </tr>
@@ -42,8 +42,8 @@
           {% comment %} <td  > <a href="{% url 'kalender:event_detail' cc.id %}" class="fa fa-pencil fa-lg"  ></a></td> {% endcomment %}
 
       {% endfor %}
-      </div>
+      {% comment %} </div>
   </div>
-</div>
+</div> {% endcomment %}
 </form>
 {% endblock  %}

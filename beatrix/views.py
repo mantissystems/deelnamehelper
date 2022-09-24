@@ -42,24 +42,6 @@ class IndexView(ListView):
         """Return the last five published questions."""  
         return Question.objects.order_by('-pub_date')[:5]
 
-def vote(request, event_id):
-    print('vote')
-    question = get_object_or_404(Flexevent, pk=event_id)
-    try:
-        selected_choice = Flexevent.lid.get(pk=request.POST['choice'])
-    except (KeyError, Flexevent.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'beatrix/event_detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(event_id,)))
 
 class DetailView(DetailView):
     model = Question
@@ -70,36 +52,44 @@ class ResultsView(DetailView):
     model = Question
     template_name = 'beatrix/results.html'
 
-
 def vote(request, question_id):
-    print('vote question_id')
     event = get_object_or_404(Flexevent, pk=question_id)
     leden = []
     afmeldingen=[]
     for l in request.POST.getlist('aanmelding'):
         leden.append(l)
     print(leden)
+    for l in leden:
+        Flexlid.objects.all().update_or_create(
+            member_id=l,
+            flexevent_id=question_id,
+        )
     event = get_object_or_404(Flexevent, pk=question_id)
     selected_event = Flexevent.objects.all().filter(id=question_id)
-    kandidaten=Person.objects.all() ##.filter(id__in=leden)
+    aanwezig=Flexlid.objects.all() ##.filter(id__in=leden)
+    reedsingedeeld=Flexlid.objects.all().exclude(flexevent_id=question_id)
+    reedsingedeeld=aanwezig.values_list('member_id', flat=True)
+    persons = list(Person.objects.all())
+    print(reedsingedeeld)
+    kandidaten=Person.objects.all() #.exclude(id__in=reedsingedeeld)
+    aanwezig=Person.objects.all().filter(id__in=reedsingedeeld)
+
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
         kk = question.choice_set.get(pk=request.POST['choice'])
         print('vote question_id, try')
-        # print(selected_choice)
     except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
+        print('vote choice, except')
+        # Redisplay the form.
         return render(request, 'beatrix/detail.html', {
-            'question': question,
+            'question': event,
             'kandidaten':kandidaten,
+            'aanwezig':aanwezig,
             'error_message': "You didn't select a choice.",
         })
     else:
         print('vote question_id, else')
-        # kk = selected_event.all(pk=request.POST['host'])
-        # print(kk)    
-        # print(event,selected_event,selected_choice,kk)
         selected_choice.votes += 1
         selected_choice.save()
         # Always return an HttpResponseRedirect after successfully dealing
@@ -356,3 +346,21 @@ def maak_activiteiten():
     # )
 
     return
+# def vote(request, event_id):
+#     print('vote')
+#     question = get_object_or_404(Flexevent, pk=event_id)
+#     try:
+#         selected_choice = Flexevent.lid.get(pk=request.POST['choice'])
+#     except (KeyError, Flexevent.DoesNotExist):
+#         # Redisplay the question voting form.
+#         return render(request, 'beatrix/event_detail.html', {
+#             'question': question,
+#             'error_message': "You didn't select a choice.",
+#         })
+#     else:
+#         selected_choice.votes += 1
+#         selected_choice.save()
+#         # Always return an HttpResponseRedirect after successfully dealing
+#         # with POST data. This prevents data from being posted twice if a
+#         # user hits the Back button.
+#         return HttpResponseRedirect(reverse('polls:results', args=(event_id,)))
