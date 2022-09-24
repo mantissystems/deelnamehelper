@@ -33,7 +33,7 @@
                      <tr class="active-row">
                     <td> {{h.pub_date}} </td>
                     <td> {{h.flexhost}} </td>
-                             <td><a href="{% url 'flex:vote' h.id %}">vote {{h.pub_date}}</a></td> 
+                             <td><a href="{% url 'flex:vote' h.id %}">datum: {{h.pub_date}}</a></td> 
                              {% endfor %}   
                          </tr>
                       </tbody>

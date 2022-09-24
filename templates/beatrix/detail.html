@@ -5,14 +5,23 @@
                 <table class="person-table">
               <thead>
                 <tr>
-                  <th> aanwezig op {{question.pub_date}}</th>
+                  <th>#</th>
+                  <th>Aanwezig op {{question.pub_date}}</th>
+                  <th>Bij / Af </th>
+                  <th><input type="submit" value="Selecteer"> </th>
                 </tr>
               </thead>
-                    <tbody>
+                 <tbody id = myTable>
                         <td>{% for aa in aanwezig %}
                             <tr>
                         </td>
-                        <td>{{aa.name }}</td>
+                        <td>{{t.id }}</td>
+                        <td>{{ forloop.counter }}. {{aa.name}}</td>
+                        <td>
+                        <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
+                        </td>
+                        </td>
+
                         {% endfor %}
                         </tr>
                     </tbody>

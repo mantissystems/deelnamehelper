@@ -56,23 +56,25 @@ def vote(request, question_id):
     event = get_object_or_404(Flexevent, pk=question_id)
     leden = []
     afmeldingen=[]
+    for af in request.POST.getlist('afmelding'):
+        afmeldingen.append(af)
     for l in request.POST.getlist('aanmelding'):
         leden.append(l)
-    print(leden)
+    print(afmeldingen)
     for l in leden:
         Flexlid.objects.all().update_or_create(
             member_id=l,
             flexevent_id=question_id,
         )
     event = get_object_or_404(Flexevent, pk=question_id)
-    selected_event = Flexevent.objects.all().filter(id=question_id)
+    # selected_event = Flexevent.objects.all().filter(id=question_id)
     aanwezig=Flexlid.objects.all() ##.filter(id__in=leden)
-    reedsingedeeld=Flexlid.objects.all().exclude(flexevent_id=question_id)
-    reedsingedeeld=aanwezig.values_list('member_id', flat=True)
+    ingedeelden=Flexlid.objects.all().exclude(flexevent_id=event.id)
+    ingedeelden=aanwezig.values_list('member_id', flat=True)
     persons = list(Person.objects.all())
-    print(reedsingedeeld)
-    kandidaten=Person.objects.all() #.exclude(id__in=reedsingedeeld)
-    aanwezig=Person.objects.all().filter(id__in=reedsingedeeld)
+    # print(ingedeelden)
+    kandidaten=Person.objects.all().exclude(id__in=ingedeelden)
+    aanwezig=Person.objects.all().filter(id__in=ingedeelden)
 
     question = get_object_or_404(Question, pk=question_id)
     try:
