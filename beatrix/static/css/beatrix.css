@@ -4,21 +4,21 @@ font-family: sans-serif; /* Change your font family */
    .person-table {
     border-collapse: collapse;
     margin: 9px 0;
-    font-size: 0.8em;
-    min-width: 310px;
+    font-size: 0.9em;
+    min-width: 340px;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   }
   .person-table tbody tr {
     border-bottom: 1px solid #dddddd;
-    line-height: 8px;
+    line-height: 9px;
   }
   .datum-table {
     border-collapse: collapse;
     margin: 9px 0;
-    font-size: 0.7em;
-    min-width: 310px;
+    font-size: 0.9em;
+    min-width: 340px;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -31,7 +31,7 @@ font-family: sans-serif; /* Change your font family */
    .beatrix-table {
      border-collapse: collapse;
      margin: 9px 0;
-     font-size: 0.7em;
+     font-size: 0.9em;
      min-width: 380px;
      border-radius: 15px 15px 0 0;
      overflow: hidden;
@@ -52,7 +52,7 @@ font-family: sans-serif; /* Change your font family */
    
    .beatrix-table tbody tr {
      border-bottom: 1px solid #dddddd;
-     line-height: 7px;
+     line-height: 12px;
    }
    
    .beatrix-table tbody tr:nth-of-type(even) {
@@ -113,15 +113,15 @@ th {
      display: flex;
      justify-content: center;
      align-items: center;
-     width: 380px;
-     height: 660px;
+     width: 480px;
+     height: 680px;
      background: #1a584e;
      border-radius: 30px;
      padding: 10px;
 }
 .phone-mirror {
      position: relative;
-     width: 380px;
+     width: 490px;
      height: 660px;
      background-color: rgb(221, 201, 221);
      border-radius: 30px;
