@@ -57,47 +57,63 @@ class IndexView(ListView):
 
 
 class DetailView(DetailView):
-    model = Question
+    model = Flexevent
     template_name = 'beatrix/detail.html'
 
 
 class ResultsView(DetailView):
-    model = Question
+    model = Flexevent
     template_name = 'beatrix/results.html'
+    def get_context_data(self, **kwargs):
+        sl_ = self.kwargs.get("pk")
+        flexevent=Flexevent.objects.filter(id=sl_)
+        print(flexevent)
+        context = {
+        'flexevent':flexevent,
+        } 
+        return context
 
-def vote(request, question_id):
-    event = get_object_or_404(Flexevent, pk=question_id)
+def vote(request, event_id):
+    event = get_object_or_404(Flexevent, pk=event_id)
     leden = []
     afmeldingen=[]
+    hosts=[]
+    for h in request.POST.getlist('hoofdhost'):
+        hosts.append(h)
     for af in request.POST.getlist('afmelding'):
         afmeldingen.append(af)
     for l in request.POST.getlist('aanmelding'):
         leden.append(l)
-    print(afmeldingen,leden)
+    print(afmeldingen,leden,hosts)
+    if len(hosts)>0:
+        h=Person.objects.all().filter(id__in=hosts)
+        # print(h,h[0].name)
+        Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
     for l in leden:
         Flexlid.objects.all().update_or_create(
             member_id=l,
-            flexevent_id=question_id,
+            flexevent_id=event_id,
         )
     for af in afmeldingen:
         p = Person.objects.get(id=af)
         if p:
-            m = Flexlid.objects.filter(flexevent_id=question_id,
+            m = Flexlid.objects.filter(flexevent_id=event_id,
                                        member_id=p,)
             m.delete()
         pp=Person.objects.get(id=p.id)
         pp.keuzes-=1
         pp.save()
-    aanwezig=Flexlid.objects.all().filter(flexevent_id=question_id)
+    aanwezig=Flexlid.objects.all().filter(flexevent_id=event_id)
     ingedeelden=aanwezig.values_list('member_id', flat=True)
     persons = list(Person.objects.all())
     kandidaten=Person.objects.all().exclude(id__in=ingedeelden)
     aanwezig=Person.objects.all().filter(id__in=ingedeelden)
-    question = get_object_or_404(Question, pk=question_id)
+    question = get_object_or_404(Flexevent, pk=event_id)
     try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
-        kk = question.choice_set.get(pk=request.POST['choice'])
-        print('vote question_id, try')
+        # selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        selected_choice = question.lid.get(pk=request.POST['aanmelding'])
+        # kk = question.choice_set.get(pk=request.POST['choice'])
+        print('vote event_id, try')
     except (KeyError, Choice.DoesNotExist):
         print('vote choice, except')
         # Redisplay the form.
@@ -109,14 +125,15 @@ def vote(request, question_id):
             'aanwezig':aanwezig,
             'error_message': "You didn't select a choice.",
         })
-    else:
-        print('vote question_id, else')
-        selected_choice.votes += 1
-        selected_choice.save()
+        # onderstaande 4 regels zijn uitgesterd omdat ze te maken hebben met de poll choices, die niet meer actief zijn
+    # else:
+    #     print('vote event_id, else')
+    #     selected_choice.keuzes += 1
+    #     selected_choice.save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('bea:results', args=(question.id,)))
+    return HttpResponseRedirect(reverse('flex:vote', args=(event_id,)))
 
 class FlexdetailView(ListView):
     template_name='beatrix/event_detail.html'
@@ -257,47 +274,6 @@ def deelname(request, event_id):
         pp.save()
     return HttpResponseRedirect(reverse('beatrix:kal', args=(event_id,)))
 
-# def get_context_data(self, **kwargs):
-# # ===
-#         dn = Flexevent.objects.none()
-#         flexevents = Flexevent.objects.all()
-#         reedsingedeeld=Flexlid.objects.all()
-#         ri=[]
-#         for f in reedsingedeeld:
-#             ri.append(f)
-#         print(len(reedsingedeeld))
-#         ri=len(reedsingedeeld)
-#         reedsingedeeld=reedsingedeeld.values_list('member_id', flat=True)
-#         kandidaten=Person.objects.all().exclude(id__in=reedsingedeeld)
-#         kandidaten=Person.objects.all()[0:ri]
-# # ===
-#         # queryset = super().get_queryset()
-#         # rooster = Flexevent.objects.all()
-#         # flexpool = Person.objects.all()           
-#         context={
-#         'object_list':kandidaten,
-#         'rooster':flexevents,
-#        }
-#         return context
-
-# def get_queryset(self): # new
-#         # criterion2 = Q(is_host=True)
-#         # criterion1 = Q(is_flex=True)
-#         # hosts = Person.objects.all().filter(criterion2)        
-#         flexpool = Person.objects.all()           
-        # query = self.request.GET.get('slug')
-        # print(query)
-        # paginate_by = 10
-        # sql="select id, name,is_present,substr(name,1,1) HL from person_person GROUP BY substr(name,1,1) order by HL"
-        # cursor = connection.cursor() 
-        # cursor.execute(sql)
-        # results = recurrent.namedtuplefetchall(cursor)
-        # template_name='person/person_list.html'            
-        # rooster = Flexevent.objects.all()
-        # results=flexpool
-        # template_name='beatrix/aanmeldview.html'
-        # return flexpool,rooster
-
 
 class PersonUpdateView(UpdateView):
     template_name = 'beatrix/person_form.html'
@@ -308,8 +284,6 @@ class PersonUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         print (**kwargs)
         context={
-        # 'object_list':kandidaten,
-        # 'rooster':flexevents,
        }
         return context
 
@@ -343,45 +317,15 @@ def maak_activiteiten():
             Flexevent.objects.all().update_or_create(
                 event_text='training_' + str(j),
               dagnaam=dagnaam, 
-              flexhost='Michiel',
+              flexhost='Te bepalen',
               pub_date=datum2,
               pub_time=tijd2,
-                # datum=datum2,
-            # flexpoule='stedelijk', #'groep ' + str(j).zfill(2),
                 )
-            # print(t,datum2,tijd2)
-    # ch1=Flexevent.objects.all().values_list('id',flat=True)
-    # x=0
     p=Person.objects.all().first()
     f=Flexevent.objects.first()
     Flexlid.objects.all().update_or_create(
     member=p, 
     flexevent=f,
     )
-    # Flexevent.objects.all().update_or_create(
-    # dagnaam=dagnaam, 
-    # flexhost='Michiel',
-    # pub_date=date.today(),
-    # pub_time='10:00',
-    # # flexpoule='stedelijk',
-    # )
 
     return
-# def vote(request, event_id):
-#     print('vote')
-#     question = get_object_or_404(Flexevent, pk=event_id)
-#     try:
-#         selected_choice = Flexevent.lid.get(pk=request.POST['choice'])
-#     except (KeyError, Flexevent.DoesNotExist):
-#         # Redisplay the question voting form.
-#         return render(request, 'beatrix/event_detail.html', {
-#             'question': question,
-#             'error_message': "You didn't select a choice.",
-#         })
-#     else:
-#         selected_choice.votes += 1
-#         selected_choice.save()
-#         # Always return an HttpResponseRedirect after successfully dealing
-#         # with POST data. This prevents data from being posted twice if a
-#         # user hits the Back button.
-#         return HttpResponseRedirect(reverse('polls:results', args=(event_id,)))

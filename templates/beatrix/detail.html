@@ -6,9 +6,10 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Aanwezig op {{question.pub_date}}</th>
+                  <th>AANGEMELD op {{question.pub_date}}</th>
                   <th>Bij / Af </th>
                   <th><input type="submit" value="Selecteer"> </th>
+                  <th>Host J/N </th>
                 </tr>
               </thead>
                  <tbody id = myTable>
@@ -19,6 +20,10 @@
                         <td>{{ forloop.counter }}. {{aa.name}}</td>
                         <td>
                         <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
+                        </td>
+                        <td>
+                        <td>
+                        <input type="checkbox" name="hoofdhost" id="host{{ forloop.counter }}" value="{{ aa.id }}">
                         </td>
                         </td>
 

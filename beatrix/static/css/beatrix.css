@@ -5,7 +5,7 @@ font-family: sans-serif; /* Change your font family */
     border-collapse: collapse;
     margin: 9px 0;
     font-size: 0.9em;
-    min-width: 340px;
+    min-width: 440px;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -18,7 +18,7 @@ font-family: sans-serif; /* Change your font family */
     border-collapse: collapse;
     margin: 9px 0;
     font-size: 0.9em;
-    min-width: 340px;
+    min-width: 440px;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -32,7 +32,7 @@ font-family: sans-serif; /* Change your font family */
      border-collapse: collapse;
      margin: 9px 0;
      font-size: 0.9em;
-     min-width: 380px;
+     min-width: 480px;
      border-radius: 15px 15px 0 0;
      overflow: hidden;
      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
