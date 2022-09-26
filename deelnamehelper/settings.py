@@ -124,5 +124,5 @@ LOGOUT_REDIRECT_URL = '/' # new
 STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 STATIC_FILES_DIR='/static'
-FIXTURE_DIRS='/static/'
+# FIXTURE_DIRS='/static/'
 # CORS_ALLOW_ALL_ORIGINS=True
