@@ -42,8 +42,8 @@ class FlexeventsView(ListView):
             ingedeelden=aanwezig.values_list('member_id', flat=True)
             print(len(aanwezig))
             x+=len(aanwezig)
-            print(x)
-            y=int(x/4)
+            # print(x)
+        y=int(x/4)
             # y=8
         roostergedeelte=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
         context = {
