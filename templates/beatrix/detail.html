@@ -3,13 +3,13 @@
 <form action="{% url 'flex:vote' question.id %}" method="post">
 {% csrf_token %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<table class="person-table">
+                <table class="person-table">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>AANGEMELD op {{question.pub_date}}</th>
-                  <th>Afmelder </th>
-                  <th><input type="submit" value="Bevestig"> </th>
+                  <th>Bij / Af </th>
+                  <th><input type="submit" value="Selecteer"> </th>
                   <th>Host J/N </th>
                 </tr>
               </thead>
@@ -39,7 +39,7 @@
                   <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
                   <th>Kandidaten voor {{question.pub_date}}</th>
                   <th>Bij / Af </th>
-                  <th><input type="submit" value="Meld aan"> </th>
+                  <th><input type="submit" value="Selecteer"> </th>
                   <th></th>
                 </tr>
               </thead>
@@ -98,7 +98,6 @@ function searchTable(value, data){
 function buildTable(data){
   
 var table = document.getElementById('myTable')
-console.log(regels)
 table.innerHTML=``
 let lengte = 10;
 for (var i = 0; i < lengte;i++ ){
