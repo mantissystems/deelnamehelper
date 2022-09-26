@@ -3,8 +3,8 @@ from django.db import models
 class Person(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100,blank=True)
-    is_flex = models.BooleanField(default=False)        #wil ingedeeld worden in flexpoule
-    is_host = models.BooleanField(default=False)        #kan flexhost zijn
+    is_flex = models.BooleanField(default=True)        #wil ingedeeld worden in flexpoule
+    # is_host = models.BooleanField(default=False)        #kan flexhost zijn
     keuzes = models.IntegerField(default=0) #aantal keren als host gekozen
     def __str__(self):
         return self.name

@@ -2,17 +2,21 @@
 {% block content %}
 <form action="{% url 'flex:vote' question.id %}" method="post">
 {% csrf_token %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<div class="regels" >
+{{regels}}
+</div>
                 <table class="person-table">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>AANGEMELD op {{question.pub_date}}</th>
-                  <th>Bij / Af </th>
-                  <th><input type="submit" value="Selecteer"> </th>
+                  <th>Afmelder </th>
+                  <th><input type="submit" value="Bevestig"> </th>
                   <th>Host J/N </th>
                 </tr>
               </thead>
-                 <tbody id = myTable>
+                 <tbody>
                         <td>{% for aa in aanwezig %}
                             <tr>
                         </td>
@@ -35,10 +39,11 @@
     <table class='person-table'>
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
                   <th>Kandidaten voor {{question.pub_date}}</th>
                   <th>Bij / Af </th>
-                  <th><input type="submit" value="Selecteer"> </th>
+                  <th><input type="submit" value="Meld aan"> </th>
+                  <th></th>
                 </tr>
               </thead>
 
@@ -51,16 +56,73 @@
                         <td>
                         <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
                         </td>
-                        </td>
+                        
 
                         {% endfor %}
                         </tr>
                     </tbody>
 
                 </table>
-{% comment %} <input type="submit" value="Vote"> {% endcomment %}
-{% comment %} </div>
-</div>
-</div> {% endcomment %}
 </form>
+{% block javascript %}
+
+<script>
+
+$('#search-input').on('keyup',function(){
+    var value = $(this).val()
+    console.log('Value:', value)
+     var data = searchTable(value,myArray)
+     console.log(data)
+    buildTable(data)
+})
+
+$.ajax({
+    method:'GET',
+    url:'http://127.0.0.1:8000/api/person/',
+    success:function(response){
+        myArray = response
+        buildTable(myArray)
+        console.log(myArray)
+    }
+})
+
+function searchTable(value, data){
+    var filteredData =[]
+    for (var i = 0; i < data.length; i++){
+        value=value.toLowerCase()
+        var name = data[i].name.toLowerCase()
+        if (name.includes(value)){
+            filteredData.push(data[i])
+        }
+    }
+    return filteredData
+}
+
+function buildTable(data){
+  
+var table = document.getElementById('myTable')
+var regels = document.getElementById('regels')
+console.log(regels)
+table.innerHTML=``
+let lengte = 10;
+for (var i = 0; i < lengte;i++ ){
+      var row = `<tr> 
+    <td> ${data[i].id} </td> 
+    <td> ${data[i].name} </td> 
+    <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].id}"> </td>
+    </tr>`
+  table.innerHTML += row
+}
+}
+
+function Check(value) {
+    console.log('Value:', value)
+    // var testid = $(this).val(testid)
+     console.log('Value:', value.parentelement)
+      document.getElementById('mantis').innerHTML = value.checked;
+      console.log('Value:', value.checked)
+    };
+  
+</script>
+{% endblock javascript %}    
 {% endblock %}

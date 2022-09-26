@@ -9,6 +9,13 @@ from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person,Question,Choic
 from beatrix.forms import Personform
 from django.views.generic import(ListView,UpdateView,DetailView)
 from django.http import HttpResponse
+from rest_framework.serializers import Serializer
+from rest_framework import generics
+from beatrix.serializers import PersoonSerializer
+
+class PersonenLijstMaken(generics.ListCreateAPIView):
+    queryset=Person.objects.all()
+    serializer_class=PersoonSerializer
 
 class FlexeventsView(ListView):
     template_name='beatrix/events.html'
@@ -262,6 +269,7 @@ def deelname(request, event_id):
         )
         p=Person.objects.get(id=l)
         p.keuzes+=1
+        p.is_flex=True
         p.save()
     for af in afmeldingen:
         p = Person.objects.get(id=af)
@@ -278,7 +286,7 @@ def deelname(request, event_id):
 class PersonUpdateView(UpdateView):
     template_name = 'beatrix/person_form.html'
     model = Person
-    fields = ('name','email' , 'is_host', 'is_flex','keuzes',)
+    fields = ('name','email' , 'is_host', 'keuzes',)
     form_class = Personform
     success_url = reverse_lazy('beatrix:person_changelist')
     def get_context_data(self, **kwargs):
