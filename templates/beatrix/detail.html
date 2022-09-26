@@ -3,10 +3,7 @@
 <form action="{% url 'flex:vote' question.id %}" method="post">
 {% csrf_token %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<div class="regels" >
-{{regels}}
-</div>
-                <table class="person-table">
+<table class="person-table">
               <thead>
                 <tr>
                   <th>#</th>
@@ -101,7 +98,6 @@ function searchTable(value, data){
 function buildTable(data){
   
 var table = document.getElementById('myTable')
-var regels = document.getElementById('regels')
 console.log(regels)
 table.innerHTML=``
 let lengte = 10;
