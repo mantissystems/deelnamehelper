@@ -1,0 +1,312 @@
+[
+{
+    "model": "beatrix.person",
+    "pk": 1,
+    "fields": {
+        "name": "fixture mantis",
+        "email": "info@mantis.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 2,
+    "fields": {
+        "name": "Wim Bakker",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 3,
+    "fields": {
+        "name": "Thom Bakker",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 4,
+    "fields": {
+        "name": "Anja van Leeuwen",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 5,
+    "fields": {
+        "name": "Edwin vd Linden",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": -1
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 6,
+    "fields": {
+        "name": "Roel van Grinsven",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 7,
+    "fields": {
+        "name": "Anne van Riesewijk",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 8,
+    "fields": {
+        "name": "Elsa Schilders",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 9,
+    "fields": {
+        "name": "Frank Heesels",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 10,
+    "fields": {
+        "name": "Hanneke Vianen",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 11,
+    "fields": {
+        "name": "Henk Kok",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 12,
+    "fields": {
+        "name": "Marion Theunissen",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 13,
+    "fields": {
+        "name": "Annelies van Driel",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 14,
+    "fields": {
+        "name": "Brigitte Tulp",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 15,
+    "fields": {
+        "name": "Carla Bakker",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 16,
+    "fields": {
+        "name": "Koen Brantjes",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 17,
+    "fields": {
+        "name": "Nel Meulendijk",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 18,
+    "fields": {
+        "name": "Peter Bremmer",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 19,
+    "fields": {
+        "name": "Richard de Croo de Jong",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 20,
+    "fields": {
+        "name": "Stephanie du Croo de Jong",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 21,
+    "fields": {
+        "name": "Ton Bakker",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 22,
+    "fields": {
+        "name": "Ton Bielderman",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 23,
+    "fields": {
+        "name": "Willemijn Nieuwenhuis",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 24,
+    "fields": {
+        "name": "Angela Hessing",
+        "email": "info@ervbeatrix.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 27,
+    "fields": {
+        "name": "fixture1 mantis",
+        "email": "info@mantis.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 28,
+    "fields": {
+        "name": "fixture2 mantis",
+        "email": "info@mantis.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.person",
+    "pk": 29,
+    "fields": {
+        "name": "fixture3 mantis",
+        "email": "info@mantis.nl",
+        "is_flex": true,
+        "keuzes": 0
+    }
+},
+{
+    "model": "beatrix.flexlid",
+    "pk": 1,
+    "fields": {
+        "flexevent": 1,
+        "member": null
+    }
+},
+{
+    "model": "beatrix.flexlid",
+    "pk": 2,
+    "fields": {
+        "flexevent": 1,
+        "member": 23
+    }
+},
+{
+    "model": "beatrix.flexlid",
+    "pk": 4,
+    "fields": {
+        "flexevent": 1,
+        "member": 19
+    }
+},
+{
+    "model": "beatrix.flexlid",
+    "pk": 5,
+    "fields": {
+        "flexevent": 1,
+        "member": 20
+    }
+},
+{
+    "model": "beatrix.flexlid",
+    "pk": 6,
+    "fields": {
+        "flexevent": 1,
+        "member": 1
+    }
+}
+]

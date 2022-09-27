@@ -1,0 +1,29 @@
+[
+  {
+    "model":"beatrix.Person",
+    "fields":{
+      "name":"fixture1 mantis",
+      "email":"info@mantis.nl",
+      "is_flex":1
+    }
+
+  },
+  {
+    "model":"beatrix.Person",
+    "fields":{
+      "name":"fixture2 mantis",
+      "email":"info@mantis.nl",
+      "is_flex":1
+    }
+
+  },
+  {
+    "model":"beatrix.Person",
+    "fields":{
+      "name":"fixture3 mantis",
+      "email":"info@mantis.nl",
+      "is_flex":1
+    }
+
+  }
+]

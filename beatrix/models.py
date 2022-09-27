@@ -40,6 +40,7 @@ class Flexevent(models.Model):
 class Flexlid(models.Model):
     flexevent = models.ForeignKey(Flexevent, on_delete=models.CASCADE,null=True)
     member = models.ForeignKey(Person, on_delete=models.CASCADE,null=True)
+    is_host = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('member',)    

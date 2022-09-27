@@ -18,7 +18,9 @@
                             <tr>
                         </td>
                         <td>{{t.id }}</td>
+                        {% comment %} het veld is host uit flexlid moet hier zichtbaar worden {% endcomment %}
                         <td>{{ forloop.counter }}. {{aa.name}}</td>
+                        {% comment %} <td> {{aa.is_host}}</td> {% endcomment %}
                         <td>
                         <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
                         </td>

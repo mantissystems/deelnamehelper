@@ -91,16 +91,18 @@ def vote(request, event_id):
         afmeldingen.append(af)
     for l in request.POST.getlist('aanmelding'):
         leden.append(l)
-    print(afmeldingen,leden,hosts)
     if len(hosts)>0:
-        h=Person.objects.all().filter(id__in=hosts)
-        # print(h,h[0].name)
+        h=Person.objects.all().filter(id__in=hosts)[:1]
         Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
+        Flexlid.objects.all().filter(flexevent_id=event_id,member_id=h[0].id).update(is_host=1)
+        # f=Flexlid.objects.filter(flexevent_id=9,member_id=2)
+        # print('hosts',event_id,h[0].id,f)
+
     for l in leden:
         Flexlid.objects.all().update_or_create(
             member_id=l,
             flexevent_id=event_id,
-        )
+        )        
     for af in afmeldingen:
         p = Person.objects.get(id=af)
         if p:
@@ -111,10 +113,12 @@ def vote(request, event_id):
         pp.keuzes-=1
         pp.save()
     aanwezig=Flexlid.objects.all().filter(flexevent_id=event_id)
+    host=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
     ingedeelden=aanwezig.values_list('member_id', flat=True)
-    persons = list(Person.objects.all())
+    # persons = list(Person.objects.all())
     kandidaten=Person.objects.all().exclude(id__in=ingedeelden)
-    aanwezig=Person.objects.all().filter(id__in=ingedeelden)
+    aanwezigen=Person.objects.all().filter(id__in=ingedeelden)
+    hosts=Person.objects.all().filter(id__in=host)
     question = get_object_or_404(Flexevent, pk=event_id)
     try:
         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
@@ -129,7 +133,7 @@ def vote(request, event_id):
         return render(request, 'beatrix/detail.html', {
             'question': event,
             'kandidaten':kandidaten,
-            'aanwezig':aanwezig,
+            'aanwezig':aanwezigen|hosts,  # kun je dicts typeren en in template typering weergeven?
             'error_message': "You didn't select a choice.",
         })
         # onderstaande 4 regels zijn uitgesterd omdat ze te maken hebben met de poll choices, die niet meer actief zijn
