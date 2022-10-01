@@ -1,7 +1,17 @@
 :root {
 font-family: sans-serif; /* Change your font family */
    }
-   .person-table {
+   .person-table th{
+    background-color: #11b5ee;
+    padding: 8px 8px;
+   }
+   .person-table thead tr {
+    background-color: #11b5e7;
+    color: powderblue;
+    text-align: left;
+    font-weight: bold;
+  }
+  .person-table {
     border-collapse: collapse;
     margin: 9px 0;
     font-size: 0.9em;
@@ -14,11 +24,15 @@ font-family: sans-serif; /* Change your font family */
     border-bottom: 1px solid #dddddd;
     line-height: 9px;
   }
+  .datum-table th{
+    background-color: #11b5e7;
+    padding: 8px 8px;
+   }
   .datum-table {
     border-collapse: collapse;
     margin: 9px 0;
     font-size: 0.9em;
-    min-width: 440px;
+    min-width: 420px;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -39,15 +53,16 @@ font-family: sans-serif; /* Change your font family */
    }
    
    .beatrix-table thead tr {
-     background-color: #009879;
-     color: #ffffff;
+     background-color: #11b5e7;
+     color: powderblue;
      text-align: left;
      font-weight: bold;
    }
    
    .beatrix-table th,
    .beatrix-table td {
-     padding: 8px 8px;
+    background-color: #11b5e7;
+    padding: 8px 8px;
    }
    
    .beatrix-table tbody tr {
@@ -60,7 +75,7 @@ font-family: sans-serif; /* Change your font family */
    }
    
    .beatrix-table tbody tr:last-of-type {
-     border-bottom: 2px solid #009879;
+     border-bottom: 2px solid #11b5e7;
    }
    
    .beatrix-table tbody tr.active-row {

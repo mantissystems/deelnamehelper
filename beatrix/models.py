@@ -4,7 +4,7 @@ class Person(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100,blank=True)
     is_flex = models.BooleanField(default=True)        #wil ingedeeld worden in flexpoule
-    # is_host = models.BooleanField(default=False)        #kan flexhost zijn
+    is_host = models.BooleanField(default=False)        #kan flexhost zijn
     keuzes = models.IntegerField(default=0) #aantal keren als host gekozen
     def __str__(self):
         return self.name
@@ -62,3 +62,21 @@ class Deelnemer(models.Model):
     question = models.ForeignKey(Flexevent, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
+
+class Boot(models.Model):
+    bootnaam = models.CharField(max_length=35, default='0')
+    flexhost = models.CharField(max_length=135, default='-')
+    # prio = models.IntegerField(default=0)
+    # seats = models.IntegerField(default=0)
+    # boottype = models.ForeignKey(Boottype, on_delete=models.CASCADE)
+    # stuur = models.CharField(max_length=35, default='st1')
+    # slag = models.CharField(max_length=35, default='sc1')
+    # twee = models.CharField(max_length=35, default='sc1')
+    # drie = models.CharField(max_length=35, default='sc1')
+    # boeg = models.CharField(max_length=35, default='sc1')
+    beschikbaar = models.BooleanField(default=True,null=True)
+    # indevaart = models.BooleanField(default=True,null=True)
+    indeling = models.TextField(blank=True)
+    def __str__(self):
+        return "%s" % (self.bootnaam)    
+

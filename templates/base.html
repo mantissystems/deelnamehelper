@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     {% load static %}
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'font_awesome/css/font-awesome.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/beatrix.css' %}" />
+            {% comment %} <script src="{% static 'beatrix.js' %}"></script> {% endcomment %}
+        {% comment %} <link href="/beatrix/static/beatrix.js" rel="preload" as="script"> {% endcomment %}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <title>{% block title %}Flexroeien{% endblock %}</title>
 </head>
@@ -18,6 +20,8 @@
     <tr>
       <th> <a href="/" class="fa fa-home fa-3x" ></a></th>
       <th> <a href="{% url 'flex:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th>
+       <th> <a href="{% url 'admin:index' %}" class="fa fa-cogs fa-3x" ></a> </th>
+
       {% comment %} <th> <a href="{% url 'person:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-3x"  ></a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-3x"  ></a></th> {% endcomment %}
@@ -30,7 +34,12 @@
 </table>
 
     <div id="content">
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
+        {% block javascript %}
+        <script src="{% static 'beatrix.js' %}"></script>
+        {% endblock javascript %}
+
     </div>
 </body>
 </html>

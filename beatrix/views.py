@@ -5,13 +5,15 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse,reverse_lazy
-from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person,Question,Choice
+from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person,Question,Choice,Boot
 from beatrix.forms import Personform
 from django.views.generic import(ListView,UpdateView,DetailView)
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from rest_framework import generics
-from beatrix.serializers import PersoonSerializer
+from beatrix.serializers import FlexeventSerializer, PersoonSerializer,BootSerializer
 
 class PersonenLijstMaken(generics.ListCreateAPIView):
     queryset=Person.objects.all()
@@ -19,40 +21,92 @@ class PersonenLijstMaken(generics.ListCreateAPIView):
 
 class FlexeventsView(ListView):
     template_name='beatrix/events.html'
-    # template_name='beatrix/maand_list.html'
     queryset=Flexevent.objects.all()
-
     def get_context_data(self, **kwargs):
         sl_ = self.kwargs.get("slug")
-        # mnd_ = self.kwargs.get("mnd")
-        print(sl_)
-
-        template_name='beatrix/maand_list.html'
         year=int(date.today().strftime('%Y'))
         month = int(date.today().strftime('%m'))
+        beginmonth = 1 #int(date.today().strftime('%m'))
+        endmonth = 12 # int(date.today().strftime('%m'))
+        # if beginmonth != 12:endmonth=beginmonth+1
+        print(beginmonth,endmonth)
         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-        einde=monthend[month]
+        einde=monthend[endmonth]
         x=0
-        start=date(year,month,1)
+        start=date(year,beginmonth,1)
         end=date(year,month,einde)
         x=10
-        rooster=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        # rooster=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        rooster=Flexevent.objects.all()[:x]
         for r in rooster:
             aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
             ingedeelden=aanwezig.values_list('member_id', flat=True)
-            print(len(aanwezig))
+            # print(len(aanwezig))
             x+=len(aanwezig)
             # print(x)
         y=int(x/4)
             # y=8
-        roostergedeelte=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
         context = {
         'rooster': rooster,
-        'roostergedeelte': roostergedeelte,
+        'roostergedeelte': roostergedeeltelijk,
         'regels':y,
         } 
         return context
 
+@api_view(['GET'])
+def bootLijst(request):
+    boten=Boot.objects.all()
+    serializer=BootSerializer(boten,many=True)
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def flexEvents(request):
+    boten=Flexevent.objects.all()
+    serializer=FlexeventSerializer(boten,many=True)
+
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def eventBeheer(request,pk):
+    event=Flexevent.objects.get(id=pk)
+    serializer=FlexeventSerializer(instance=event,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def bootDetail(request,pk):
+    boot=Boot.objects.get(id=pk)
+    serializer=BootSerializer(boot,many=False)
+
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def werfin(request):
+    serializer=BootSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def bootBeheer(request,pk):
+    boot=Boot.objects.get(id=pk)
+    serializer=BootSerializer(instance=boot,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def bootWerfuit(request,pk):
+    boot=Boot.objects.get(id=pk)
+    boot.delete()
+    
+    return Response('boot verwijderd uit de werf')
 
 class IndexView(ListView):
     template_name = 'beatrix/index.html'
@@ -95,9 +149,7 @@ def vote(request, event_id):
         h=Person.objects.all().filter(id__in=hosts)[:1]
         Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
         Flexlid.objects.all().filter(flexevent_id=event_id,member_id=h[0].id).update(is_host=1)
-        # f=Flexlid.objects.filter(flexevent_id=9,member_id=2)
-        # print('hosts',event_id,h[0].id,f)
-
+    boten=Boot.objects.all().filter(beschikbaar=True,flexhost=event_id)
     for l in leden:
         Flexlid.objects.all().update_or_create(
             member_id=l,
@@ -108,33 +160,39 @@ def vote(request, event_id):
         if p:
             m = Flexlid.objects.filter(flexevent_id=event_id,
                                        member_id=p,)
+            print(m)
+            if m[0].is_host==True:
+                Flexevent.objects.all().filter(id=event_id).update(flexhost='')
             m.delete()
+
         pp=Person.objects.get(id=p.id)
         pp.keuzes-=1
         pp.save()
     aanwezig=Flexlid.objects.all().filter(flexevent_id=event_id)
-    host=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
+    ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
     ingedeelden=aanwezig.values_list('member_id', flat=True)
-    # persons = list(Person.objects.all())
+    zijnhost=ishost.values_list('member_id', flat=True)
     kandidaten=Person.objects.all().exclude(id__in=ingedeelden)
     aanwezigen=Person.objects.all().filter(id__in=ingedeelden)
-    hosts=Person.objects.all().filter(id__in=host)
+    hosts=Person.objects.all().filter(id__in=zijnhost) #.update(is_host=True)
     question = get_object_or_404(Flexevent, pk=event_id)
     try:
         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
         selected_choice = question.lid.get(pk=request.POST['aanmelding'])
-        # kk = question.choice_set.get(pk=request.POST['choice'])
         print('vote event_id, try')
     except (KeyError, Choice.DoesNotExist):
         print('vote choice, except')
         # Redisplay the form.
-        print(len(aanwezig))
-        print(len(kandidaten))
+        # print(len(aanwezig)) #regel niet verwijderen
+        # print(len(kandidaten)) #regel niet verwijderen
         return render(request, 'beatrix/detail.html', {
             'question': event,
             'kandidaten':kandidaten,
-            'aanwezig':aanwezigen|hosts,  # kun je dicts typeren en in template typering weergeven?
-            'error_message': "You didn't select a choice.",
+            'aanwezig':aanwezigen, 
+            'hosts':hosts, 
+            'boten':boten, 
+            'aantal':kandidaten.count(), 
+            'error_message': "Er is geen keuze gemaakt.",
         })
         # onderstaande 4 regels zijn uitgesterd omdat ze te maken hebben met de poll choices, die niet meer actief zijn
     # else:
@@ -168,7 +226,7 @@ class FlexdetailView(ListView):
         ri=[]
         for f in reedsingedeeld:
             ri.append(f)
-        print(len(reedsingedeeld))
+        # print(len(reedsingedeeld))
         ri=len(reedsingedeeld)
         reedsingedeeld=reedsingedeeld.values_list('member_id', flat=True)
         # kandidaten=Person.objects.all().exclude(id__in=reedsingedeeld)
@@ -183,20 +241,32 @@ class FlexdetailView(ListView):
 
 class AanmeldView(ListView):
     template_name='beatrix/aanmeldview.html'
-    # template_name='beatrix/maand_list.html'
     queryset=Flexevent.objects.all()
-
     def get_context_data(self, **kwargs):
+        x=0
         year=int(date.today().strftime('%Y'))
         month = int(date.today().strftime('%m'))
+        volgendemaand=month
         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-        einde=monthend[month]
-        start=date(year,month,1)
+        x+=1
+        if month <= 12 and x==0: volgendemaand=month+1
+        einde=monthend[volgendemaand]
         end=date(year,month,einde)
+        beginmonth = 1 #int(date.today().strftime('%m'))
+        endmonth = 12 # int(date.today().strftime('%m'))
+        # if beginmonth != 12:endmonth=beginmonth+1
+        monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+        einde=monthend[endmonth]
+        x=100
+        start=date(year,beginmonth,1)
+        end=date(year,endmonth,einde)
+        start=date(year,beginmonth,1)
         rooster=Flexevent.objects.filter(pub_date__range=[start, end])
+        roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        print(x,einde)
         # rooster=Flexevent.objects.all()
         context = {
-        'rooster': rooster,
+        'rooster': roostergedeeltelijk,
         } 
         return context
 
@@ -310,6 +380,7 @@ def maak_activiteiten():
     dagnaam=datetime.datetime.now().strftime('%A')
     weekdag=datetime.datetime.now().strftime('%w')
     dagnummer=int(weekdag)
+    boten=Boot.objects.values_list('bootnaam',flat=True)
     day_delta = datetime.timedelta(days=1)
     for d in range(7):
         tomorrow = start_date + datetime.timedelta(days=d)
@@ -333,6 +404,17 @@ def maak_activiteiten():
               pub_date=datum2,
               pub_time=tijd2,
                 )
+        fl=Flexevent.objects.values_list('id',flat=True)
+        for f in fl:
+            for b in boten:
+                print(b)
+                Boot.objects.update_or_create(
+                bootnaam=b,
+                flexhost=f,
+                beschikbaar=True,
+                indeling='onbekend',
+                )
+
     p=Person.objects.all().first()
     f=Flexevent.objects.first()
     Flexlid.objects.all().update_or_create(
@@ -341,3 +423,20 @@ def maak_activiteiten():
     )
 
     return
+@api_view(['GET'])
+def apiOverview(request):
+    api_urls={
+    'api/':'api-overview',    
+    'api/person':'api/person',    
+    'bootlijst/':'bootlijst',    
+    'flexevents/':'flexevents',    
+    'flexeventsbeheer/':'flexeventsbeheer',    
+    'bootdetail/<str:pk>/':'bootdetail',    
+    'bootaanmaken/':'bootaanmaken',    
+    'bootbeheer/<str:pk>/':'bootbeheer',    
+    'bootwerfuit/<str:pk>/':'bootwerfuit',    
+
+
+    }
+    # return JsonResponse("API BASE POINT",safe=False)
+    return Response(api_urls)

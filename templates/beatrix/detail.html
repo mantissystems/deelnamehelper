@@ -3,6 +3,24 @@
 <form action="{% url 'flex:vote' question.id %}" method="post">
 {% csrf_token %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <table class="person-table">
+              <thead>
+                <tr>
+                  <th>Hosts {{question.pub_date}}</th>
+                </tr>
+              </thead>
+                 <tbody>
+                        <td>{% for hh in hosts %}
+                            <tr>
+                        </td>
+                        <td>{{hh.id}}. {{hh.name}}</td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
                 <table class="person-table">
               <thead>
                 <tr>
@@ -18,9 +36,7 @@
                             <tr>
                         </td>
                         <td>{{t.id }}</td>
-                        {% comment %} het veld is host uit flexlid moet hier zichtbaar worden {% endcomment %}
-                        <td>{{ forloop.counter }}. {{aa.name}}</td>
-                        {% comment %} <td> {{aa.is_host}}</td> {% endcomment %}
+                        <td>{{ forloop.counter }}|{{aa.id}}. {{aa.name}}</td>
                         <td>
                         <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
                         </td>
@@ -39,7 +55,7 @@
               <thead>
                 <tr>
                   <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
-                  <th>Kandidaten voor {{question.pub_date}}</th>
+                  <th>Kandidaten(uit {{aantal}}) voor {{question.pub_date}}</th>
                   <th>Meld Aan </th>
                   <th><input type="submit" value="Bevestig"> </th>
                   <th></th>
@@ -62,8 +78,26 @@
                     </tbody>
 
                 </table>
+                 <table class="person-table">
+              <thead>
+                <tr>
+                  <th>Beschikbare boten op {{question.pub_date}}</th>
+                </tr>
+              </thead>
+                 <tbody>
+                        <td>{% for bb in boten %}
+                            <tr>
+                        </td>
+                        <td>{{bb.id}}. {{bb.bootnaam}}</td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
 </form>
-{% block javascript %}
+{% comment %} {% block javascript %}
 
 <script>
 
@@ -75,7 +109,7 @@ $('#search-input').on('keyup',function(){
     buildTable(data)
 })
 
-$.ajax({
+$.ajax1({
     method:'GET',
     url:'http://127.0.0.1:8000/api/person/',
     success:function(response){
@@ -85,7 +119,7 @@ $.ajax({
     }
 })
 
-function searchTable(value, data){
+function searchTable1(value, data){
     var filteredData =[]
     for (var i = 0; i < data.length; i++){
         value=value.toLowerCase()
@@ -97,7 +131,7 @@ function searchTable(value, data){
     return filteredData
 }
 
-function buildTable(data){
+function buildTable1(data){
   
 var table = document.getElementById('myTable')
 table.innerHTML=``
@@ -112,7 +146,7 @@ for (var i = 0; i < lengte;i++ ){
 }
 }
 
-function Check(value) {
+function Check1(value) {
     console.log('Value:', value)
     // var testid = $(this).val(testid)
      console.log('Value:', value.parentelement)
@@ -121,5 +155,5 @@ function Check(value) {
     };
   
 </script>
-{% endblock javascript %}    
+{% endblock javascript %}     {% endcomment %}
 {% endblock %}

@@ -1,31 +1,7 @@
 :root {
-  --color-main: #71c6dd;
-  --color-main-light: #e1f6fb;
-  --color-dark: #3f4156;
-  --color-dark-medium: #51546e;
-  --color-dark-light: #696d97;
-  --color-light: #e5e5e5;
-  --color-gray: #8b8b8b;
-  --color-light-gray: #b2bdbd;
-  --color-bg: #2d2d39;
-  --color-success: #5dd693;
-  --color-error: #fc4b0b;
-}
-/*========== base styles ==========*/
-:root {
 font-family: sans-serif; /* Change your font family */
    }
-   .person-table th{
-    background-color: #11b5ee;
-    padding: 8px 8px;
-   }
-   .person-table thead tr {
-    background-color: #11b5e7;
-    color: powderblue;
-    text-align: left;
-    font-weight: bold;
-  }
-  .person-table {
+   .person-table {
     border-collapse: collapse;
     margin: 9px 0;
     font-size: 0.9em;
@@ -38,11 +14,7 @@ font-family: sans-serif; /* Change your font family */
     border-bottom: 1px solid #dddddd;
     line-height: 9px;
   }
-  .datum-table th{
-    background-color: #11b5e7;
-    padding: 8px 8px;
-   }
-  .datum-table {  
+  .datum-table {
     border-collapse: collapse;
     margin: 9px 0;
     font-size: 0.9em;
@@ -53,7 +25,7 @@ font-family: sans-serif; /* Change your font family */
   }
   .datum-table tbody tr {
     border-bottom: 1px solid #dddddd;
-    line-height: 9px;
+    line-height: 15px;
   }
    
    .beatrix-table {
@@ -67,16 +39,15 @@ font-family: sans-serif; /* Change your font family */
    }
    
    .beatrix-table thead tr {
-     background-color: #11b5e7;
-     color: powderblue;
+     background-color: #009879;
+     color: #ffffff;
      text-align: left;
      font-weight: bold;
    }
    
    .beatrix-table th,
    .beatrix-table td {
-    background-color: #11b5e7;
-    padding: 8px 8px;
+     padding: 8px 8px;
    }
    
    .beatrix-table tbody tr {
@@ -89,7 +60,7 @@ font-family: sans-serif; /* Change your font family */
    }
    
    .beatrix-table tbody tr:last-of-type {
-     border-bottom: 2px solid #11b5e7;
+     border-bottom: 2px solid #009879;
    }
    
    .beatrix-table tbody tr.active-row {
@@ -152,7 +123,7 @@ th {
      position: relative;
      width: 490px;
      height: 660px;
-     background-color: powderblue;
+     background-color: rgb(221, 201, 221);
      border-radius: 30px;
 }
 .topWrapper {
