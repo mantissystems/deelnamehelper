@@ -15,14 +15,15 @@ SECRET_KEY = 'django-insecure-^-pi9ng(&g=zaka8r3%0))5n!27^_-%@-&76cu#29(zlt2ui&+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '127.0.0.1','https://mantisapp.azurewebsites.net']
+ALLOWED_HOSTS = ['*', '127.0.0.1',
+'flexroeien.up.railway.app',]
 ALLOWED_ORIGINS = ['http://*', 'https://*',
-'https://mantisapp.azurewebsites.net/admin/*',
+'flexroeien.up.railway.app/admin/*',
 'https://mantisapp.azurewebsites.net/aanmelden',
 'https://mantisapp.azurewebsites.net/events']
 # CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*',
-'https://mantisapp.azurewebsites.net',
+'flexroeien.up.railway.app',
 ]
 
 
