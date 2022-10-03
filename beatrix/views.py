@@ -20,7 +20,7 @@ class PersonenLijstMaken(generics.ListCreateAPIView):
     serializer_class=PersoonSerializer
 
 class FlexeventsView(ListView):
-    template_name='beatrix/events.html'
+    template_name='events.html'
     queryset=Flexevent.objects.all()
     def get_context_data(self, **kwargs):
         sl_ = self.kwargs.get("slug")
@@ -202,7 +202,7 @@ def vote(request, event_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-    return HttpResponseRedirect(reverse('flex:vote', args=(event_id,)))
+    return HttpResponseRedirect(reverse('vote', args=(event_id,)))
 
 class FlexdetailView(ListView):
     template_name='beatrix/event_detail.html'

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form action="{% url 'vote' 69 %}" method="post">
+{% csrf_token %}
+{% comment %} {{flexevent}} {% endcomment %}
+                <table class="person-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>INDELING </th>
+                  {% comment %} <th>Host J/N </th> {% endcomment %}
+                  <th><input type="submit" value="Selecteer"> </th>
+                </tr>
+              </thead>
+                 <tbody id = myTable>
+                        <td>{% for aa in flexevent %}
+                        {% comment %} {{aa}} {% endcomment %}
+                            <tr>
+                        </td>
+                        <td>{{aa.id }}</td>
+                        <td>{{ forloop.counter }}. {{aa.name}}</td>
+                        <td>
+                        <td>{% for t in aa.lid.all %}
+                      {{ t.name }}<br>
+                        {% endfor %}</td>
+
+                        {% comment %} <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}"> {% endcomment %}
+                        </td>
+                        <td>
+                        <input type="checkbox" name="hoofdhost" id="host{{ forloop.counter }}" value="{{ aa.id }}">
+                        </td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+    {% comment %} <table class='person-table'>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Bij / Af </th>
+                  <th><input type="submit" value="Selecteer"> </th>
+                </tr>
+              </thead>
+
+                    <tbody id = myTable>
+                        <td>{% for t in kandidaten %}
+                            <tr>
+                        </td>
+                        <td>{{t.id }}</td>
+                        <td>{{ forloop.counter }}. {{t.name}}</td>
+                        <td>
+                        <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
+                        </td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table> {% endcomment %}
+{% comment %} <input type="submit" value="Vote"> {% endcomment %}
+{% comment %} </div>
+</div>
+</div> {% endcomment %}
+</form>
+{% endblock %}

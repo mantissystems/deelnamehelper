@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<form>
+ {% csrf_token %}
+{% comment %} <div class="mobile">
+  <div class="phone">
+     <div class="phone-mirror"> {% endcomment %}
+<table class="datum-table">
+  <thead>
+    <tr>
+      {% comment %} <th> <a href="/" class="fa fa-home fa-2x" ></a></th> {% endcomment %}
+      {% comment %} <th> <a href="{% url 'flex:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <a> Voordeel van vooraf aanmelden is, dat we sneller op het water zijn
+          </a>
+    </tr>
+  </tbody>
+</table>
+<table class="beatrix-table">
+    <thead>
+      <thead>
+        <tr>
+          <th >Schema deze maand</th>
+          <th >Host</th>
+          <th >Deelname</th>
+        </tr>
+      </thead>
+   
+    </thead>
+    
+    <tbody>
+            {% for cc in rooster %}
+        <tr>
+          <td > {{cc.pub_date}}</td>
+          <td >{{cc.flexhost}}</td>
+
+          <td>{% for t in cc.lid.all %}
+            {% if forloop.counter0 < regels %}              
+          {{ t.name }}<br>
+        {% endif %} 
+          {% endfor %}</td>
+        {% endfor %}
+</form>
+{% endblock  %}

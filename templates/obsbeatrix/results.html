@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form action="{% url 'flex:vote' 69 %}" method="post">
+<form action="{% url 'vote' 69 %}" method="post">
 {% csrf_token %}
 {% comment %} {{flexevent}} {% endcomment %}
                 <table class="person-table">

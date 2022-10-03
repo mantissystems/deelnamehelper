@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="{% url 'vote' question.id %}" method="post">
+{% csrf_token %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <table class="person-table">
+              <thead>
+                <tr>
+                  <th>Hosts {{question.pub_date}}</th>
+                </tr>
+              </thead>
+                 <tbody>
+                        <td>{% for hh in hosts %}
+                            <tr>
+                        </td>
+                        <td>{{hh.id}}. {{hh.name}}</td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+                <table class="person-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>AANGEMELD op {{question.pub_date}}</th>
+                  <th>Afmelder </th>
+                  <th><input type="submit" value="Bevestig"> </th>
+                  <th>Host J/N </th>
+                </tr>
+              </thead>
+                 <tbody>
+                        <td>{% for aa in aanwezig %}
+                            <tr>
+                        </td>
+                        <td>{{t.id }}</td>
+                        <td>{{ forloop.counter }}|{{aa.id}}. {{aa.name}}</td>
+                        <td>
+                        <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
+                        </td>
+                        <td>
+                        <td>
+                        <input type="checkbox" name="hoofdhost" id="host{{ forloop.counter }}" value="{{ aa.id }}">
+                        </td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+    <table class='person-table'>
+              <thead>
+                <tr>
+                  <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
+                  <th>Kandidaten(uit {{aantal}}) voor {{question.pub_date}}</th>
+                  <th>Meld Aan </th>
+                  <th><input type="submit" value="Bevestig"> </th>
+                  <th></th>
+                </tr>
+              </thead>
+
+                    <tbody id = myTable>
+                        <td>{% for t in kandidaten %}
+                            <tr>
+                        </td>
+                        <td>{{t.id }}</td>
+                        <td>{{ forloop.counter }}. {{t.name}}</td>
+                        <td>
+                        <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
+                        </td>
+                        
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+                 <table class="person-table">
+              <thead>
+                <tr>
+                  <th>Beschikbare boten op {{question.pub_date}}</th>
+                </tr>
+              </thead>
+                 <tbody>
+                        <td>{% for bb in boten %}
+                            <tr>
+                        </td>
+                        <td>{{bb.id}}. {{bb.bootnaam}}</td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+</form>
+{% comment %} {% block javascript %}
+
+<script>
+
+$('#search-input').on('keyup',function(){
+    var value = $(this).val()
+    console.log('Value:', value)
+     var data = searchTable(value,myArray)
+     console.log(data)
+    buildTable(data)
+})
+
+$.ajax1({
+    method:'GET',
+    url:'http://127.0.0.1:8000/api/person/',
+    success:function(response){
+        myArray = response
+        buildTable(myArray)
+        console.log(myArray)
+    }
+})
+
+function searchTable1(value, data){
+    var filteredData =[]
+    for (var i = 0; i < data.length; i++){
+        value=value.toLowerCase()
+        var name = data[i].name.toLowerCase()
+        if (name.includes(value)){
+            filteredData.push(data[i])
+        }
+    }
+    return filteredData
+}
+
+function buildTable1(data){
+  
+var table = document.getElementById('myTable')
+table.innerHTML=``
+let lengte = 10;
+for (var i = 0; i < lengte;i++ ){
+      var row = `<tr> 
+    <td> ${data[i].id} </td> 
+    <td> ${data[i].name} </td> 
+    <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].id}"> </td>
+    </tr>`
+  table.innerHTML += row
+}
+}
+
+function Check1(value) {
+    console.log('Value:', value)
+    // var testid = $(this).val(testid)
+     console.log('Value:', value.parentelement)
+      document.getElementById('mantis').innerHTML = value.checked;
+      console.log('Value:', value.checked)
+    };
+  
+</script>
+{% endblock javascript %}     {% endcomment %}
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+{% comment %} {% load static %} {% endcomment %}
+{% comment %} {% csrf_token %} {% endcomment %}
+<div class="mobile">
+  <div class="phone">
+     <div class="phone-mirror">
+<table class="beatrix-table">
+  <thead>
+    <tr>
+      <th> <a href="/" class="fa fa-home fa-2x" ></a></th>
+      {% comment %} <th> <a href="{% url 'person:person_changelist' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'kalender:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
+    </tr>
+  </thead>
+
+</table>
+
+{% comment %} <div class="card card-body">
+    <input id="search-input" class="form-control" type="text">
+</div> {% endcomment %}
+           
+<form action="{% url 'beatrix:vote' flexevent.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ flexevent.pub_date }}</h1></legend>
+    {% comment %} {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} {% endcomment %}
+    {% for choice in lid.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Vote">
+</form>
+  <table class="beatrix-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  {% comment %} <th><input class="search-input" placeholder="Naam@" type="text"></th> {% endcomment %}
+                  <th>Selectie</th>
+                  <th>Bij / Af </th>
+                </tr>
+              </thead>
+                    <tbody id ="Deelnemers">
+                        <td>{% for t in flexevent.lid.all %}
+                            <tr>
+                        </td>
+                        <td>
+                        <td> {{ forloop.counter }}. {{t.name}}</td>
+                        <td>
+                            <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
+                        </td>
+                        </td>
+
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+                <table class='beatrix-table'>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Naam</th>
+                  <th>Selectie</th>
+                  <th>Bij / Af </th>
+                </tr>
+              </thead>
+
+                    <tbody id = Kandidaten>
+                        <td>{% for t in deelnemers %}<tr> </td>
+                        <td> <td> {{ forloop.counter }}. {{t.name}}</td>
+                        <td>  <input type="checkbox" name="host" id="host{{ forloop.counter }}" value="{{ t.id }}">  </td> </td>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+
+                </table>
+                </div>
+</div>
+</div>
+
+            </form>
+{% endblock %}

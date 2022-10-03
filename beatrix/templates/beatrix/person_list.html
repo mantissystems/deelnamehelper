@@ -1,0 +1,45 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<form>
+{% csrf_token %}
+{% load static %}
+<div class="mobile">
+<div class="phone">
+<div class="phone-mirror">
+<table class="beatrix-table">
+  <thead>
+    <tr>
+      <th> <a href="/" class="fa fa-home fa-3x" ></a></th>
+      {% comment %} <th> <a href="{% url 'person:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'beatrix:rooster' %}" class="fa fa-list fa-3x"  ></a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'beatrix:hoofdhost' %}" class="fa fa-user fa-3x"  ></a></th> {% endcomment %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+         <table class="beatrix-table">
+              <thead>
+                <tr>
+                  <th>Maand</th>
+                  <th>Host</th>
+                </tr>
+              </thead>
+                   <tbody>
+                     {% for h in rooster %}
+                     <tr class="active-row">
+                    <td> {{h.pub_date}} </td>
+                    <td> {{h.flexhost}} </td>
+                             {% comment %} <td><a href="{% url 'ploeg:kal' h.pub_date %}">maand {{h.pub_date}}</a></td>  {% endcomment %}
+                             {% endfor %}   
+                         </tr>
+                      </tbody>
+     </table>
+</div>
+</div>
+</div>
+</form>
+{% endblock  %}
