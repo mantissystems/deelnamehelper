@@ -12,7 +12,7 @@ deelname, ResultsView, vote,DetailView,IndexView, werfin
 # assign,
 )
 
-app_name = 'flex'
+# app_name = 'beatrix'
 urlpatterns = [
     path('', FlexeventsView.as_view(), name='trainingen'),
     path('<int:pk>/', DetailView.as_view(), name='detail'),

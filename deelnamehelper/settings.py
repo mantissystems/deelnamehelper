@@ -13,17 +13,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^-pi9ng(&g=zaka8r3%0))5n!27^_-%@-&76cu#29(zlt2ui&+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', '127.0.0.1',
 'flexroeien.up.railway.app',]
 ALLOWED_ORIGINS = ['http://*', 'https://*',
-'flexroeien.up.railway.app/admin/*',
-'https://mantisapp.azurewebsites.net/aanmelden',
-'https://mantisapp.azurewebsites.net/events']
+'https://flexroeien.up.railway.app/admin/*',]
 # CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*',
-'flexroeien.up.railway.app',
+'https://flexroeien.up.railway.app',
 ]
 
 
