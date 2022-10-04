@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+{% load i18n %}
     {% load static %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1"> {% endcomment %}
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'css/pico.min.css' %}">    
     <link rel="stylesheet" href="{% static 'font_awesome/css/font-awesome.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/beatrix.css' %}" />
             {% comment %} <script src="{% static 'beatrix.js' %}"></script> {% endcomment %}
@@ -20,7 +24,7 @@
     <tr>
       <th> <a href="/" class="fa fa-home fa-3x" ></a></th>
       <th> <a href="{% url 'aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th>
-       <th> <a href="{% url 'admin:index' %}" class="fa fa-cogs fa-3x" ></a> </th>
+       {% comment %} <th> <a href="{% url 'admin:index' %}" class="fa fa-cogs fa-3x" ></a> </th> {% endcomment %}
 
       {% comment %} <th> <a href="{% url 'person:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
       {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-3x"  ></a></th> {% endcomment %}

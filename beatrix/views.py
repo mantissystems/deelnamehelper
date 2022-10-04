@@ -16,7 +16,7 @@ from rest_framework import generics
 from beatrix.serializers import FlexeventSerializer, PersoonSerializer,BootSerializer
 
 class PersonenLijstMaken(generics.ListCreateAPIView):
-    queryset=Person.objects.all()
+    queryset=Person.objects.all()[0:15]
     serializer_class=PersoonSerializer
 
 class FlexeventsView(ListView):
@@ -128,7 +128,7 @@ class ResultsView(DetailView):
     def get_context_data(self, **kwargs):
         sl_ = self.kwargs.get("pk")
         flexevent=Flexevent.objects.filter(id=sl_)
-        print(flexevent)
+        # print(flexevent)
         context = {
         'flexevent':flexevent,
         } 
@@ -172,7 +172,7 @@ def vote(request, event_id):
     ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
     ingedeelden=aanwezig.values_list('member_id', flat=True)
     zijnhost=ishost.values_list('member_id', flat=True)
-    kandidaten=Person.objects.all().exclude(id__in=ingedeelden)
+    kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[:5]
     aanwezigen=Person.objects.all().filter(id__in=ingedeelden)
     hosts=Person.objects.all().filter(id__in=zijnhost) #.update(is_host=True)
     question = get_object_or_404(Flexevent, pk=event_id)
@@ -407,7 +407,7 @@ def maak_activiteiten():
         fl=Flexevent.objects.values_list('id',flat=True)
         for f in fl:
             for b in boten:
-                print(b)
+                # print(b)
                 Boot.objects.update_or_create(
                 bootnaam=b,
                 flexhost=f,

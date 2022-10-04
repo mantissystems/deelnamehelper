@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^-pi9ng(&g=zaka8r3%0))5n!27^_-%@-&76cu#29(zlt2ui&+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', '127.0.0.1',
 'flexroeien.up.railway.app',]
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #  'responsive.middleware.DeviceInfoMiddleware',  #02-10-22
     "whitenoise.middleware.WhiteNoiseMiddleware",  #22-09-22
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +50,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#     # Other context processors included here
+#     'responsive.context_processors.device_info',
+# )
+
+# DEFAULT_BREAKPOINTS = {
+#     'phone': 480,
+#     'tablet': 767,
+#     'desktop': None,
+# }
 
 ROOT_URLCONF = 'deelnamehelper.urls'
 
