@@ -22,7 +22,9 @@ class PersonenLijstMaken(generics.ListCreateAPIView):
 class FlexeventsView(ListView):
     template_name='events.html'
     queryset=Flexevent.objects.all()
+    
     def get_context_data(self, **kwargs):
+
         sl_ = self.kwargs.get("slug")
         year=int(date.today().strftime('%Y'))
         month = int(date.today().strftime('%m'))
@@ -38,21 +40,42 @@ class FlexeventsView(ListView):
         x=10
         # rooster=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
         rooster=Flexevent.objects.all()[:x]
+        print(rooster)
         for r in rooster:
             aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
             ingedeelden=aanwezig.values_list('member_id', flat=True)
             # print(len(aanwezig))
             x+=len(aanwezig)
-            # print(x)
         y=int(x/4)
             # y=8
         roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
         context = {
         'rooster': rooster,
         'roostergedeelte': roostergedeeltelijk,
+        'events': roostergedeeltelijk,
         'regels':y,
         } 
         return context
+
+def home(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    rooms = Flexevent.objects. all() #filter(
+        # Q(topic__name__icontains = q) | 
+        # Q(name__icontains = q) | 
+        # Q(description__icontains = q) 
+        # ) # search 
+    
+    # topcs = Topic.objects.all()
+    # room_count = rooms.count()
+    # room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+
+    context = {
+        'rooms': rooms, 
+        # 'topics': topcs, 
+        # 'room_count': room_count, 
+        # 'room_messages': room_messages
+        }
+    return render(request, 'beatrix/home.html', context)
 
 @api_view(['GET'])
 def bootLijst(request):

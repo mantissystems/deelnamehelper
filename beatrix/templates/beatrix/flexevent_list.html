@@ -1,30 +1,47 @@
 {% extends 'base.html' %}
 {% block content %}
-<form method="post">
-  
-  <html>
-  {% csrf_token %} 
-    <head>
-
-    </head>
-    <body>
-      <div class="activiteiten">
-        <div id="myDIV">
-          <h5>Flexactiviteiten</h5>
-          {% comment %} <h1>PLOEGLEDEN</h5> {% endcomment %}
-          </div>
-      
-    </body>
+<form>
+ {% csrf_token %}
+{% comment %} <div class="mobile">
+  <div class="phone">
+     <div class="phone-mirror"> {% endcomment %}
+<table class="datum-table">
+  <thead>
+    <tr>
+      {% comment %} <th> <a href="/" class="fa fa-home fa-2x" ></a></th> {% endcomment %}
+      {% comment %} <th> <a href="{% url 'flex:aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'ploeg:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
+      {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+<table class="beatrix-table">
+    <thead>
+      <thead>
+        <tr>
+          <th >Schema deze maand</th>
+          <th >Host</th>
+          <th >Deelname</th>
+        </tr>
+      </thead>
+   
+    </thead>
     
-    {% if events %}
-    <ul>
-      {% for q in object_list %}
-      <li><a href="{% url 'beatrix:ploeg_aanwezig' poule.id %}"> {{ q.pub_date }} {{ q.dagnaam }} {{ q.pub_time }}  {{ q.event_text }}  HOSTS:  {{ q.flexhost }}, {{ q.flexhost2 }} {{q.flexpoule}} </a></li>        
-      {% endfor %}
-    </ul>
-{% else %}
-<p>Geen activiteiten.</p>
-{% endif %}
-</div>
-</html> 
+    <tbody>
+            {% for cc in roostergedeelte %}
+        <tr>
+          <td > {{cc.pub_date}}</td>
+          <td >{{cc.flexhost}}</td>
+
+          <td>{% for t in cc.lid.all %}
+            {% if forloop.counter0 < regels %}              
+          {{ t.name }}<br>
+        {% endif %} 
+          {% endfor %}</td>
+        {% endfor %}
+</form>
 {% endblock  %}

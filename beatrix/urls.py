@@ -1,7 +1,8 @@
 from django.urls import path
 
 from beatrix.views import( 
-AanmeldView, FlexdetailView, FlexeventsView, PersonListView,PersonUpdateView, PersonenLijstMaken, apiOverview, bootBeheer, bootDetail, bootLijst, bootWerfuit, eventBeheer, flexEvents,
+AanmeldView, FlexdetailView, FlexeventsView, PersonListView,PersonUpdateView, PersonenLijstMaken, 
+apiOverview, bootBeheer, bootDetail, bootLijst, bootWerfuit, eventBeheer, flexEvents, home,
 recurrent_event,
 # events,
 # maandlistview,
@@ -14,7 +15,8 @@ deelname, ResultsView, vote,DetailView,IndexView, werfin
 
 # app_name = 'beatrix'
 urlpatterns = [
-    path('', FlexeventsView.as_view(), name='trainingen'),
+    # path('', home, name='home'),
+    path('', FlexeventsView.as_view(), name='home'),
     path('<int:pk>/', DetailView.as_view(), name='detail'),
     path('<int:event_id>/vote/', vote, name='vote'),  
     path('<int:pk>/results/', ResultsView.as_view(), name='results'),

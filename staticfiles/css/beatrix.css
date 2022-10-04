@@ -1,20 +1,21 @@
-:root {
-  --color-main: #71c6dd;
-  --color-main-light: #e1f6fb;
-  --color-dark: #3f4156;
-  --color-dark-medium: #51546e;
-  --color-dark-light: #696d97;
-  --color-light: #e5e5e5;
-  --color-gray: #8b8b8b;
-  --color-light-gray: #b2bdbd;
-  --color-bg: #2d2d39;
-  --color-success: #5dd693;
-  --color-error: #fc4b0b;
-}
+/* :root { */
+  /* --color-main: #71c6dd; */
+  /* --color-main-light: #e1f6fb; */
+  /* --color-dark: #3f4156; */
+  /* --color-dark-medium: #51546e; */
+  /* --color-dark-light: #696d97; */
+  /* --color-light: #e5e5e5; */
+  /* --color-gray: #8b8b8b; */
+  /* --color-light-gray: #b2bdbd; */
+  /* --color-bg: #2d2d39; */
+  /* --color-success: #5dd693; */
+  /* --color-error: #fc4b0b; */
+/* } */
 /*========== base styles ==========*/
-:root {
-font-family: sans-serif; /* Change your font family */
-   }
+/* :root { */
+  /* Change your font family */
+/* font-family: sans-serif;  */
+   /* } */
    .person-table th{
     background-color: #11b5ee;
     padding: 8px 8px;
