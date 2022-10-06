@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class = "container">
 <form>
  {% csrf_token %}
 {% comment %} <div class="mobile">
   <div class="phone">
      <div class="phone-mirror"> {% endcomment %}
-<table class="datum-table">
+{% comment %} <table class="datum-table"> {% endcomment %}
+<table>
   <thead>
     <tr>
       {% comment %} <th> <a href="/" class="fa fa-home fa-2x" ></a></th> {% endcomment %}
@@ -19,7 +21,8 @@
     </tr>
   </tbody>
 </table>
-<table class="beatrix-table">
+<table>
+{% comment %} <table class="beatrix-table"> {% endcomment %}
     <thead>
       <thead>
         <tr>
@@ -44,4 +47,5 @@
           {% endfor %}</td>
         {% endfor %}
 </form>
+</div>
 {% endblock  %}

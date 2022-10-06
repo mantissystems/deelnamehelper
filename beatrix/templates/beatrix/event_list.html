@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class = "container">
 <form method="post">
   
-  <html>
+  {% comment %} <html> {% endcomment %}
   {% csrf_token %} 
     <head>
 
@@ -26,5 +27,5 @@
 <p>Geen activiteiten.</p>
 {% endif %}
 </div>
-</html> 
+{% comment %} </html>  {% endcomment %}
 {% endblock  %}

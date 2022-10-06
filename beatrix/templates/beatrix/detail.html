@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container">
 <form action="{% url 'vote' question.id %}" method="post">
 {% csrf_token %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-   <table class="person-table">
+   {% comment %} <table class="person-table"> {% endcomment %}
+   <table>
               <thead>
                 <tr>
                   <th>Hosts {{question.pub_date}}</th>
@@ -21,7 +23,8 @@
                     </tbody>
 
                 </table>
-                <table class="person-table">
+                {% comment %} <table class="person-table"> {% endcomment %}
+                <table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -51,7 +54,8 @@
                     </tbody>
 
                 </table>
-    <table class='person-table'>
+    {% comment %} <table class='person-table'> {% endcomment %}
+    <table>
               <thead>
                 <tr>
                   <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
@@ -156,4 +160,5 @@ function Check1(value) {
   
 </script>
 {% endblock javascript %}     {% endcomment %}
+</div>
 {% endblock %}
