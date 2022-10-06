@@ -16,16 +16,6 @@
   /* Change your font family */
 /* font-family: sans-serif;  */
    /* } */
-   .room-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-}
-/*========== components ==========*/
-.container {
-  max-width: 120rem;
-  width: 90%;
-  margin: auto;
-}   
    .person-table th{
     background-color: #11b5ee;
     padding: 8px 8px;
