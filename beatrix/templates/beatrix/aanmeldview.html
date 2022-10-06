@@ -1,7 +1,6 @@
 
 {% extends 'base.html' %}
 {% block content %}
-<div class = "container">
 <form>
 {% csrf_token %}
 {% load static %}
@@ -12,8 +11,7 @@
     </tr>
   </tbody>
 </table>
-         {% comment %} <table class="datum-table"> {% endcomment %}
-         <table>
+         <table class="datum-table">
               <thead>
                 <tr>
                   <th>#</th>
@@ -32,5 +30,4 @@
                       </tbody>
      </table>
 </form>
-</div>
 {% endblock  %}
