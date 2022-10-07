@@ -1,28 +1,34 @@
 from django.urls import path
 
 from beatrix.views import( 
-AanmeldView, FlexdetailView, FlexeventsView, PersonListView,PersonUpdateView, PersonenLijstMaken, 
-apiOverview, bootBeheer, bootDetail, bootLijst, bootWerfuit, eventBeheer, flexEvents, home,
+AanmeldView, FlexdetailView, FlexeventsView, PersonListView, PersonenLijstMaken, activityPage, 
+apiOverview, bootBeheer, bootDetail, bootLijst, bootWerfuit, createRoom, deleteMessage, deleteRoom, eventBeheer, flexEvents, home, loginPage, logoutUser,
 recurrent_event,
-# events,
-# maandlistview,
-# personenlijst,
-# event_detail,
-# flexlistview,
-deelname, ResultsView, vote,DetailView,IndexView, werfin
+deelname, ResultsView, registerPage, topicsPage, updateRoom, updateUser, userProfile, vote,DetailView,IndexView, werfin
 # assign,
 )
 
 # app_name = 'beatrix'
 urlpatterns = [
-    # path('', home, name='home'),
-    path('', FlexeventsView.as_view(), name='home'),
+    path('', home, name='home'),
+    path('login/', loginPage, name="login"),
+    path('logout/', logoutUser, name="logout"),
+    path('topics/', topicsPage, name="topics"),
+    path('update-user/', updateUser, name="update-user"),
+    path('register/', registerPage, name="register"),    
+    path('profile/<str:pk>/', userProfile, name='user-profile'),
+    # path('', FlexeventsView.as_view(), name='home'),
+    path('create-room/', createRoom, name='create-room'),
+    path('update-room/<str:pk>/', updateRoom, name='update-room'),
+    path('delete-room/<str:pk>/', deleteRoom, name='delete-room'),
+    path('delete-message/<str:pk>/', deleteMessage, name='delete-message'),
+    path('activity/', activityPage, name="activity"),
+
     path('<int:pk>/', DetailView.as_view(), name='detail'),
     path('<int:event_id>/vote/', vote, name='vote'),  
     path('<int:pk>/results/', ResultsView.as_view(), name='results'),
     path('events/', AanmeldView.as_view(), name='aanmelden'),
     path('recurrent/', recurrent_event, name='recurrent'),
-    path('<int:pk>/', PersonUpdateView.as_view(), name='person_change'),
     path('api/person/', PersonenLijstMaken.as_view()),    
     path('api/', apiOverview,name='api-overview'),    
     path('bootlijst/', bootLijst,name='bootlijst'),    
@@ -32,12 +38,5 @@ urlpatterns = [
     path('bootbeheer/<str:pk>/', bootBeheer,name='bootbeheer'),    
     path('flexeventsbeheer/<str:pk>/', eventBeheer,name='flexeventsbeheer'),    
     path('bootwerfuit/<str:pk>/', bootWerfuit,name='bootwerfuit'),    
-    # path('kal/<slug:slug>/' , FlexdetailView.as_view(), name='kal'),     
-    # path('collect/', Flexpoule.as_view(), name='collect'),
-    # path('collecting/', flexcollect, name='collecting'),
-    # path('flexcalculate/', FlexCalculateView.as_view(), name='flexcalculate'),
-    # path('export/', export_team_data, name='export'),
-    # path('eq/<slug:slug>/' , equipe_aanwezigheid, name='eq'), 
-    # path('helptekst/', HelpTekstView.as_view(), name='helptekst'),
     ]
 # https://docs.djangoproject.com/en/3.1/topics/http/urls/
