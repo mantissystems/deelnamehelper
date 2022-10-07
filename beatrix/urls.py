@@ -10,7 +10,7 @@ deelname, ResultsView, registerPage, room, topicsPage, updateRoom, updateUser, u
 
 # app_name = 'beatrix'
 urlpatterns = [
-    path('', home, name='home'),
+    # path('', home, name='home'),
     path('login/', loginPage, name="login"),
     path('logout/', logoutUser, name="logout"),
     path('topics/', topicsPage, name="topics"),
@@ -18,7 +18,7 @@ urlpatterns = [
     path('register/', registerPage, name="register"),    
     path('profile/<str:pk>/', userProfile, name='user-profile'),
     path('room/<str:pk>/', room, name='room'),    
-    # path('', FlexeventsView.as_view(), name='home'),
+    path('', FlexeventsView.as_view(), name='home'),
     path('create-room/', createRoom, name='create-room'),
     path('update-room/<str:pk>/', updateRoom, name='update-room'),
     path('delete-room/<str:pk>/', deleteRoom, name='delete-room'),
