@@ -4,7 +4,7 @@ from beatrix.views import(
 AanmeldView, FlexdetailView, FlexeventsView, PersonListView, PersonenLijstMaken, activityPage, 
 apiOverview, bootBeheer, bootDetail, bootLijst, bootWerfuit, createRoom, deleteMessage, deleteRoom, eventBeheer, flexEvents, home, loginPage, logoutUser,
 recurrent_event,
-deelname, ResultsView, registerPage, topicsPage, updateRoom, updateUser, userProfile, vote,DetailView,IndexView, werfin
+deelname, ResultsView, registerPage, room, topicsPage, updateRoom, updateUser, userProfile, vote,DetailView,IndexView, werfin
 # assign,
 )
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path('update-user/', updateUser, name="update-user"),
     path('register/', registerPage, name="register"),    
     path('profile/<str:pk>/', userProfile, name='user-profile'),
+    path('room/<str:pk>/', room, name='room'),    
     # path('', FlexeventsView.as_view(), name='home'),
     path('create-room/', createRoom, name='create-room'),
     path('update-room/<str:pk>/', updateRoom, name='update-room'),

@@ -27,22 +27,40 @@ from beatrix.serializers import FlexeventSerializer, PersoonSerializer,BootSeria
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     rooms = Flexevent.objects.filter(
-        # Q(topic__name__icontains = q) | 
-        # Q(name__icontains = q) | 
+        Q(topic__name__icontains = q) | 
+        Q(name__icontains = q) | 
         Q(description__icontains = q) 
         ) # search 
     
-    # topcs = Topic.objects.all()[0:5]
-    # room_count = rooms.count()
-    # room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    topcs = Topic.objects.all()[0:5]
+    room_count = rooms.count()
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
     context = {
         'rooms': rooms, 
-        # 'topics': topcs, 
-        # 'room_count': room_count, 
-        # 'room_messages': room_messages
+        'topics': topcs, 
+        'room_count': room_count, 
+        'room_messages': room_messages
         }
-    return render(request, 'base/home.html', context)
+    return render(request, 'beatrix/home.html', context)
+
+def room(request, pk):
+    room = Room.objects.get(id=pk)
+    room_messages = room.message_set.all()
+    participants = room.participants.all()
+
+    if request.method == 'POST':
+        message = Message.objects.create(
+            user=request.user,
+            room=room,
+            body=request.POST.get('body')
+        )
+        room.participants.add(request.user)
+        return redirect('room', pk=room.id)
+
+    context = {'room': room, 'room_messages': room_messages, 'participants': participants}
+    return render(request, 'beatrix/room.html', context)
+
 
 def loginPage(request):
     page = 'login'
@@ -50,15 +68,18 @@ def loginPage(request):
         return redirect('home')
 
     if request.method == 'POST':
-        email = request.POST.get('email').lower()
+        username = request.POST.get('username').lower()    
+        # email = request.POST.get('email').lower()
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(email=email)
+            # user = User.objects.get(email=email)
+            user = User.objects.get(username=username)
+
         except:
             messages.error(request, 'User does not exist')
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, email=username, password=password)
 
         if user is not None:
             login(request, user)
@@ -84,7 +105,7 @@ def registerPage(request):
         else:
             messages.error(request, 'An error occurred during registration')
 
-    return render(request, 'login_register.html', {'form': form})
+    return render(request, 'beatrix/login_register.html', {'form': form})
 
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
@@ -98,7 +119,7 @@ def userProfile(request, pk):
         'room_messages': room_messages,
         'topics': topics
         }
-    return render(request, 'profile.html', context)
+    return render(request, 'beatrix/profile.html', context)
 
 
 def logoutUser(request):
@@ -116,17 +137,17 @@ def updateUser(request):
             form.save()
             return redirect('user-profile', pk=user.id)
 
-    return render(request, 'update-user.html', {'form': form})
+    return render(request, 'beatrix/update-user.html', {'form': form})
 
 def topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     topics = Topic.objects.filter(name__icontains=q)
-    return render(request, 'topics.html', {'topics': topics})
+    return render(request, 'beatrix/topics.html', {'topics': topics})
 
 
 def activityPage(request):
     room_messages = Message.objects.all()
-    return render(request, 'base/activity.html', {'room_messages': room_messages})
+    return render(request, 'beatrix/activity.html', {'room_messages': room_messages})
 
 @login_required(login_url='login')
 def createRoom(request):
@@ -173,7 +194,7 @@ def deleteRoom(request, pk):
     if request.method == 'POST':
         room.delete()
         return redirect('home')
-    return render(request, 'delete.html', {'object': room})
+    return render(request, 'beatrix/delete.html', {'object': room})
 
 @login_required(login_url='login')
 def deleteMessage(request, pk):
@@ -188,11 +209,11 @@ def deleteMessage(request, pk):
         return redirect('home')
 
     context = {'obj': message}
-    return render(request, 'delete.html', context)
+    return render(request, 'beatrix/delete.html', context)
 
 def activityPage(request):
     room_messages = Message.objects.all()
-    return render(request, 'activity.html', {'room_messages': room_messages})
+    return render(request, 'beatrix/activity.html', {'room_messages': room_messages})
 
 class PersonenLijstMaken(generics.ListCreateAPIView):
     queryset=Person.objects.all()[0:15]
@@ -237,21 +258,21 @@ class FlexeventsView(ListView):
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    rooms = Room.objects. all() #filter(
-        # Q(topic__name__icontains = q) | 
-        # Q(name__icontains = q) | 
-        # Q(description__icontains = q) 
-        # ) # search 
+    rooms = Room.objects. all().filter(
+        Q(topic__name__icontains = q) | 
+        Q(name__icontains = q) | 
+        Q(description__icontains = q) 
+        ) # search 
     
     topcs = Topic.objects.all()
-    # room_count = rooms.count()
-    # room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    room_count = rooms.count()
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
     context = {
         'rooms': rooms, 
-        # 'topics': topcs, 
-        # 'room_count': room_count, 
-        # 'room_messages': room_messages
+        'topics': topcs, 
+        'room_count': room_count, 
+        'room_messages': room_messages
         }
     return render(request, 'beatrix/home.html', context)
 

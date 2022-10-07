@@ -1,12 +1,12 @@
 {% extends 'main.html' %}
 
 {% block content %}
-
+{% comment %} {% load static %} {% endcomment %}
 <main class="layout layout--3">
   <div class="container">
 
     <!-- Topics Start -->
-    {% include 'topics_component.html' %}
+    {% include 'beatrix/topics_component.html' %}
 
     <!-- Topics End -->
 
@@ -47,13 +47,13 @@
         </a>
       </div>
 
-      {% include 'feed_component.html' %}
+      {% include 'beatrix/feed_component.html' %}
 
     </div>
     <!-- Room List End -->
 
     <!-- Activities Start -->
-    {% include 'activity_component.html' %}
+    {% include 'beatrix/activity_component.html' %}
 
     <!-- Activities End -->
   </div>
