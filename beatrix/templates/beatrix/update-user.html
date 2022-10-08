@@ -15,7 +15,7 @@
                                 </path>
                             </svg>
                         </a>
-                        <h3>Edit your profile</h3>
+                        <h3>Bewerk je account</h3>
                     </div>
                 </div>
                 <div class="layout__body">
@@ -32,6 +32,9 @@
                         <div class="form__action">
                             <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
                             <button class="btn btn--main" type="submit">Update</button>
+                            {% if user.is_superuser %}  
+                            <a class="btn btn--dark" href="{% url 'admin:index' %}">Admin</a>
+                            {% endif %}
                         </div>
                     </form>
                 </div>

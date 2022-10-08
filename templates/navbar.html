@@ -96,8 +96,7 @@
 </header>
 
 {% if request.user.is_authenticated %}
-<p>Hello {{request.user}}</p>
-<a href="{% url 'logout' %}">Logout</a>
+<p>Ingelogd als: {{request.user}}</p>
+{% comment %} <a href="{% url 'logout' %}">Logout</a>
 {% else %}
-<a href="{% url 'login' %}">Login</a>
-{% endif %}
+<a href="{% url 'login' %}">Login</a> {% endcomment %} {% endif %}
