@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
     ]
 
-AUTH_USER_MODEL = 'beatrix.User'
+# AUTH_USER_MODEL = 'beatrix.User'
 MIDDLEWARE = [
     #'debug_toolbar.middleware.DebugToolbarMiddleware', ## handig tijdens debug 
     'django.middleware.security.SecurityMiddleware',
