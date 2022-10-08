@@ -239,7 +239,7 @@ class FlexeventsView(ListView):
         x=10
         # rooster=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
         rooster=Flexevent.objects.all()[:x]
-        print(rooster)
+        # print(rooster)
         for r in rooster:
             aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
             ingedeelden=aanwezig.values_list('member_id', flat=True)

@@ -1,0 +1,18 @@
+pl/url; import settings; collect static
+pyhton3 manage.py collectstatic => staticfiles
+.env env=production
+base.html ; dashy css; fonts
+pip freeze; dit maakt requirements.txt aan; aangepast naar 'normale' requirementsfile uit backup
+.env django_env=production
+logout redirect='/'
+query="; redirect 'ploeg:events' ;mogelijk css problemen
+awesome font pencil is beschikbaar
+form teksten ctrl+ etc
+form empty field opmaak
+logout en login in navigator balk
+create directory fixtures
+ python3 manage.py dumpdata --indent 4 > beatrix.json
+ python3 manage.py loaddata person_data.json
+ python3 manage.py dumpdata beatrix > db.json
+ python3 manage.py dumpdata --indent 4 beatrix.Person > db.json
+ python3 manage.py dumpdata beatrix --indent 4 --exclude beatrix.Flexevent > db.json

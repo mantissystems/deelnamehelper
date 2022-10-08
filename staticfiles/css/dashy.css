@@ -1,0 +1,73 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: linear-gradient(360deg,#00767efb 50%,#3a91a1 360%);
+}
+.dashy-container {
+  text-align: center;
+  font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif;
+}
+.dashy-container > .dashy-link {
+  display: inline-block;
+  margin: 10px;
+  text-decoration: none;
+  color: black;
+  width: 128px;
+  height: 100px;
+}
+.dashy-container > .dashy-link:visited {
+  color: black;
+}
+.dashy-container > .dashy-link > .dashy-icon {
+  font-size: 64px;
+  width: 64px;
+  vertical-align: middle;
+  text-align: center;
+}
+.dashy-container > .dashy-link > .dashy-title {
+  display: block;
+  font-size: 16px;
+  vertical-align: middle;
+}
+.dashy-container.dashy-menu {
+  text-align: left;
+}
+.dashy-container.dashy-menu > .dashy-link {
+  display: block;
+  height: 64px;
+  width: 100%;
+}
+.dashy-container.dashy-menu > .dashy-link > .dashy-icon {
+  display: inline-block;
+  font-size: 32px;
+}
+.dashy-container.dashy-menu > .dashy-link > .dashy-title {
+  display: inline-block;
+  font-size: 16px;
+}
+style>
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+  }
+
+  li {
+    float: left;
+  }
+
+  /* li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+  } */
+
+  li a:hover {
+    background-color: #111111;
+  }
