@@ -1,4 +1,4 @@
-{% extends 'main.html' %} {% block content %}
+{% extends 'base.html' %} {% block content %}
     <main class="auth layout">
     {% if page == 'login' %}
        <div class="container">
@@ -9,13 +9,13 @@
             </div>
           </div>
           <div class="layout__body">
-            <h2 class="auth__tagline">Find your study partner</h2>
+            <h2 class="auth__tagline">Vind een roeimaat</h2>
 
             <form class="form" action="" method="POST">
             {% csrf_token %}
               <div class="form__group form__group">
                 <label for="room_name">Username</label>
-                <input id="username" name="username" type="text" placeholder="e.g. beatrix" />
+                <input id="username" name="username" type="text" placeholder="bijvoorbeeld: info@beatrix.nl" />
               </div>
               <div class="form__group">
                 <label for="password">Password</label>
@@ -49,8 +49,8 @@
             </form>
 
             <div class="auth__action">
-              <p>Haven't signed up yet?</p>
-              <a href="{% url 'register' %}" class="btn btn--link">Sign Up</a>
+              <p>Nog niet geregistreerd?</p>
+              <a href="{% url 'register' %}" class="btn btn--link">Registreer</a>
             </div>
           </div>
         </div>

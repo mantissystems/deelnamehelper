@@ -68,8 +68,8 @@ def loginPage(request):
         return redirect('home')
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower()    
-        # email = request.POST.get('email').lower()
+        username = request.POST.get('username') ##.lower()    
+        # email = request.POST.get('email') ##.lower()
         password = request.POST.get('password')
 
         try:
@@ -77,15 +77,16 @@ def loginPage(request):
             user = User.objects.get(username=username)
 
         except:
-            messages.error(request, 'User does not exist')
+            messages.error(request, 'Gebruiker bestaat niet')
 
-        user = authenticate(request, email=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
             messages.error(request, 'Username OR password does not exist')
+            print('username: ', username)
 
     context = {'page': page}
     return render(request, 'beatrix/login_register.html', context)
@@ -170,7 +171,7 @@ def createRoom(request):
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
-    print(room.host.id)
+    # print(room.host.id)
     if request.user != room.host:
         return HttpResponse('You are not allowed here!')
 
