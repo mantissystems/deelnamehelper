@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% comment %} {% load i18n %} {% endcomment %}
     {% load static %}
-    {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1"> {% endcomment %}
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'font_awesome/css/font-awesome.css' %}" />
-    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/beatrix.css' %}" /> {% endcomment %}
     <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
-            <script src="{% static 'beatrix.js' %}"></script>
-        {% comment %} <link href="/beatrix/static/beatrix.js" rel="preload" as="script"> {% endcomment %}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <title>{% block title %}Flexroeien{% endblock %}</title>
+    <title>{% block title %}Flexbase{% endblock %}</title>
 </head>
 
 <body>
-{% comment %} <div class="mobile"> {% endcomment %}
-{% comment %} <div class="phone"> {% endcomment %}
-{% comment %} <div class="phone-mirror"> {% endcomment %}
-{% comment %} <table class="beatrix-table"> {% endcomment %}
   <thead>
     <tr>
           <a> Voordeel van vooraf aanmelden is, dat we sneller op het water zijn
           </a>
-
-      <th> <a href="/" class="fa fa-home fa-3x" ></a></th>
-      <th> <a href="{% url 'aanmelden' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th>
-       {% comment %} <th> <a href="{% url 'admin:index' %}" class="fa fa-cogs fa-3x" ></a> </th> {% endcomment %}
     </tr>
   </thead>
   <tbody>
@@ -41,7 +28,7 @@
         {% block content %}
         {% endblock %}
         {% block javascript %}
-        {% comment %} <script src="{% static 'beatrix.js' %}"></script> {% endcomment %}
+        <script src="{% static 'js/script.js' %}"></script>
         {% endblock javascript %}
 
     </div>

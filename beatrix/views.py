@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse,reverse_lazy
 from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person,Question,Choice,Boot,User,Room,Topic,Message
-from beatrix.forms import MyUserCreationForm, UserForm,RoomForm
+from beatrix.forms import MyUserCreationForm, UserForm,RoomForm,Personform
 from django.views.generic import(ListView,UpdateView,DetailView)
 from django.http import HttpResponse,JsonResponse
 from rest_framework.decorators import api_view
@@ -580,9 +580,47 @@ def deelname(request, event_id):
 
 
 def recurrent_event(request):
-    template_name = 'beatrix/event_list.html'
-    maak_activiteiten()
+    template_name = 'beatrix/home.html'
+    # maak_activiteiten() #flexevents; houd tijdelijk niet qctief
+    # Topic.objects.all().delete()
+    # Room.objects.all().delete()
+    # Message.objects.all().delete()
+    tops=[]
+    tops.append('flexmaandag')
+    tops.append('flexdinsdag')
+    tops.append('flexwoensdag')
+    tops.append('flexdonderdag')
+    tops.append('flexvrijdag')
+    gebruiker=User.objects.all().first()
+    for t in tops:
+        # Topic.objects.all().update_or_create(
+        #     name=t,
+        # )
+        maak_rooms(t,gebruiker)
     return render(request, template_name, {})
+
+def maak_rooms(tekst,gebruiker):
+        gebruiker=User.objects.all().first()
+        eerste=Topic.objects.all().first()
+        start_date = datetime.date.today()
+        Room.objects.all().update_or_create(
+        host=gebruiker,
+        topic=eerste,
+        name=tekst,
+        description='omschrijving',
+        updated=start_date,
+        created=start_date,
+        )
+        room = Room.objects.all().first()
+        room_messages = room.message_set.all()
+        participants = room.participants.all()
+        room.participants.add(gebruiker)
+        message = Message.objects.create(
+            user=gebruiker,
+            room=room,
+            body=tekst
+        )
+        return
 
 def maak_activiteiten():
     start_date = datetime.date.today()

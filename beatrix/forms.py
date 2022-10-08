@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import Room,User
+from .models import Room,User,Person
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -22,3 +22,8 @@ class UserForm(ModelForm):
         fields = '__all__'
         fields = ['username', 'email']        
         # fields = ['avatar', 'name', 'username', 'email', 'bio']        
+
+class Personform(ModelForm):
+  class Meta:
+    model =Person
+    fields=('__all__')        
