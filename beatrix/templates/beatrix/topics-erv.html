@@ -1,4 +1,4 @@
-{% extends 'main.html' %} {% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <main class="create-room layout">
   <div class="container">
@@ -19,7 +19,7 @@
               ></path>
             </svg>
           </a>
-          <h3>Bekijk Mogelijkhedennn</h3>
+          <h3>Bekijk Flex Mogelijkheden</h3>
         </div>
       </div>
 
@@ -44,14 +44,14 @@
 
         <ul class="topics__list">
           <li>
-            <a href="{% url 'topics' %}" class="active"
+            <a href="{% url 'topics-erv' %}" class="active"
               >All <span>{{topics.count}} </span></a
             >
           </li>
           {% for topic in topics %}
           <li>
-            <a href="{%url 'home' %}?q={{topic.name}}"
-              >{{topic.name}} <span>{{topic.room_set.count}} </span></a
+            <a href="{%url 'home-erv' %}?q={{topic.name}}"
+              >{{topic.event_text}} <span>{{topic.room_set.count}} </span></a
             >
           </li>
           {% endfor %}

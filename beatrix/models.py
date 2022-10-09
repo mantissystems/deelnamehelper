@@ -34,6 +34,38 @@ class Message(models.Model):
 
     def __str__(self):
         return self.body[0:50]
-    
+
+class Person(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100,blank=True)
+    is_flex = models.BooleanField(default=True)        #wil ingedeeld worden in flexpoule
+    is_host = models.BooleanField(default=False)        #kan flexhost zijn
+    keuzes = models.IntegerField(default=0) #aantal keren als host gekozen
+    def __str__(self):
+        return self.name
+
+class Flexevent(models.Model):
+    id = models.AutoField(primary_key=True)
+    event_text = models.CharField(max_length=200)
+    pub_date = models.CharField(max_length=35)
+    pub_time = models.CharField(max_length=35)
+    dagnaam = models.CharField(max_length=35, default='10:00')
+    flexhost = models.CharField(max_length=135, default='-')
+    # flexhost2 = models.CharField(max_length=135, default='-')
+    # flexpoule = models.CharField(max_length=135, default='groep')
+    lid = models.ManyToManyField(Person,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
+    # datum = models.DateField(auto_now=False)
+
+    def __str__(self):
+        return "%s" % (self.event_text)               
+class Flexlid(models.Model):
+    flexevent = models.ForeignKey(Flexevent, on_delete=models.CASCADE,null=True)
+    member = models.ForeignKey(Person, on_delete=models.CASCADE,null=True)
+    is_host = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('member',)    
+    def __str__(self):
+        return "%s" % (self.flexevent)        
 # python .\manage.py makemigrations
 # python .\manage.py migrate

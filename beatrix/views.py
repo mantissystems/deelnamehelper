@@ -1,6 +1,6 @@
 # from django.shortcuts import render
-# import datetime
-# from datetime import date
+import datetime
+from datetime import date
 # from django.shortcuts import render, redirect
 # from django.http import HttpResponse
 # from django.contrib import messages
@@ -13,10 +13,13 @@
 # from django.http import HttpResponseRedirect
 # from django.shortcuts import get_object_or_404, render
 # from django.urls import reverse,reverse_lazy
-# # from beatrix.models import Flexevent,Flexlid,Flexrecurrent,Person,Question,Choice,Boot,
+from beatrix.models import( Flexevent,Flexlid,
+# Flexrecurrent,
+Person,
+)
 # from .models import Room,Topic,Message
 # # from beatrix.forms import MyUserCreationForm, UserForm,RoomForm,Personform
-# from django.views.generic import(ListView,UpdateView,DetailView)
+from django.views.generic import(ListView,UpdateView,DetailView)
 # from django.http import HttpResponse,JsonResponse
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
@@ -105,6 +108,45 @@ def home(request):
         'room_messages': room_messages
         }
     return render(request, 'beatrix/home.html', context)
+
+def home_erv(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    rooms = Room.objects.filter(
+        Q(topic__name__icontains = q) | 
+        Q(name__icontains = q) | 
+        Q(description__icontains = q) 
+        ) # search 
+    
+    topcs = Topic.objects.all()[0:5]
+    room_count = rooms.count()
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    year=int(date.today().strftime('%Y'))
+    month = int(date.today().strftime('%m'))
+    beginmonth = 1 #int(date.today().strftime('%m'))
+    endmonth = 12 # int(date.today().strftime('%m'))
+    print(beginmonth,endmonth)
+    monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+    einde=monthend[endmonth]
+    start=date(year,beginmonth,1)
+    end=date(year,month,einde)
+    rooster=Flexevent.objects.all()
+    for r in rooster:
+        aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
+    ingedeelden=aanwezig.values_list('member_id', flat=True)
+    # x+=len(aanwezig)
+    roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])
+    # context = {
+    #     }         
+    context = {
+        'rooster': rooster,
+        'roostergedeelte': roostergedeeltelijk,
+        'events': roostergedeeltelijk,
+        'rooms': rooms, 
+        'topics': topcs, 
+        'room_count': room_count, 
+        'room_messages': room_messages
+        }
+    return render(request, 'beatrix/home-erv.html', context)
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
@@ -233,46 +275,51 @@ def activityPage(request):
     room_messages = Message.objects.all()
     return render(request, 'beatrix/activity.html', {'room_messages': room_messages})
 
+def erv_topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Flexevent.objects.filter(event_text__icontains=q)
+    return render(request, 'beatrix/topics-erv.html', {'topics': topics})
+
 # class PersonenLijstMaken(generics.ListCreateAPIView):
 #     queryset=Person.objects.all()[0:15]
 #     serializer_class=PersoonSerializer
 
-# class FlexeventsView(ListView):
-#     queryset=Flexevent.objects.all()
+class FlexeventsView(ListView):
+    queryset=Flexevent.objects.all()
     
-    # def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
 
-    #     sl_ = self.kwargs.get("slug")
-    #     year=int(date.today().strftime('%Y'))
-    #     month = int(date.today().strftime('%m'))
-    #     beginmonth = 1 #int(date.today().strftime('%m'))
-    #     endmonth = 12 # int(date.today().strftime('%m'))
-    #     # if beginmonth != 12:endmonth=beginmonth+1
-    #     print(beginmonth,endmonth)
-    #     monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-    #     einde=monthend[endmonth]
-    #     x=0
-    #     start=date(year,beginmonth,1)
-    #     end=date(year,month,einde)
-    #     x=10
-    #     # rooster=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
-    #     rooster=Flexevent.objects.all()[:x]
-    #     # print(rooster)
-    #     for r in rooster:
-    #         aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
-    #         ingedeelden=aanwezig.values_list('member_id', flat=True)
-    #         # print(len(aanwezig))
-    #         x+=len(aanwezig)
-    #     y=int(x/4)
-    #         # y=8
-    #     roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
-    #     context = {
-    #     'rooster': rooster,
-    #     'roostergedeelte': roostergedeeltelijk,
-    #     'events': roostergedeeltelijk,
-    #     'regels':y,
-    #     } 
-    #     return context
+        sl_ = self.kwargs.get("slug")
+        year=int(date.today().strftime('%Y'))
+        month = int(date.today().strftime('%m'))
+        beginmonth = 1 #int(date.today().strftime('%m'))
+        endmonth = 12 # int(date.today().strftime('%m'))
+        # if beginmonth != 12:endmonth=beginmonth+1
+        print(beginmonth,endmonth)
+        monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+        einde=monthend[endmonth]
+        x=0
+        start=date(year,beginmonth,1)
+        end=date(year,month,einde)
+        x=10
+        # rooster=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        rooster=Flexevent.objects.all()[:x]
+        # print(rooster)
+        for r in rooster:
+            aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
+            ingedeelden=aanwezig.values_list('member_id', flat=True)
+            # print(len(aanwezig))
+            x+=len(aanwezig)
+        y=int(x/4)
+            # y=8
+        roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        context = {
+        'rooster': rooster,
+        'roostergedeelte': roostergedeeltelijk,
+        'events': roostergedeeltelijk,
+        'regels':y,
+        } 
+        return context
 
 
 # @api_view(['GET'])
@@ -579,8 +626,8 @@ def activityPage(request):
 
 
 def recurrent_event(request):
-    template_name = 'beatrix/home.html'
-    # maak_activiteiten() #flexevents; houd tijdelijk niet qctief
+    template_name = 'beatrix/flexevent_list.html'
+    maak_activiteiten() #flexevents; houd tijdelijk niet qctief
     # Topic.objects.all().delete()
     # Room.objects.all().delete()
     # Message.objects.all().delete()
@@ -591,11 +638,11 @@ def recurrent_event(request):
     tops.append('flexdonderdag')
     tops.append('flexvrijdag')
     gebruiker=User.objects.all().first()
-    for t in tops:
+    # for t in tops:
         # Topic.objects.all().update_or_create(
         #     name=t,
         # )
-        maak_rooms(t,gebruiker)
+        # maak_rooms(t,gebruiker)
     return render(request, template_name, {})
 
 def maak_rooms(tekst,gebruiker):
@@ -627,7 +674,7 @@ def maak_activiteiten():
     dagnaam=datetime.datetime.now().strftime('%A')
     weekdag=datetime.datetime.now().strftime('%w')
     dagnummer=int(weekdag)
-    boten=Boot.objects.values_list('bootnaam',flat=True)
+    # boten=Boot.objects.values_list('bootnaam',flat=True)
     day_delta = datetime.timedelta(days=1)
     for d in range(7):
         tomorrow = start_date + datetime.timedelta(days=d)
@@ -645,28 +692,28 @@ def maak_activiteiten():
         for t in range(1,7,1):
             tijd2="20:30"
             Flexevent.objects.all().update_or_create(
-                event_text='training_' + str(j),
-              dagnaam=dagnaam, 
-              flexhost='Te bepalen',
-              pub_date=datum2,
-              pub_time=tijd2,
+            event_text='training_' + str(j),
+            dagnaam=dagnaam, 
+            flexhost='Te bepalen',
+            pub_date=datum2,
+            pub_time=tijd2,
                 )
         fl=Flexevent.objects.values_list('id',flat=True)
         for f in fl:
-            for b in boten:
-                # print(b)
-                Boot.objects.update_or_create(
-                bootnaam=b,
-                flexhost=f,
-                beschikbaar=True,
-                indeling='onbekend',
-                )
+            # for b in boten:
+            #     # print(b)
+            #     Boot.objects.update_or_create(
+            #     bootnaam=b,
+            #     flexhost=f,
+            #     beschikbaar=True,
+            #     indeling='onbekend',
+            #     )
 
-    p=Person.objects.all().first()
-    f=Flexevent.objects.first()
-    Flexlid.objects.all().update_or_create(
-    member=p, 
-    flexevent=f,
+            p=Person.objects.all().first()
+        f=Flexevent.objects.first()
+        Flexlid.objects.all().update_or_create(
+        member=p, 
+        flexevent=f,
     )
 
     return
