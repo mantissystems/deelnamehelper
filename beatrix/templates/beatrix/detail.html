@@ -97,10 +97,9 @@
 
                 </table> {% endcomment %}
 </form>
-{% comment %} {% block javascript %}
+{% block javascript %}
 
 <script>
-
 $('#search-input').on('keyup',function(){
     var value = $(this).val()
     console.log('Value:', value)
@@ -108,8 +107,7 @@ $('#search-input').on('keyup',function(){
      console.log(data)
     buildTable(data)
 })
-
-$.ajax1({
+$.ajax({
     method:'GET',
     url:'http://127.0.0.1:8000/api/person/',
     success:function(response){
@@ -155,5 +153,5 @@ function Check1(value) {
     };
   
 </script>
-{% endblock javascript %}     {% endcomment %}
+{% endblock javascript %}
 {% endblock %}

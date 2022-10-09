@@ -31,7 +31,8 @@
             <img src="{{request.user.avatar.url}}" />
           </div>
           <p>
-            {{request.user.username}} <span>@{{request.user.username}}</span>
+            {% comment %} {{request.user.username}} {% endcomment %}
+            <span>ingelogd als: @{{request.user.username}}</span>
           </p>
         </a>
         <button class="dropdown-button">
@@ -90,7 +91,7 @@
           </svg>
           Logout</a
         >
-        <a href="{% url 'home-erv' %}" class="dropdown-link"
+        <a href="{% url 'aanmelden' %}" class="dropdown-link"
           ><svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -113,8 +114,9 @@
   </div>
 </header>
 
-{% if request.user.is_authenticated %}
+{% comment %} {% if request.user.is_authenticated %}
 <p>Ingelogd als: {{request.user}}</p>
-{% comment %} <a href="{% url 'logout' %}">Logout</a>
+{% endcomment %} {% comment %} <a href="{% url 'logout' %}">Logout</a>
 {% else %}
-<a href="{% url 'login' %}">Login</a> {% endcomment %} {% endif %}
+<a href="{% url 'login' %}">Login</a> {% endcomment %} {% comment %} {% endif %}
+{% endcomment %}

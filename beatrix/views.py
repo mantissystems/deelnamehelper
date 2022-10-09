@@ -1,8 +1,8 @@
-# from django.shortcuts import render
+from django.shortcuts import render
 import datetime
 from datetime import date
 # from django.shortcuts import render, redirect
-# from django.http import HttpResponse
+from django.http import HttpResponse
 # from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
 # from django.db.models import Q
@@ -10,9 +10,9 @@ from datetime import date
 # from django.contrib.auth.models import User
 # from django.contrib.auth.forms import UserCreationForm ##as MyUserCreationForm
 
-# from django.http import HttpResponseRedirect
-# from django.shortcuts import get_object_or_404, render
-# from django.urls import reverse,reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse,reverse_lazy
 from beatrix.models import( Flexevent,Flexlid,
 # Flexrecurrent,
 Person,
@@ -21,8 +21,8 @@ Person,
 # # from beatrix.forms import MyUserCreationForm, UserForm,RoomForm,Personform
 from django.views.generic import(ListView,UpdateView,DetailView)
 # from django.http import HttpResponse,JsonResponse
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 # from rest_framework.serializers import Serializer
 # from rest_framework import generics
 # from beatrix.serializers import FlexeventSerializer, PersoonSerializer,BootSerializer
@@ -33,8 +33,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm 
-from .models import Message, Room, Topic
+from django.contrib.auth.forms import UserCreationForm
+
+from beatrix.serializers import PersoonSerializer 
+from .models import Message, Room, Topic,Choice
 from .forms import RoomForm,UserForm
 
 def loginPage(request):
@@ -178,7 +180,19 @@ def userProfile(request, pk):
         'topics': topics
         }
     return render(request, 'beatrix/profile.html', context)
-
+def erv_userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    room_messages = user.message_set.all()
+    topics = Topic.objects.all()
+    
+    context = {
+        'user': user, 
+        'rooms': rooms, 
+        'room_messages': room_messages,
+        'topics': topics
+        }
+    return render(request, 'beatrix/profile.html', context)
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm()
@@ -322,12 +336,12 @@ class FlexeventsView(ListView):
         return context
 
 
-# @api_view(['GET'])
-# def bootLijst(request):
-#     boten=Boot.objects.all()
-#     serializer=BootSerializer(boten,many=True)
+@api_view(['GET'])
+def personenlijst(request):
+    deelnemers=Person.objects.all()
+    serializer=PersoonSerializer(deelnemers,many=True)
 
-#     return Response(serializer.data)
+    return Response(serializer.data)
 
 # @api_view(['GET'])
 # def flexEvents(request):
@@ -390,87 +404,88 @@ class FlexeventsView(ListView):
 #     template_name = 'beatrix/detail.html'
 
 
-# class ResultsView(DetailView):
-#     model = Flexevent
-#     template_name = 'beatrix/results.html'
-#     def get_context_data(self, **kwargs):
-#         sl_ = self.kwargs.get("pk")
-#         flexevent=Flexevent.objects.filter(id=sl_)
-#         # print(flexevent)
-#         context = {
-#         'flexevent':flexevent,
-#         } 
-#         return context
+class ResultsView(DetailView):
+    model = Flexevent
+    template_name = 'beatrix/erv-room.html'
+    def get_context_data(self, **kwargs):
+        sl_ = self.kwargs.get("pk")
+        flexevent=Flexevent.objects.filter(id=sl_)
+        # print(flexevent)
+        context = {
+        'flexevent':flexevent,
+        } 
+        return context
 
-# def vote(request, event_id):
-#     event = get_object_or_404(Flexevent, pk=event_id)
-#     leden = []
-#     afmeldingen=[]
-#     hosts=[]
-#     for h in request.POST.getlist('hoofdhost'):
-#         hosts.append(h)
-#     for af in request.POST.getlist('afmelding'):
-#         afmeldingen.append(af)
-#     for l in request.POST.getlist('aanmelding'):
-#         leden.append(l)
-#     if len(hosts)>0:
-#         h=Person.objects.all().filter(id__in=hosts)[:1]
-#         Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
-#         Flexlid.objects.all().filter(flexevent_id=event_id,member_id=h[0].id).update(is_host=1)
-#     boten=Boot.objects.all().filter(beschikbaar=True,flexhost=event_id)
-#     for l in leden:
-#         Flexlid.objects.all().update_or_create(
-#             member_id=l,
-#             flexevent_id=event_id,
-#         )        
-#     for af in afmeldingen:
-#         p = Person.objects.get(id=af)
-#         if p:
-#             m = Flexlid.objects.filter(flexevent_id=event_id,
-#                                        member_id=p,)
-#             print(m)
-#             if m[0].is_host==True:
-#                 Flexevent.objects.all().filter(id=event_id).update(flexhost='')
-#             m.delete()
+def vote(request, event_id):
+    event = get_object_or_404(Flexevent, pk=event_id)
+    print(event)
+    leden = []
+    afmeldingen=[]
+    hosts=[]
+    for h in request.POST.getlist('hoofdhost'):
+        hosts.append(h)
+    for af in request.POST.getlist('afmelding'):
+        afmeldingen.append(af)
+    for l in request.POST.getlist('aanmelding'):
+        leden.append(l)
+    if len(hosts)>0:
+        h=Person.objects.all().filter(id__in=hosts)[:1]
+        Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
+        Flexlid.objects.all().filter(flexevent_id=event_id,member_id=h[0].id).update(is_host=1)
+    for l in leden:
+        Flexlid.objects.all().update_or_create(
+            member_id=l,
+            flexevent_id=event_id,
+        )        
+    for af in afmeldingen:
+        p = Person.objects.get(id=af)
+        if p:
+            m = Flexlid.objects.filter(flexevent_id=event_id,
+                                       member_id=p,)
+            print(m)
+            if m[0].is_host==True:
+                Flexevent.objects.all().filter(id=event_id).update(flexhost='')
+            m.delete()
 
-#         pp=Person.objects.get(id=p.id)
-#         pp.keuzes-=1
-#         pp.save()
-#     aanwezig=Flexlid.objects.all().filter(flexevent_id=event_id)
-#     ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
-#     ingedeelden=aanwezig.values_list('member_id', flat=True)
-#     zijnhost=ishost.values_list('member_id', flat=True)
-#     kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[:5]
-#     aanwezigen=Person.objects.all().filter(id__in=ingedeelden)
-#     hosts=Person.objects.all().filter(id__in=zijnhost) #.update(is_host=True)
-#     question = get_object_or_404(Flexevent, pk=event_id)
-#     try:
-#         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
-#         selected_choice = question.lid.get(pk=request.POST['aanmelding'])
-#         print('vote event_id, try')
-#     except (KeyError, Choice.DoesNotExist):
-#         print('vote choice, except')
-#         # Redisplay the form.
-#         # print(len(aanwezig)) #regel niet verwijderen
-#         # print(len(kandidaten)) #regel niet verwijderen
-#         return render(request, 'beatrix/detail.html', {
-#             'question': event,
-#             'kandidaten':kandidaten,
-#             'aanwezig':aanwezigen, 
-#             'hosts':hosts, 
-#             'boten':boten, 
-#             'aantal':kandidaten.count(), 
-#             'error_message': "Er is geen keuze gemaakt.",
-#         })
+        pp=Person.objects.get(id=p.id)
+        pp.keuzes-=1
+        pp.save()
+    aanwezig=Flexlid.objects.all().filter(flexevent_id=event_id)
+    ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
+    ingedeelden=aanwezig.values_list('member_id', flat=True)
+    zijnhost=ishost.values_list('member_id', flat=True)
+    kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[:5]
+    kandidaten=Person.objects.all()
+    aanwezigen=Person.objects.all().filter(id__in=ingedeelden)
+    hosts=Person.objects.all().filter(id__in=zijnhost) #.update(is_host=True)
+    question = get_object_or_404(Flexevent, pk=event_id)
+    try:
+        # selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        selected_choice = question.lid.get(pk=request.POST['aanmelding'])
+        print('vote event_id, try')
+    except (KeyError, Choice.DoesNotExist):
+        print('vote choice, except')
+        # Redisplay the form.
+        # print(len(aanwezig)) #regel niet verwijderen
+        # print(len(kandidaten)) #regel niet verwijderen
+        return render(request, 'beatrix/detail.html', {
+            'question': event,
+            'kandidaten':kandidaten,
+            'aanwezig':aanwezigen, 
+            'hosts':hosts, 
+            # 'boten':boten, 
+            'aantal':kandidaten.count(), 
+            'error_message': "Er is geen keuze gemaakt.",
+        })
         # onderstaande 4 regels zijn uitgesterd omdat ze te maken hebben met de poll choices, die niet meer actief zijn
-    # else:
-    #     print('vote event_id, else')
-    #     selected_choice.keuzes += 1
-    #     selected_choice.save()
+    else:
+        print('vote event_id, else')
+        selected_choice.keuzes += 1
+        selected_choice.save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-    # return HttpResponseRedirect(reverse('vote', args=(event_id,)))
+    return HttpResponseRedirect(reverse('vote', args=(event_id,)))
 
 # class FlexdetailView(ListView):
 #     template_name='beatrix/event_detail.html'
@@ -507,36 +522,33 @@ class FlexeventsView(ListView):
 #         } 
 #         return context
 
-# class AanmeldView(ListView):
-#     template_name='beatrix/aanmeldview.html'
-#     queryset=Flexevent.objects.all()
-#     def get_context_data(self, **kwargs):
-#         x=0
-#         year=int(date.today().strftime('%Y'))
-#         month = int(date.today().strftime('%m'))
-#         volgendemaand=month
-#         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-#         x+=1
-#         if month <= 12 and x==0: volgendemaand=month+1
-#         einde=monthend[volgendemaand]
-#         end=date(year,month,einde)
-#         beginmonth = 1 #int(date.today().strftime('%m'))
-#         endmonth = 12 # int(date.today().strftime('%m'))
-#         # if beginmonth != 12:endmonth=beginmonth+1
-#         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-#         einde=monthend[endmonth]
-#         x=100
-#         start=date(year,beginmonth,1)
-#         end=date(year,endmonth,einde)
-#         start=date(year,beginmonth,1)
-#         rooster=Flexevent.objects.filter(pub_date__range=[start, end])
-#         roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
-#         print(x,einde)
-#         # rooster=Flexevent.objects.all()
-#         context = {
-#         'rooster': roostergedeeltelijk,
-#         } 
-#         return context
+class AanmeldView(ListView):
+    template_name='beatrix/aanmeldview.html'
+    queryset=Flexevent.objects.all()
+    def get_context_data(self, **kwargs):
+        x=0
+        year=int(date.today().strftime('%Y'))
+        month = int(date.today().strftime('%m'))
+        volgendemaand=month
+        monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+        x+=1
+        if month <= 12 and x==0: volgendemaand=month+1
+        einde=monthend[volgendemaand]
+        end=date(year,month,einde)
+        beginmonth = 1 #int(date.today().strftime('%m'))
+        endmonth = 12 # int(date.today().strftime('%m'))
+        monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+        einde=monthend[endmonth]
+        x=100
+        start=date(year,beginmonth,1)
+        end=date(year,endmonth,einde)
+        start=date(year,beginmonth,1)
+        rooster=Flexevent.objects.filter(pub_date__range=[start, end])
+        roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        context = {
+        'rooster': roostergedeeltelijk,
+        } 
+        return context
 
 
 # def events(request):
@@ -717,20 +729,20 @@ def maak_activiteiten():
     )
 
     return
-# @api_view(['GET'])
-# def apiOverview(request):
-#     api_urls={
-#     'api/':'api-overview',    
-#     'api/person':'api/person',    
-#     'bootlijst/':'bootlijst',    
-#     'flexevents/':'flexevents',    
-#     'flexeventsbeheer/':'flexeventsbeheer',    
-#     'bootdetail/<str:pk>/':'bootdetail',    
-#     'bootaanmaken/':'bootaanmaken',    
-#     'bootbeheer/<str:pk>/':'bootbeheer',    
-#     'bootwerfuit/<str:pk>/':'bootwerfuit',    
+@api_view(['GET'])
+def apiOverview(request):
+    api_urls={
+    'api/':'api-overview',    
+    'api/person':'api/person',    
+    'bootlijst/':'bootlijst',    
+    'flexevents/':'flexevents',    
+    'flexeventsbeheer/':'flexeventsbeheer',    
+    'bootdetail/<str:pk>/':'bootdetail',    
+    'bootaanmaken/':'bootaanmaken',    
+    'bootbeheer/<str:pk>/':'bootbeheer',    
+    'bootwerfuit/<str:pk>/':'bootwerfuit',    
 
 
-#     }
-#     # return JsonResponse("API BASE POINT",safe=False)
-#     return Response(api_urls)
+    }
+    # return JsonResponse("API BASE POINT",safe=False)
+    return Response(api_urls)

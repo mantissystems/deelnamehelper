@@ -48,12 +48,13 @@
               >All <span>{{topics.count}} </span></a
             >
           </li>
-          {% for topic in topics %}
+          {% for topic in events %}
           <li>
             <a href="{%url 'home-erv' %}?q={{topic.name}}"
-              >{{topic.event_text}} <span>{{topic.room_set.count}} </span></a
+              >{{topic.pub_date}} <span>{{topic.room_set.count}} </span></a
             >
           </li>
+
           {% endfor %}
         </ul>
       </div>
