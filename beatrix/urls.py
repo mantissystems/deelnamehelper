@@ -7,6 +7,7 @@ ResultsView,
 activityPage,
 apiOverview, 
 createRoom, deleteMessage, deleteRoom,
+erv_activityPage,
 erv_home,
 erv_room,
 erv_topicsPage,
@@ -47,6 +48,7 @@ urlpatterns = [
     path('delete-message/<str:pk>/', deleteMessage, name='delete-message'),
     path('activity/', activityPage, name="activity"),
 
+    path('erv_activity/', erv_activityPage, name="erv-activity"),
     path('erv-topics/', erv_topicsPage, name="erv-topics"),
     path('profile/<str:pk>/', erv_userProfile, name='erv-user-profile'),
 

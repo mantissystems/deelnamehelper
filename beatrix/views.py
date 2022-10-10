@@ -305,6 +305,10 @@ def activityPage(request):
     room_messages = Message.objects.all()
     return render(request, 'beatrix/activity.html', {'room_messages': room_messages})
 
+def erv_activityPage(request):
+    room_messages = Message.objects.all()
+    return render(request, 'beatrix/erv-activity.html', {'room_messages': room_messages})
+
 def erv_topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     topics = Flexevent.objects.filter(event_text__icontains=q)
