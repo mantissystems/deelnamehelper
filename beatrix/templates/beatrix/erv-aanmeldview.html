@@ -1,0 +1,20 @@
+
+{% comment %} {% extends 'erv-base.html' %} {% endcomment %}
+{% block content %}
+<form>
+{% csrf_token %}
+{% load static %}
+  <div class="roomListRoom__content">
+
+                    <ul>
+                     {% for h in rooster %}
+                    <li> {{h.id}} </li>
+                    <li><a href="{% url 'vote' h.id %}">{{h.pub_date}}</a>{{h.event_text}}</li> 
+    <a href="{% url 'room' h.id %}"></a>
+                             {% endfor %}   
+                  </ul> 
+                  
+</form>
+  </div>
+
+{% endblock  %}

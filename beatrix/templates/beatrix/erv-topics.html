@@ -1,11 +1,11 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'erv-base.html' %} {% block content %}
 
 <main class="create-room layout">
   <div class="container">
     <div class="layout__box">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
-          <a href="{% url 'home' %}">
+          <a href="{% url 'erv-home' %}">
             <svg
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
@@ -44,13 +44,13 @@
 
         <ul class="topics__list">
           <li>
-            <a href="{% url 'topics-erv' %}" class="active"
+            <a href="{% url 'erv-topics' %}" class="active"
               >All <span>{{topics.count}} </span></a
             >
           </li>
           {% for topic in events %}
           <li>
-            <a href="{%url 'home-erv' %}?q={{topic.name}}"
+            <a href="{%url 'erv-home' %}?q={{topic.name}}"
               >{{topic.pub_date}} <span>{{topic.room_set.count}} </span></a
             >
           </li>

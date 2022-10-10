@@ -4,7 +4,7 @@
   </div>
   <ul class="topics__list">
     <li>
-      <a href="{% url 'home' %}" class="active"
+      <a href="{% url 'erv-home' %}" class="active"
         >All <span>{{rooster.count}}</span></a
       >
       {% comment %} {% for cc in roostergedeelte %}
@@ -23,13 +23,13 @@
 
     {% for tt in rooster %}
     <li>
-      <a href="{% url 'home-erv' %}?q={{tt.name}}"
+      <a href="{% url 'erv-home' %}?q={{tt.name}}"
         >{{tt.event_text}}<span>{{tt.pub_date}}</span></a
       >
     </li>
     {% endfor %}
   </ul>
-  <a class="btn btn--link" href="{% url 'topics-erv' %}">
+  <a class="btn btn--link" href="{% url 'erv-topics' %}">
     More
     <svg
       version="1.1"

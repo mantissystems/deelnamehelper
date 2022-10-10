@@ -1,11 +1,11 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'erv-base.html' %} {% block content %}
 <main class="profile-page layout layout--2">
   <div class="container">
     <!-- Room Start -->
     <div class="room">
       <div class="room__top">
         <div class="room__topLeft">
-          <a href="{% url 'home' %}">
+          <a href="{% url 'erv-home' %}">
             <svg
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,10 @@
           </div>
           <div class="room__hosted">
             <p>Hosted By</p>
-            <a href="{% url 'user-profile' 1 %}" class="room__author">
+            <a
+              href="{% url 'user-profile' room.host.id %}"
+              class="room__author"
+            >
               <div class="avatar avatar--small">
                 <img src="{{room.host.avatar.url}}" />
               </div>

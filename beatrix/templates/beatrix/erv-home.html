@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'erv-base.html' %} {% load static %} {% block content %}
 
 <main class="layout layout--3">
   <div class="container">
@@ -10,7 +10,7 @@
     <!-- Room List Start -->
     <div class="roomList">
       <div class="mobile-menu">
-        <form action="{% url 'home-erv' %}" method="GET" class="header__search">
+        <form action="{% url 'erv-home' %}" method="GET" class="header__search">
           <label>
             <svg
               version="1.1"
@@ -28,7 +28,7 @@
           </label>
         </form>
         <div class="mobile-menuItems">
-          <a class="btn btn--main btn--pill" href="{% url 'topics-erv' %}"
+          <a class="btn btn--main btn--pill" href="{% url 'erv-topics' %}"
             >Browse Topics</a
           >
           <a class="btn btn--main btn--pill" href="{% url 'activity' %}"
@@ -60,12 +60,12 @@
         </a>
       </div>
 
-      {% include 'beatrix/erv-feed_component.html' %}
+      {% include 'beatrix/erv-aanmeldview.html' %}
     </div>
     <!-- Room List End -->
 
     <!-- Activities Start -->
-    {% include 'beatrix/activity_component.html' %}
+    {% include 'beatrix/erv-activity_component.html' %}
 
     <!-- Activities End -->
   </div>

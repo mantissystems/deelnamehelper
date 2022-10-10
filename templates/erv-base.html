@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+    <title>{% block title %}Flexbase{% endblock %}</title>
+</head>
+
+<body>
+  <thead>
+    <tr>
+          <h1> Voordeel van vooraf aanmelden is, dat we sneller op het water zijn
+          </h1>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+
+    <div id="content">
+    {% include 'erv-navbar.html' %}
+      {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+        {% block content %}
+        {% endblock %}
+        {% block javascript %}
+        <script src="{% static 'js/script.js' %}"></script>
+        {% endblock javascript %}
+
+    </div>
+</body>
+</html>

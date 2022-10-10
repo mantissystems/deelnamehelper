@@ -45,15 +45,16 @@ class Person(models.Model):
         return self.name
 
 class Flexevent(models.Model):
+    host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     id = models.AutoField(primary_key=True)
     event_text = models.CharField(max_length=200)
     pub_date = models.CharField(max_length=35)
     pub_time = models.CharField(max_length=35)
     dagnaam = models.CharField(max_length=35, default='10:00')
     flexhost = models.CharField(max_length=135, default='-')
+    lid = models.ManyToManyField(Person,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
     # flexhost2 = models.CharField(max_length=135, default='-')
     # flexpoule = models.CharField(max_length=135, default='groep')
-    lid = models.ManyToManyField(Person,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
     # datum = models.DateField(auto_now=False)
 
     def __str__(self):

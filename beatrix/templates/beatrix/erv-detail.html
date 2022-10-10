@@ -1,8 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'erv-base.html' %}
 {% block content %}
 <form action="{% url 'vote' question.id %}" method="post">
 {% csrf_token %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <table class="person-table">
               <thead>
                 <tr>
