@@ -47,12 +47,16 @@ class Person(models.Model):
 class Flexevent(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     id = models.AutoField(primary_key=True)
+    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     event_text = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+    description = models.TextField(null=True, blank=True) # database field (can Empty), form field (can Empty)
     pub_date = models.CharField(max_length=35)
     pub_time = models.CharField(max_length=35)
     dagnaam = models.CharField(max_length=35, default='10:00')
     flexhost = models.CharField(max_length=135, default='-')
     lid = models.ManyToManyField(Person,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
+    deelnemers = models.ManyToManyField(User, related_name='deelnemers', blank=True)
     # flexhost2 = models.CharField(max_length=135, default='-')
     # flexpoule = models.CharField(max_length=135, default='groep')
     # datum = models.DateField(auto_now=False)
@@ -68,6 +72,19 @@ class Flexlid(models.Model):
         ordering = ('member',)    
     def __str__(self):
         return "%s" % (self.flexevent)        
+
+class Bericht(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Flexevent, on_delete=models.CASCADE) # when room delete, delete all chiled messages
+    body = models.TextField()
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)     
+
+    class Meta:
+        ordering = ['-updated', '-created']
+
+    def __str__(self):
+        return self.body[0:50]
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)

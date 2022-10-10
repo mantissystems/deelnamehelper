@@ -19,7 +19,7 @@
               ></path>
             </svg>
           </a>
-          <h3>UPDATE ROOM</h3>
+          <h3>Bewerk FlexEvent</h3>
         </div>
       </div>
       <div class="layout__body">
@@ -50,7 +50,7 @@
           {% endcomment %}
 
           <div class="form__group">
-            <label for="room_topic">Enter a Topic</label>
+            <label for="room_topic">Onderwerp</label>
             <input
               required
               type="text"
@@ -62,7 +62,7 @@
             <datalist id="topic-list">
               <select id="room_topic">
                 {% for topic in topics %}
-                <option value="">Select your topic</option>
+                <option value="">Selecteer Onderwerp</option>
                 <option value="{{topic.name}}">{{topic.name}}</option>
                 {% endfor %}
               </select>
@@ -70,7 +70,7 @@
           </div>
 
           <div class="form__group">
-            <label for="room_name">Room Name</label>
+            <label for="room_name">FlexEvent</label>
             {{form.name}}
           </div>
 
@@ -78,7 +78,7 @@
             <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}"
               >Cancel</a
             >
-            <button class="btn btn--main" type="submit">Submit</button>
+            <button class="btn btn--main" type="submit">Bevestig</button>
           </div>
         </form>
       </div>

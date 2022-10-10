@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import Room,User
+from .models import Flexevent, Room,User
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -15,6 +15,11 @@ class RoomForm(ModelForm):
         fields = '__all__'
         exclude = ['host', 'participants']
 
+class erv_RoomForm(ModelForm):
+    class Meta:
+        model = Flexevent
+        fields = '__all__'
+        # exclude = ['host', 'participants']
 
 class UserForm(ModelForm):
     class Meta:

@@ -36,8 +36,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
 from beatrix.serializers import PersoonSerializer 
-from .models import Message, Room, Topic,Choice
-from .forms import RoomForm,UserForm
+from .models import Bericht, Message, Room, Topic,Choice
+from .forms import RoomForm,UserForm, erv_RoomForm
 
 def loginPage(request):
 
@@ -113,7 +113,7 @@ def home(request):
 
 def erv_home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    rooms = Room.objects.filter(
+    rooms = Flexevent.objects.filter(
         Q(topic__name__icontains = q) | 
         Q(name__icontains = q) | 
         Q(description__icontains = q) 
@@ -121,7 +121,8 @@ def erv_home(request):
     
     topcs = Topic.objects.all()[0:5]
     room_count = rooms.count()
-    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    # room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
     year=int(date.today().strftime('%Y'))
     month = int(date.today().strftime('%m'))
     beginmonth = 1 #int(date.today().strftime('%m'))
@@ -131,7 +132,7 @@ def erv_home(request):
     einde=monthend[endmonth]
     start=date(year,beginmonth,1)
     end=date(year,month,einde)
-    rooster=Flexevent.objects.all()
+    rooster=Flexevent.objects.all().exclude(host=None) ##########
     aanwezig=Flexlid.objects.none()
     for r in rooster:
         aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
@@ -167,21 +168,25 @@ def room(request, pk):
 
     context = {'room': room, 'room_messages': room_messages, 'participants': participants}
     return render(request, 'beatrix/room.html', context)
+    
 def erv_room(request, pk):
-    room = Room.objects.get(id=pk)
-    room_messages = room.message_set.all()
-    participants = room.participants.all()
+    event = Flexevent.objects.get(id=pk)
+    event_messages = event.bericht_set.all()
+    deelnemers = event.deelnemers.all()
 
     if request.method == 'POST':
-        message = Message.objects.create(
+        bericht = Bericht.objects.create(
             user=request.user,
-            room=room,
+            event=event,
             body=request.POST.get('body')
         )
-        room.participants.add(request.user)
-        return redirect('room', pk=room.id)
+        event.deelnemers.add(request.user)
+        return redirect('erv-room', pk=event.id)
 
-    context = {'room': room, 'room_messages': room_messages, 'participants': participants}
+    context = {'event': event,
+     'event_messages': event_messages, 
+     'deelnemers': deelnemers
+    }
     return render(request, 'beatrix/erv-room.html', context)
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
@@ -198,17 +203,17 @@ def userProfile(request, pk):
     return render(request, 'beatrix/erv-profile.html', context)
 def erv_userProfile(request, pk):
     user = User.objects.get(id=pk)
-    rooms = user.room_set.all()
+    events = user.flexevent_set.all()
     room_messages = user.message_set.all()
     topics = Topic.objects.all()
-    
+    print(events)
     context = {
         'user': user, 
-        'rooms': rooms, 
+        'events': events, 
         'room_messages': room_messages,
         'topics': topics
         }
-    return render(request, 'beatrix/profile.html', context)
+    return render(request, 'beatrix/erv-profile.html', context)
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm()
@@ -228,6 +233,25 @@ def createRoom(request):
     context = {'form': form, 'topics': topics}
     return render(request, 'beatrix/erv-room_form.html', context)
 
+@login_required(login_url='login')
+def erv_createRoom(request):
+    form = erv_RoomForm()
+    topics = Topic.objects.all()
+    if request.method == 'POST':
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+
+        Flexevent.objects.create(
+            host=request.user,
+            dagnaam=topic,
+            pub_date=datetime.date.today(),
+            flexhost='test', ##request.POST.get('name'),
+            event_text='test', ##request.POST.get('description'),
+        )
+        return redirect('erv-home')
+
+    context = {'form': form, 'topics': topics}
+    return render(request, 'beatrix/erv-room_form.html', context)
 
 @login_required(login_url='login')
 def updateRoom(request, pk):
@@ -249,6 +273,40 @@ def updateRoom(request, pk):
     context = {'form': form, 'topics': topics, 'room': room}
     return render(request, 'beatrix/room_form.html', context)
 
+@login_required(login_url='login')
+def erv_updateRoom(request, pk):
+    room = Flexevent.objects.get(id=pk)
+    form = erv_RoomForm(instance=room)
+    topics = Topic.objects.all()
+    if request.user != room.host:
+        return HttpResponse('Your are not allowed here!!')
+
+    if request.method == 'POST':
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        room.name = request.POST.get('name')
+        room.topic = topic
+        room.description = request.POST.get('description')
+        room.save()
+        return redirect('home')
+
+    context = {'form': form, 'topics': topics, 'room': room}
+    return render(request, 'beatrix/erv-room_form.html', context)
+
+@login_required(login_url='login')
+def erv_deleteRoom(request, pk):
+
+    room = Room.objects.get(id=pk)
+
+    if request.user != room.host:
+        return HttpResponse('You are not allowed here!!')
+
+    if request.method == 'POST':
+        room.delete()
+        return redirect('erv-home')
+
+    context = {'obj': room}
+    return render(request, 'beatrix/erv-delete.html', context)
 
 @login_required(login_url='login')
 def deleteRoom(request, pk):
@@ -275,11 +333,25 @@ def deleteMessage(request, pk):
 
     if request.method == 'POST':
         message.delete()
+        return redirect('home')
+
+    context = {'obj': message}
+    return render(request, 'beatrix/delete.html', context)
+
+@login_required(login_url='login')
+def erv_deleteMessage(request, pk):
+
+    message = Bericht.objects.get(id=pk)
+
+    if request.user != message.user:
+        return HttpResponse('U mag hier niet komen!!')
+
+    if request.method == 'POST':
+        message.delete()
         return redirect('erv-home')
 
     context = {'obj': message}
     return render(request, 'beatrix/erv-delete.html', context)
-
 
 @login_required(login_url='login')
 def updateUser(request):
@@ -311,7 +383,7 @@ def erv_activityPage(request):
 
 def erv_topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    topics = Flexevent.objects.filter(event_text__icontains=q)
+    topics = Topic.objects.filter(name__icontains=q)
     return render(request, 'beatrix/erv-topics.html', {'topics': topics})
 
 # class PersonenLijstMaken(generics.ListCreateAPIView):

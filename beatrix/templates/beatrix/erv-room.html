@@ -21,9 +21,9 @@
           </a>
           <h3>Mogelijkheid</h3>
         </div>
-        {% if room.host == request.user %}
+        {% if event.host == request.user %}
         <div class="room__topRight">
-          <a href="{% url 'update-room' room.id %}">
+          <a href="{% url 'erv-update-room' event.id %}">
             <svg
               enable-background="new 0 0 24 24"
               height="32"
@@ -51,7 +51,7 @@
               </g>
             </svg>
           </a>
-          <a href="{% url 'delete-room' room.id %}">
+          <a href="{% url 'erv-delete-room' event.id %}">
             <svg
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
@@ -71,13 +71,13 @@
       <div class="room__box scroll">
         <div class="room__header scroll">
           <div class="room__info">
-            <h3>{{room.name}}</h3>
-            <span>{{room.created|timesince}} geleden</span>
+            <h3>{{event.name}}</h3>
+            <span>{{event.created|timesince}} geleden</span>
           </div>
           <div class="room__hosted">
             <p>Hosted By</p>
             <a
-              href="{% url 'user-profile' room.host.id %}"
+              href="{% url 'erv-user-profile' event.host.id %}"
               class="room__author"
             >
               <div class="avatar avatar--small">
@@ -91,17 +91,17 @@
             rerum consectetur, voluptatem repudiandae eum ea porro cupiditate provident nulla, deserunt, ab ipsum
             corporis laboriosam deleniti molestias?
           </div> -->
-          <span class="room__topics">{{room.topic}}</span>
+          <span class="room__topics">{{event.topic}}</span>
         </div>
 
         <div class="room__conversation">
           <div class="threads scroll">
-            {% for message in room_messages %}
+            {% for message in event_messages %}
             <div class="thread">
               <div class="thread__top">
                 <div class="thread__author">
                   <a
-                    href="{% url 'user-profile' message.user.id %}"
+                    href="{% url 'erv-user-profile' message.user.id %}"
                     class="thread__authorInfo"
                   >
                     <div class="avatar avatar--small">
@@ -115,7 +115,7 @@
                 </div>
 
                 {% if request.user == message.user %}
-                <a href="{% url 'delete-message' message.id %}">
+                <a href="{% url 'erv-delete-message' message.id %}">
                   <div class="thread__delete">
                     <svg
                       version="1.1"
@@ -142,7 +142,7 @@
       <div class="room__message">
         <form action="" method="POST">
           {% csrf_token %}
-          <input name="body" placeholder="Write your message here..." />
+          <input name="body" placeholder="deelnemers bericht geven..." />
         </form>
       </div>
     </div>
@@ -155,7 +155,7 @@
       </h3>
       <div class="participants__list scroll">
         {% for user in participants %}
-        <a href="{%  url 'user-profile' user.id %}" class="participant">
+        <a href="{%  url 'erv-user-profile' user.id %}" class="participant">
           <div class="avatar avatar--medium">
             <img src="{{user.avatar.url}}" />
           </div>

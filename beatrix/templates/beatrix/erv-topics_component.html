@@ -5,7 +5,7 @@
   <ul class="topics__list">
     <li>
       <a href="{% url 'erv-home' %}" class="active"
-        >All <span>{{rooster.count}}</span></a
+        >All <span>{{topics.count}}</span></a
       >
       {% comment %} {% for cc in roostergedeelte %}
       <tr>
@@ -21,11 +21,9 @@
       </tr>
     </li>
 
-    {% for tt in rooster %}
+    {% for tt in topics %}
     <li>
-      <a href="{% url 'erv-home' %}?q={{tt.name}}"
-        >{{tt.event_text}}<span>{{tt.pub_date}}</span></a
-      >
+      <a href="{% url 'erv-home' %}?q={{tt.name}}"><span>{{tt.name}}</span></a>
     </li>
     {% endfor %}
   </ul>

@@ -39,11 +39,11 @@
 
       <div class="roomList__header">
         <div>
-          <h2>Roeigroepen</h2>
+          <h2>Flexmogelijkheden</h2>
           <p>{{room_count}} Flexmogelijkheden</p>
         </div>
 
-        <a class="btn btn--main" href="{% url 'create-room' %}">
+        <a class="btn btn--main" href="{% url 'erv-create-flex' %}">
           <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -56,11 +56,11 @@
               d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
             ></path>
           </svg>
-          Create Room
+          FlexEvent
         </a>
       </div>
 
-      {% include 'beatrix/erv-aanmeldview.html' %}
+      {% include 'beatrix/erv-feed_component.html' %}
     </div>
     <!-- Room List End -->
 
