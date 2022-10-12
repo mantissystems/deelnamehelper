@@ -9,9 +9,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse,reverse_lazy
 from beatrix.models import( Flexevent,Flexlid,
-# Flexrecurrent,
-Person,
-)
+Person,)
+
 # from .models import Room,Topic,Message
 # # from beatrix.forms import MyUserCreationForm, UserForm,RoomForm,Personform
 from django.views.generic import(ListView,UpdateView,DetailView)
@@ -313,29 +312,36 @@ def erv_updateRoom(request, pk):
     event = Flexevent.objects.get(id=pk)
     event_messages = event.bericht_set.all()
     deelnemers = event.deelnemers.all()
-    # aanwezig=Flexlid.objects.all().filter(flexevent_id=event.id)
     ingedeelden=deelnemers.values_list('id', flat=True)
-    # kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[0:10]
     kandidaten=User.objects.all().exclude(id__in=ingedeelden)[0:10]
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
 
+    flexevnt = get_object_or_404(Flexevent, pk=pk)
     if request.method == 'POST':
         topic_name = request.POST.get('topic')
-        aanmelding = request.POST.get('aanmelding')
-        if len(aanmelding)>=1:
-            for aa in aanmelding:
-                room.deelnemers.add(aa)
-        # else:
-        #     room.deelnemers.add(aanmelding)
-        print('aanmelding,topic:', aanmelding,topic_name)
-        # topic, created = Topic.objects.get_or_create(name=topic_name)
-        # room.name = request.POST.get('name')
-        # room.topic = topic
-        # room.description = request.POST.get('description')
-        # room.save()
-        return redirect('erv-home')
+        for l in request.POST.getlist('aanmelding'):
+            room.deelnemers.add(l)
+# 
 
+#     try:
+#         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
+#         selected_choice = flexevnt.deelnemers.get(pk=request.POST['aanmelding'])
+#         print('update deelnemers, try')
+#     except (KeyError, User.DoesNotExist):
+#         print('update deelnemer, except')
+#         # Redisplay the form.
+#         return redirect('erv-home')
+#     else:
+#         print('vote event_id, else')
+#         selected_choice.keuzes += 1
+#         selected_choice.save()
+#         # Always return an HttpResponseRedirect after successfully dealing
+#         # with POST data. This prevents data from being posted twice if a
+#         # user hits the Back button.
+#         context = {'form': form, 'topics': topics, 'room': room}
+#     return render(request, 'beatrix/erv-room_form.html', context)
+# 
     context = {'form': form, 
     'topics': topics,
      'room': room,
