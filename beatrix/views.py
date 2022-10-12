@@ -2,15 +2,9 @@ from urllib import request
 from django.shortcuts import render
 import datetime
 from datetime import date
-# from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.http import HttpResponse
-# from django.contrib import messages
-# from django.contrib.auth.decorators import login_required
-# from django.db.models import Q
-# from django.contrib.auth import authenticate, login, logout
-# from django.contrib.auth.models import User
-# from django.contrib.auth.forms import UserCreationForm ##as MyUserCreationForm
-
+from django.contrib.sessions.models import Session
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse,reverse_lazy
@@ -141,37 +135,40 @@ def home(request):
 
 def erv_home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    flexevents = Flexevent.objects.all().filter(
-        Q(topic__name__icontains = q) | 
-        Q(name__icontains = q) | 
-        Q(event_text__icontains = q) | 
-        Q(description__icontains = q) 
-        ) # search 
     
-    topcs = Topic.objects.all()
-    room_count = flexevents.count()
+    tops=Flexevent.objects.values_list('topic', flat=True)
+    print(tops)
+    topcs = Topic.objects.all().filter(id__in=tops)
     room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
     year=int(date.today().strftime('%Y'))
     month = int(date.today().strftime('%m'))
     beginmonth = 1 #int(date.today().strftime('%m'))
     endmonth = 12 # int(date.today().strftime('%m'))
-    # print(beginmonth,endmonth)
     monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
     einde=monthend[endmonth]
     start=date(year,beginmonth,1)
     end=date(year,month,einde)
-    rooster=Flexevent.objects.all() #.exclude(host=None) ##########
-    # aanwezig=Flexlid.objects.none()
+    ingedeelden=[]
+    # rooster=Flexevent.objects.all() #.exclude(host=None) ##########
     personen=User.objects.all()
-    # for r in rooster:
-        # aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
-    # ingedeelden=aanwezig.values_list('member_id', flat=True)
-    # x+=len(aanwezig)
-    roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])
+    flexevents = Flexevent.objects.all().filter(
+        Q(pub_date__range=[start, end]) & 
+        Q(topic__name__icontains = q) | 
+        Q(name__icontains = q) | 
+        Q(event_text__icontains = q) | 
+        Q(description__icontains = q) 
+        ) # search 
+    room_count = flexevents.count()
+    # sessions = Session.objects.filter(expire_date__gte=date.today())
+    # uid_list = []
+
+    # Build a list of user ids logged in ##for future use
+    # for session in sessions:
+    #     data = session.get_decoded()
+    #     uid_list.append(data.get('_auth_user_id', None))
+    # print(uid_list)
     context = {
-        'events': rooster,
-        'roostergedeelte': roostergedeeltelijk,
-        # 'events': roostergedeeltelijk,
+        'events': flexevents,
         'rooms': flexevents, 
         'personen': personen, 
         'topics': topcs, 
@@ -316,10 +313,10 @@ def erv_updateRoom(request, pk):
     event = Flexevent.objects.get(id=pk)
     event_messages = event.bericht_set.all()
     deelnemers = event.deelnemers.all()
-    aanwezig=Flexlid.objects.all().filter(flexevent_id=event.id)
-    ingedeelden=aanwezig.values_list('member_id', flat=True)
-    kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[0:10]
-    kandidaten=User.objects.all()
+    # aanwezig=Flexlid.objects.all().filter(flexevent_id=event.id)
+    ingedeelden=deelnemers.values_list('id', flat=True)
+    # kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[0:10]
+    kandidaten=User.objects.all().exclude(id__in=ingedeelden)[0:10]
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
 
@@ -342,7 +339,7 @@ def erv_updateRoom(request, pk):
     context = {'form': form, 
     'topics': topics,
      'room': room,
-     'aanwezig': aanwezig,
+    #  'aanwezig': aanwezig,
      'kandidaten': kandidaten,
      }
     return render(request, 'beatrix/erv-room_form.html', context)

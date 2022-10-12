@@ -27,13 +27,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'beatrix',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'rest_framework',
     ]
 
 # AUTH_USER_MODEL = 'beatrix.User'
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware', ## handig tijdens debug 
+    ##'debug_toolbar.middleware.DebugToolbarMiddleware', ## handig tijdens debug 
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",  #22-09-22
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -44,9 +44,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+# INTERNAL_IPS = [
+#     "127.0.0.1",
+# ]
 ROOT_URLCONF = 'deelnamehelper.urls'
 
 TEMPLATES = [

@@ -14,6 +14,7 @@
 
       <ul>
         <a
+        {% if request.user == ee.host %}
           >{% for t in ee.deelnemers.all %}
           <li>{{ forloop.counter }}. {{t.username}}</li>
 
@@ -21,7 +22,7 @@
           {% endfor %}</a
         >
       </ul>
-
+        {% endif %}
       {% endfor %}
     </ul>
   </div>
