@@ -19,7 +19,7 @@
               ></path>
             </svg>
           </a>
-          <h3>Mogelijkheid</h3>
+          <h3>FlexEvent “{{event.dagnaam}}“</h3>
         </div>
         {% if event.host == request.user %}
         <div class="room__topRight">
@@ -83,7 +83,7 @@
               <div class="avatar avatar--small">
                 <img src="{{room.host.avatar.url}}" />
               </div>
-              <span>@{{room.host.username}}</span>
+              <span>@{{event.host.username}}</span>
             </a>
           </div>
           <!-- <div class="room__details">
@@ -151,18 +151,18 @@
     <!--   Start -->
     <div class="participants">
       <h3 class="participants__top">
-        Participants <span>({{participants.count}} Joined)</span>
+        Deelnemers <span>({{event.deelnemers.count}} Aangemeld)</span>
       </h3>
       <div class="participants__list scroll">
-        {% for user in participants %}
+        {% comment %} {% include 'beatrix/erv-detail.html' %} {% endcomment %}
+        {% for user in event.deelnemers.all %}
         <a href="{%  url 'erv-user-profile' user.id %}" class="participant">
           <div class="avatar avatar--medium">
-            <img src="{{user.avatar.url}}" />
+            {% comment %} <img src="{{user.avatar.url}}" /> {% endcomment %}
           </div>
-          <p>
-            {{user.name}}
-            <span>@{{user.username}}</span>
-          </p>
+
+          {{user.id}}.{{user.name}}
+          <span>{{user.username}}</span>
         </a>
         {% endfor %}
       </div>

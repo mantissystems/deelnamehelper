@@ -19,17 +19,15 @@
               ></path>
             </svg>
           </a>
-          <h3>
-            Bewerk FlexEvent {{room.pub_date}} --selecteer leden voor deelname
-          </h3>
+          <h3>Maak FlexEvent</h3>
         </div>
       </div>
       <div class="layout__body">
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group">
-            {% comment %} <label for="room_topic">Enter a Topic</label> {%
-            endcomment %} {% comment %}
+            <label for="room_topic">Enter a Topic</label>
+
             <input
               required
               type="text"
@@ -37,7 +35,7 @@
               name="topic"
               list="topic-list"
             />
-            {% endcomment %} {% comment %}
+
             <datalist id="topic-list">
               <select id="room_topic">
                 {% for topic in topic %}
@@ -45,11 +43,10 @@
                 {% endfor %}
               </select>
             </datalist>
-            {% endcomment %}
           </div>
           <div class="form__group">
-            {% comment %} <label for="room_description">Room Description</label>
-            {{form.description}} {% endcomment %}
+            <label for="room_description">Room Description</label>
+            {{form.description}}
             <ul>
               {% for aa in kandidaten %}
               <li>
@@ -65,7 +62,6 @@
             </ul>
           </div>
 
-          {% comment %}
           <div class="form__group">
             <label for="room_topic">Onderwerp</label>
             <input
@@ -85,12 +81,11 @@
               </select>
             </datalist>
           </div>
-          {% endcomment %} {% comment %}
+
           <div class="form__group">
             <label for="room_name">Flex Event</label>
             {{form.name}}
           </div>
-          {% endcomment %}
 
           <div class="form__action">
             <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}"

@@ -1,5 +1,8 @@
+from datetime import datetime
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
@@ -57,6 +60,7 @@ class Flexevent(models.Model):
     flexhost = models.CharField(max_length=135, default='-')
     lid = models.ManyToManyField(Person,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
     deelnemers = models.ManyToManyField(User, related_name='deelnemers', blank=True)
+    created = models.DateTimeField(default=datetime.now, blank=True)
     # flexhost2 = models.CharField(max_length=135, default='-')
     # flexpoule = models.CharField(max_length=135, default='groep')
     # datum = models.DateField(auto_now=False)

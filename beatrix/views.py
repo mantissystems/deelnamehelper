@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render
 import datetime
 from datetime import date
@@ -64,7 +65,34 @@ def loginPage(request):
             messages.error(request, 'User name or password does not exist')
 
     context = {'page': page}
-    return render(request, 'beatrix/login_register.html', context)
+    return render(request, 'beatrix/erv-login_register.html', context)
+
+def erv_loginPage(request):
+
+    page = 'login'
+
+    if request.user.is_authenticated:
+        return redirect('erv-home')
+
+    if request.method == 'POST':
+        username = request.POST.get('username').lower()
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username = username)
+        except:
+            messages.error(request, 'User does not exist')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('erv-home')
+        else:
+            messages.error(request, 'User name or password does not exist')
+
+    context = {'page': page}
+    return render(request, 'beatrix/erv-login_register.html', context)
 
 def logoutUser(request):
     logout(request)
@@ -84,12 +112,12 @@ def registerPage(request):
             # log the user in
             login(request, user)
 
-            return redirect('home')
+            return redirect('erv-home')
         else:
             messages.error(request, 'Error occurred during registration.')
 
     context = {'form': form}
-    return render(request, 'beatrix/login_register.html', context)
+    return render(request, 'beatrix/erv-login_register.html', context)
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -109,43 +137,43 @@ def home(request):
         'room_count': room_count, 
         'room_messages': room_messages
         }
-    return render(request, 'beatrix/erv-home.html', context)
+    return render(request, 'beatrix/home.html', context)
 
 def erv_home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    rooms = Flexevent.objects.filter(
+    flexevents = Flexevent.objects.all().filter(
         Q(topic__name__icontains = q) | 
         Q(name__icontains = q) | 
+        Q(event_text__icontains = q) | 
         Q(description__icontains = q) 
         ) # search 
     
-    topcs = Topic.objects.all()[0:5]
-    room_count = rooms.count()
-    # room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    topcs = Topic.objects.all()
+    room_count = flexevents.count()
     room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
     year=int(date.today().strftime('%Y'))
     month = int(date.today().strftime('%m'))
     beginmonth = 1 #int(date.today().strftime('%m'))
     endmonth = 12 # int(date.today().strftime('%m'))
-    print(beginmonth,endmonth)
+    # print(beginmonth,endmonth)
     monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
     einde=monthend[endmonth]
     start=date(year,beginmonth,1)
     end=date(year,month,einde)
-    rooster=Flexevent.objects.all().exclude(host=None) ##########
-    aanwezig=Flexlid.objects.none()
-    for r in rooster:
-        aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
-    ingedeelden=aanwezig.values_list('member_id', flat=True)
+    rooster=Flexevent.objects.all() #.exclude(host=None) ##########
+    # aanwezig=Flexlid.objects.none()
+    personen=User.objects.all()
+    # for r in rooster:
+        # aanwezig=Flexlid.objects.all().filter(flexevent_id=r.id)
+    # ingedeelden=aanwezig.values_list('member_id', flat=True)
     # x+=len(aanwezig)
     roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])
-    # context = {
-    #     }         
     context = {
-        'rooster': rooster,
+        'events': rooster,
         'roostergedeelte': roostergedeeltelijk,
-        'events': roostergedeeltelijk,
-        'rooms': rooms, 
+        # 'events': roostergedeeltelijk,
+        'rooms': flexevents, 
+        'personen': personen, 
         'topics': topcs, 
         'room_count': room_count, 
         'room_messages': room_messages
@@ -173,7 +201,10 @@ def erv_room(request, pk):
     event = Flexevent.objects.get(id=pk)
     event_messages = event.bericht_set.all()
     deelnemers = event.deelnemers.all()
-
+    aanwezig=Flexlid.objects.all().filter(flexevent_id=event.id)
+    ingedeelden=aanwezig.values_list('member_id', flat=True)
+    kandidaten=User.objects.all() #.exclude(id__in=ingedeelden)[:5]
+    print(deelnemers)
     if request.method == 'POST':
         bericht = Bericht.objects.create(
             user=request.user,
@@ -185,9 +216,11 @@ def erv_room(request, pk):
 
     context = {'event': event,
      'event_messages': event_messages, 
-     'deelnemers': deelnemers
+     'deelnemers': deelnemers,
+     'kandidaten': kandidaten,
     }
     return render(request, 'beatrix/erv-room.html', context)
+
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all()
@@ -231,7 +264,7 @@ def createRoom(request):
         return redirect('erv-home')
 
     context = {'form': form, 'topics': topics}
-    return render(request, 'beatrix/erv-room_form.html', context)
+    return render(request, 'beatrix/room_form.html', context)
 
 @login_required(login_url='login')
 def erv_createRoom(request):
@@ -242,16 +275,18 @@ def erv_createRoom(request):
         topic, created = Topic.objects.get_or_create(name=topic_name)
 
         Flexevent.objects.create(
-            host=request.user,
-            dagnaam=topic,
-            pub_date=datetime.date.today(),
-            flexhost='test', ##request.POST.get('name'),
-            event_text='test', ##request.POST.get('description'),
+             host=request.user,
+            topic=topic,
+            name=request.POST.get('name'),
+            description=request.POST.get('description'),
+            event_text=topic,
+            flexhost=request.user,
+
         )
         return redirect('erv-home')
 
     context = {'form': form, 'topics': topics}
-    return render(request, 'beatrix/erv-room_form.html', context)
+    return render(request, 'beatrix/erv-flexevent_form.html', context)
 
 @login_required(login_url='login')
 def updateRoom(request, pk):
@@ -278,25 +313,44 @@ def erv_updateRoom(request, pk):
     room = Flexevent.objects.get(id=pk)
     form = erv_RoomForm(instance=room)
     topics = Topic.objects.all()
+    event = Flexevent.objects.get(id=pk)
+    event_messages = event.bericht_set.all()
+    deelnemers = event.deelnemers.all()
+    aanwezig=Flexlid.objects.all().filter(flexevent_id=event.id)
+    ingedeelden=aanwezig.values_list('member_id', flat=True)
+    kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[0:10]
+    kandidaten=User.objects.all()
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
 
     if request.method == 'POST':
         topic_name = request.POST.get('topic')
-        topic, created = Topic.objects.get_or_create(name=topic_name)
-        room.name = request.POST.get('name')
-        room.topic = topic
-        room.description = request.POST.get('description')
-        room.save()
-        return redirect('home')
+        aanmelding = request.POST.get('aanmelding')
+        if len(aanmelding)>=1:
+            for aa in aanmelding:
+                room.deelnemers.add(aa)
+        # else:
+        #     room.deelnemers.add(aanmelding)
+        print('aanmelding,topic:', aanmelding,topic_name)
+        # topic, created = Topic.objects.get_or_create(name=topic_name)
+        # room.name = request.POST.get('name')
+        # room.topic = topic
+        # room.description = request.POST.get('description')
+        # room.save()
+        return redirect('erv-home')
 
-    context = {'form': form, 'topics': topics, 'room': room}
+    context = {'form': form, 
+    'topics': topics,
+     'room': room,
+     'aanwezig': aanwezig,
+     'kandidaten': kandidaten,
+     }
     return render(request, 'beatrix/erv-room_form.html', context)
 
 @login_required(login_url='login')
 def erv_deleteRoom(request, pk):
 
-    room = Room.objects.get(id=pk)
+    room = Flexevent.objects.get(id=pk)
 
     if request.user != room.host:
         return HttpResponse('You are not allowed here!!')
@@ -383,7 +437,7 @@ def erv_activityPage(request):
 
 def erv_topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    topics = Topic.objects.filter(name__icontains=q)
+    topics = Topic.objects.filter(name__icontains=q)[0:5]
     return render(request, 'beatrix/erv-topics.html', {'topics': topics})
 
 # class PersonenLijstMaken(generics.ListCreateAPIView):
@@ -521,10 +575,16 @@ def vote(request, event_id):
     for l in request.POST.getlist('aanmelding'):
         leden.append(l)
     if len(hosts)>0:
-        h=Person.objects.all().filter(id__in=hosts)[:1]
+        hh=Person.objects.all().filter(id__in=hosts)[:1]
+        uu=User.objects.all().filter(id__in=hosts)[:1]
         Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
         Flexlid.objects.all().filter(flexevent_id=event_id,member_id=h[0].id).update(is_host=1)
     for l in leden:
+        try:
+            uu=User.objects.get(id=l)
+            event.deelnemers.add(uu)
+        except (KeyError, User.DoesNotExist):
+            print('vote deelnemer add, except')
         Flexlid.objects.all().update_or_create(
             member_id=l,
             flexevent_id=event_id,
@@ -561,7 +621,7 @@ def vote(request, event_id):
         # print(len(aanwezig)) #regel niet verwijderen
         # print(len(kandidaten)) #regel niet verwijderen
         return render(request, 'beatrix/erv-detail.html', {
-            'question': event,
+            'event': event,
             'kandidaten':kandidaten,
             'aanwezig':aanwezigen, 
             'hosts':hosts, 
@@ -731,7 +791,7 @@ class AanmeldView(ListView):
 
 def recurrent_event(request):
     template_name = 'beatrix/flexevent_list.html'
-    maak_activiteiten() #flexevents; houd tijdelijk niet qctief
+    # maak_activiteiten() #flexevents; houd tijdelijk niet qctief
     # Topic.objects.all().delete()
     # Room.objects.all().delete()
     # Message.objects.all().delete()
@@ -742,32 +802,32 @@ def recurrent_event(request):
     tops.append('flexdonderdag')
     tops.append('flexvrijdag')
     gebruiker=User.objects.all().first()
-    # for t in tops:
-        # Topic.objects.all().update_or_create(
-        #     name=t,
-        # )
-        # maak_rooms(t,gebruiker)
+    for t in tops:
+        Topic.objects.all().update_or_create(
+            name=t,
+        )
+        maak_rooms(t,gebruiker)
     return render(request, template_name, {})
 
 def maak_rooms(tekst,gebruiker):
-        gebruiker=User.objects.all().first()
+        # gebruiker=User.objects.all().first()
         eerste=Topic.objects.all().first()
         start_date = datetime.date.today()
-        Room.objects.all().update_or_create(
+        Flexevent.objects.all().update_or_create(
         host=gebruiker,
         topic=eerste,
         name=tekst,
         description='omschrijving',
-        updated=start_date,
+        # updated=start_date,
         created=start_date,
         )
-        room = Room.objects.all().first()
-        room_messages = room.message_set.all()
-        participants = room.participants.all()
-        room.participants.add(gebruiker)
-        message = Message.objects.create(
+        room = Flexevent.objects.all().first()
+        # room_messages = room.message_set.all()
+        participants = room.deelnemers.all()
+        room.deelnemers.add(gebruiker)
+        message = Bericht.objects.create(
             user=gebruiker,
-            room=room,
+            event=room,
             body=tekst
         )
         return
@@ -791,8 +851,21 @@ def maak_activiteiten():
         day_delta = datetime.timedelta(days=7) 
         datum2=start_date + j * day_delta   
         weekdag=datum2.strftime('%w')
-        dagnaam=datum2.strftime('%A')
-        week=datum2.strftime('%W'),
+        dagnaam='training_' + str(j)
+        week=datum2.strftime('%W')
+        personen=Person.objects.values_list('name',flat=True)
+        qs2 = Person.objects.none()
+        for pp in personen:
+            dd = pp.split(' ')
+            if len(dd[0]) > 0:
+                created = User.objects.get_or_create(
+                username=dd[0],
+                first_name=dd[0],
+                last_name=dd,),
+                password='mantis123'
+
+        user=User.objects.all().first()
+        topc=Topic.objects.create(name='gegenereerd'+ str(j))
         for t in range(1,7,1):
             tijd2="20:30"
             Flexevent.objects.all().update_or_create(
@@ -801,18 +874,11 @@ def maak_activiteiten():
             flexhost='Te bepalen',
             pub_date=datum2,
             pub_time=tijd2,
+            host=user,
+            topic=topc,
                 )
         fl=Flexevent.objects.values_list('id',flat=True)
         for f in fl:
-            # for b in boten:
-            #     # print(b)
-            #     Boot.objects.update_or_create(
-            #     bootnaam=b,
-            #     flexhost=f,
-            #     beschikbaar=True,
-            #     indeling='onbekend',
-            #     )
-
             p=Person.objects.all().first()
         f=Flexevent.objects.first()
         Flexlid.objects.all().update_or_create(

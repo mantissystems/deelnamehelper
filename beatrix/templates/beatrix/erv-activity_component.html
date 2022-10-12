@@ -1,12 +1,55 @@
 <div class="activities">
+  {% if request.user.is_authenticated %}
   <div class="activities__header">
-    <h2>Recente Meldingen</h2>
+    <h2>Lijst van Deelnemers</h2>
   </div>
-  {% for message in room_messages %}
+  <div>
+    <ul>
+      {% for ee in rooms %}
+      <!-- <li>
+        {{ee.event_text}}
+        <hr />
+      </li> -->
+      <!-- <li>{{ee.deelnemers.all.count}} In de groep</li> -->
+
+      <ul>
+        <a
+          >{% for t in ee.deelnemers.all %}
+          <li>{{ forloop.counter }}. {{t.username}}</li>
+
+          <hr />
+          {% endfor %}</a
+        >
+      </ul>
+
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="activities__header">
+    <h2>Kandidaat Deelnemers</h2>
+    <ul>
+      {% for pp in personen %}
+      <li>
+        {{forloop.counter}} {{pp.username}}: {{pp.first_name}} {{pp.last_name}}
+        <!-- <a href="{% url 'erv-register' %}" class="btn btn-warning btn-sm"
+          >Registreer</a
+        > -->
+        <hr />
+      </li>
+
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% else %}
+  <div class="activities__header">
+    <h2>U bent niet ingelogd. Informatie wordt niet getoond</h2>
+  </div>
+  {% endif %} {% for message in room_messages %}
   <div class="activities__box">
     <div class="activities__boxHeader roomListRoom__header">
       <a
-        href="{% url 'user-profile' message.user.id %}"
+        href="{% url 'erv-user-profile' message.user.id %}"
         class="roomListRoom__author"
       >
         <div class="avatar avatar--small">
