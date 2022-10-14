@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-{% comment %} {% load static %} {% endcomment %}
-{% comment %} {% csrf_token %} {% endcomment %}
+  <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a>
+
+<h5>erv-detail</h5>
 <div class="mobile">
   <div class="phone">
      <div class="phone-mirror">
@@ -9,9 +10,6 @@
   <thead>
     <tr>
       <th> <a href="/" class="fa fa-home fa-2x" ></a></th>
-      {% comment %} <th> <a href="{% url 'person:person_changelist' %}" class="btn btn-warning btn-sm" >Aanmelden</a></th> {% endcomment %}
-      {% comment %} <th><a href="{% url 'kalender:rooster' %}" class="fa fa-list fa-2x"  ></a></th> {% endcomment %}
-      {% comment %} <th><a href="{% url 'ploeg:hoofdhost' %}" class="fa fa-user fa-2x"  ></a></th> {% endcomment %}
     </tr>
   </thead>
 

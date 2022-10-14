@@ -1,6 +1,10 @@
+{% extends 'erv-base.html' %}
 {% block content %}
 <form action="{% url 'vote' event.id %}" method="post">
 {% csrf_token %}
+  <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a>
+
+<h5>erv-detail</h5>
    <table class="person-table">
               <thead>
                 <tr>

@@ -1,11 +1,14 @@
 
-{% comment %} {% extends 'erv-base.html' %} {% endcomment %}
+{% extends 'erv-base.html' %}
 {% block content %}
 <form>
 {% csrf_token %}
 {% load static %}
+          <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a>
   <div class="roomListRoom__content">
+            <div class="mobile-menuItems">
 
+<h5>erv-aanmeldview</h5>
                     <ul>
                      {% for h in rooster %}
                     <li> {{h.id}} </li>

@@ -3,7 +3,9 @@
     <h2>Aangemelde Vaardigheden</h2>
   </div>
   <div>
+    {% if personen %}
     <h3>boeg | pos2 | pos3 | slag | stuur</h3>
+    {% endif %}
     <ul>
       <a
       >{% for t in personen %}

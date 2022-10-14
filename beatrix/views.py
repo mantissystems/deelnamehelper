@@ -134,7 +134,6 @@ def home(request):
 
 def erv_home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    
     tops=Flexevent.objects.values_list('topic', flat=True)
     topcs = Topic.objects.all().filter(id__in=tops)
     room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
@@ -150,16 +149,17 @@ def erv_home(request):
     users=User.objects.all()
     ingedeelden=Flexevent.objects.filter(deelnemers__id__in=users)
     flexevents = Flexevent.objects.all().filter(
-        Q(pub_date__range=[start, end]) & 
+        Q(created__range=[start, end]) & 
         Q(topic__name__icontains = q) | 
         Q(name__icontains = q) | 
         Q(event_text__icontains = q) | 
         Q(description__icontains = q) 
         ) # search 
+    d=[]
     for fl in flexevents:
         d = fl.deelnemers.all()
         d | d
-        deelnemers = d
+    deelnemers = d
     skills=Person.objects.all().filter(
         Q(id__in=deelnemers) &
         Q(pos1__in=['sc1','sc2','sc3'])&
@@ -168,19 +168,32 @@ def erv_home(request):
         Q(pos4__in=['sc1','sc2','sc3'])&
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
-
     room_count = flexevents.count()
     # sessions = Session.objects.filter(expire_date__gte=date.today())
     # uid_list = []
+    namen=Person.objects.all()
+    rooster=Flexevent.objects.all() #filter(created__range=[start, end])
+    # rooster=Flexevent.objects.all() #filter(pub_date__range=[(2021,1,1),(2023,12,12)])
+    # print(month,einde,start,end,rooster)
+    # context={
+    #     # 'object_list':results,
+    #    }
     context = {
+        'rooster':rooster,
+        'namen':namen,
         'events': flexevents,
         'rooms': flexevents, 
         'personen':skills,
-        # 'personen': personen, #kandidaten hoeven niet weergegeven te worden
         'topics': topcs, 
         'room_count': room_count, 
         'room_messages': room_messages
         }
+    if 'beatrix' in q:
+        redirect('aanmelden')            
+        return render(request, 'beatrix/maand_list.html', context)
+        print(q)
+        # if request.method == 'GET':
+        # q1 = Flexevent.objects.all()
     return render(request, 'beatrix/erv-home.html', context)
 
 def room(request, pk):
@@ -323,15 +336,26 @@ def erv_updateRoom(request, pk):
     ingedeelden=deelnemers.values_list('id', flat=True)
     deelnemers = event.deelnemers.all()
     kandidaten=User.objects.all().exclude(id__in=ingedeelden)[0:10]
+    users=User.objects.all()
+    ing=Flexevent.objects.filter(deelnemers__id__in=users)
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
-
+    verwijder=Flexevent.objects.none()
     flexevnt = get_object_or_404(Flexevent, pk=pk)
     if request.method == 'POST':
         topic_name = request.POST.get('topic')
-        for l in request.POST.getlist('aanmelding'):
-            room.deelnemers.add(l)
 #  als id in deelnemers, dan verwijderen
+        for l in request.POST.getlist('aanmelding'):
+            verwijder=Flexevent.objects.filter(deelnemers__id__in=l)
+            event.deelnemers.add(l)
+            v=deelnemers.filter(id__in=l)
+            # print(verwijder)
+            if v:
+                print('verwijder', v)
+        for l in request.POST.getlist('aanmelding'):
+            verwijder=Flexevent.objects.filter(deelnemers__id__in=l)
+            event.deelnemers.add(l)
+
 #     try:
 #         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
 #         selected_choice = flexevnt.deelnemers.get(pk=request.POST['aanmelding'])
@@ -353,7 +377,6 @@ def erv_updateRoom(request, pk):
     context = {'form': form, 
     'topics': topics,
      'room': room,
-    #  'aangemeld': f,
      'kandidaten': kandidaten,
      }
     return render(request, 'beatrix/erv-room_form.html', context)
@@ -443,8 +466,53 @@ def activityPage(request):
     return render(request, 'beatrix/activity.html', {'room_messages': room_messages})
 
 def erv_activityPage(request):
-    room_messages = Message.objects.all()
-    return render(request, 'beatrix/erv-activity.html', {'room_messages': room_messages})
+    tops=Flexevent.objects.values_list('topic', flat=True)
+    topcs = Topic.objects.all().filter(id__in=tops)
+    room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
+    year=int(date.today().strftime('%Y'))
+    month = int(date.today().strftime('%m'))
+    beginmonth = 1 #int(date.today().strftime('%m'))
+    endmonth = 12 # int(date.today().strftime('%m'))
+    monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+    einde=monthend[endmonth]
+    start=date(year,beginmonth,1)
+    end=date(year,month,einde)
+    usr=request.user
+    users=User.objects.all()
+    ingedeelden=Flexevent.objects.filter(deelnemers__id__in=users)
+    flexevents = Flexevent.objects.all().filter(
+        Q(pub_date__range=[start, end]) 
+        # Q(topic__name__icontains = q) | 
+        # Q(name__icontains = q) | 
+        # Q(event_text__icontains = q) | 
+        # Q(description__icontains = q) 
+         ) # search 
+    for fl in flexevents:
+        d = fl.deelnemers.all()
+        d | d
+        deelnemers = d
+    skills=Person.objects.all().values_list('pos1','pos2','pos3','pos4','pos5').filter(
+        Q(id__in=deelnemers) &
+        Q(pos1__in=['sc1','sc2','sc3'])&
+        Q(pos2__in=['sc1','sc2','sc3'])&
+        Q(pos3__in=['sc1','sc2','sc3'])&
+        Q(pos4__in=['sc1','sc2','sc3'])&
+        Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
+        )
+
+    room_count = flexevents.count()
+    # sessions = Session.objects.filter(expire_date__gte=date.today())
+    # uid_list = []
+    context = {
+        'events': flexevents,
+        'rooms': flexevents, 
+        'personen':skills,
+        'topics': topcs, 
+        'room_count': room_count, 
+        'room_messages': room_messages
+        }
+
+    return render(request, 'beatrix/erv-activity.html', context)
 
 def erv_topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -590,8 +658,8 @@ def vote(request, event_id):
     if len(hosts)>0:
         hh=Person.objects.all().filter(id__in=hosts)[:1]
         uu=User.objects.all().filter(id__in=hosts)[:1]
-        Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
-        Flexlid.objects.all().filter(flexevent_id=event_id,member_id=h[0].id).update(is_host=1)
+        # Flexevent.objects.all().filter(id=event_id).update(flexhost=h[0].name)
+        Flexlid.objects.all().filter(flexevent_id=event_id,member_id=hh[0].id).update(is_host=1)
     for l in leden:
         try:
             uu=User.objects.get(id=l)
@@ -689,6 +757,7 @@ def vote(request, event_id):
 
 class AanmeldView(ListView):
     template_name='beatrix/erv-aanmeldview.html'
+    print('aanmelden')
     queryset=Flexevent.objects.all()
     def get_context_data(self, **kwargs):
         x=0
@@ -708,43 +777,43 @@ class AanmeldView(ListView):
         start=date(year,beginmonth,1)
         end=date(year,endmonth,einde)
         start=date(year,beginmonth,1)
-        rooster=Flexevent.objects.filter(pub_date__range=[start, end])
-        roostergedeeltelijk=Flexevent.objects.filter(pub_date__range=[start, end])[:x]
+        rooster=Flexevent.objects.filter(created__range=[start, end])
+        roostergedeeltelijk=Flexevent.objects.filter(created__range=[start, end])[:x]
         context = {
         'rooster': roostergedeeltelijk,
         } 
         return context
 
 
-# def events(request):
-#     q1 = Flexevent.objects.all()
-#     # print(request)
-#     # fp = Flexevent.objects.filter(id=1).values('flexpoule')[0:1]
-#     r = q1
-#     template_name = 'beatrix/events.html'
-#     aanwezigen = Flexlid.objects.all() #values_list('member_id', flat=True).filter(is_present=True)
-#     events = Flexevent.objects.all() #.filter(flexhost='',flexhost2='')
-#     rowers = Person.objects.all() #.filter(is_present=True)
-#     hosts = Person.objects.all() #.filter(is_host=True)
-#     # hosts = Person.objects.all().filter(is_host=True, is_present=True)
-#     rowers = rowers | hosts  # voeg hosts en roeiers samen
-#     results=Flexevent.objects.all()
-#     year=int(date.today().strftime('%Y'))
-#     month = int(date.today().strftime('%m'))
-#     monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31]
-#     einde=monthend[month]
-#     start=date(year,month,1)
-#     end=date(year,month,einde)
-#     namen=Person.objects.all()
-#     rooster=Flexevent.objects.filter(pub_date__range=[start, end])
-#     # rooster=Flexevent.objects.all() #filter(pub_date__range=[(2021,1,1),(2023,12,12)])
-#     print(month,einde,start,end,rooster)
-#     context={
-#         # 'object_list':results,
-#         'rooster':rooster,
-#         'namen':namen,
-#        }
-#     return render(request, template_name, context)
+def events(request):
+    q1 = Flexevent.objects.all()
+    print('events')
+    # fp = Flexevent.objects.filter(id=1).values('flexpoule')[0:1]
+    r = q1
+    template_name = 'beatrix/maand_list.html'
+    aanwezigen = Flexlid.objects.all() #values_list('member_id', flat=True).filter(is_present=True)
+    events = Flexevent.objects.all() #.filter(flexhost='',flexhost2='')
+    rowers = Person.objects.all() #.filter(is_present=True)
+    hosts = Person.objects.all() #.filter(is_host=True)
+    # hosts = Person.objects.all().filter(is_host=True, is_present=True)
+    rowers = rowers | hosts  # voeg hosts en roeiers samen
+    results=Flexevent.objects.all()
+    year=int(date.today().strftime('%Y'))
+    month = int(date.today().strftime('%m'))
+    monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31]
+    einde=monthend[month]
+    start=date(year,month,1)
+    end=date(year,month,einde)
+    namen=Person.objects.all()
+    rooster=Flexevent.objects.filter(created__range=[start, end])
+    # rooster=Flexevent.objects.all() #filter(pub_date__range=[(2021,1,1),(2023,12,12)])
+    print(month,einde,start,end,rooster)
+    context={
+        # 'object_list':results,
+        'rooster':rooster,
+        'namen':namen,
+       }
+    return render(request, template_name, context)
 
 # class PersonListView (ListView):
 #     model=Person
