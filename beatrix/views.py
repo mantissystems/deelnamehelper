@@ -136,7 +136,6 @@ def erv_home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     
     tops=Flexevent.objects.values_list('topic', flat=True)
-    print(tops)
     topcs = Topic.objects.all().filter(id__in=tops)
     room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
     year=int(date.today().strftime('%Y'))
@@ -147,9 +146,9 @@ def erv_home(request):
     einde=monthend[endmonth]
     start=date(year,beginmonth,1)
     end=date(year,month,einde)
-    ingedeelden=[]
-    # rooster=Flexevent.objects.all() #.exclude(host=None) ##########
-    personen=User.objects.all()
+    usr=request.user
+    users=User.objects.all()
+    ingedeelden=Flexevent.objects.filter(deelnemers__id__in=users)
     flexevents = Flexevent.objects.all().filter(
         Q(pub_date__range=[start, end]) & 
         Q(topic__name__icontains = q) | 
@@ -157,19 +156,27 @@ def erv_home(request):
         Q(event_text__icontains = q) | 
         Q(description__icontains = q) 
         ) # search 
+    for fl in flexevents:
+        d = fl.deelnemers.all()
+        d | d
+        deelnemers = d
+    skills=Person.objects.all().filter(
+        Q(id__in=deelnemers) &
+        Q(pos1__in=['sc1','sc2','sc3'])&
+        Q(pos2__in=['sc1','sc2','sc3'])&
+        Q(pos3__in=['sc1','sc2','sc3'])&
+        Q(pos4__in=['sc1','sc2','sc3'])&
+        Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
+        )
+
     room_count = flexevents.count()
     # sessions = Session.objects.filter(expire_date__gte=date.today())
     # uid_list = []
-
-    # Build a list of user ids logged in ##for future use
-    # for session in sessions:
-    #     data = session.get_decoded()
-    #     uid_list.append(data.get('_auth_user_id', None))
-    # print(uid_list)
     context = {
         'events': flexevents,
         'rooms': flexevents, 
-        'personen': personen, 
+        'personen':skills,
+        # 'personen': personen, #kandidaten hoeven niet weergegeven te worden
         'topics': topcs, 
         'room_count': room_count, 
         'room_messages': room_messages
@@ -200,7 +207,7 @@ def erv_room(request, pk):
     aanwezig=Flexlid.objects.all().filter(flexevent_id=event.id)
     ingedeelden=aanwezig.values_list('member_id', flat=True)
     kandidaten=User.objects.all() #.exclude(id__in=ingedeelden)[:5]
-    print(deelnemers)
+    # print(deelnemers)
     if request.method == 'POST':
         bericht = Bericht.objects.create(
             user=request.user,
@@ -234,8 +241,9 @@ def erv_userProfile(request, pk):
     user = User.objects.get(id=pk)
     events = user.flexevent_set.all()
     room_messages = user.message_set.all()
-    topics = Topic.objects.all()
-    print(events)
+    tops=Flexevent.objects.values_list('topic', flat=True)
+    topcs = Topic.objects.all().filter(id__in=tops)
+    topics = topcs
     context = {
         'user': user, 
         'events': events, 
@@ -313,6 +321,7 @@ def erv_updateRoom(request, pk):
     event_messages = event.bericht_set.all()
     deelnemers = event.deelnemers.all()
     ingedeelden=deelnemers.values_list('id', flat=True)
+    deelnemers = event.deelnemers.all()
     kandidaten=User.objects.all().exclude(id__in=ingedeelden)[0:10]
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
@@ -322,8 +331,7 @@ def erv_updateRoom(request, pk):
         topic_name = request.POST.get('topic')
         for l in request.POST.getlist('aanmelding'):
             room.deelnemers.add(l)
-# 
-
+#  als id in deelnemers, dan verwijderen
 #     try:
 #         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
 #         selected_choice = flexevnt.deelnemers.get(pk=request.POST['aanmelding'])
@@ -345,7 +353,7 @@ def erv_updateRoom(request, pk):
     context = {'form': form, 
     'topics': topics,
      'room': room,
-    #  'aanwezig': aanwezig,
+    #  'aangemeld': f,
      'kandidaten': kandidaten,
      }
     return render(request, 'beatrix/erv-room_form.html', context)
@@ -440,7 +448,9 @@ def erv_activityPage(request):
 
 def erv_topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    topics = Topic.objects.filter(name__icontains=q)[0:5]
+    tops=Flexevent.objects.filter(topic__name__contains=q).values_list('topic', flat=True)
+    topcs = Topic.objects.all().filter(id__in=tops)
+    topics = topcs ##Topic.objects.filter(name__icontains=q)[0:5]
     return render(request, 'beatrix/erv-topics.html', {'topics': topics})
 
 # class PersonenLijstMaken(generics.ListCreateAPIView):

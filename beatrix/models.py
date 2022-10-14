@@ -3,7 +3,21 @@ from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+SCULL = [
+            ('--', '--'),
+            ('sc1', 'sc1'),
+            ('sc2', 'sc2'),
+            ('sc2a', 'sc2a'),
+            ('sc3', 'sc3'),
+            ('sc4', 'sc4'),
+            ('b1', 'b1'),
+            ('b2', 'b2'),
+            ('b3', 'b3'),
+            ('b4', 'b4'),
+            ('st1', 'st1'),
+            ('st2', 'st2'),
+            ('st3', 'st3'),
+]
 class Topic(models.Model):
     name = models.CharField(max_length=200)
 
@@ -44,6 +58,18 @@ class Person(models.Model):
     is_flex = models.BooleanField(default=True)        #wil ingedeeld worden in flexpoule
     is_host = models.BooleanField(default=False)        #kan flexhost zijn
     keuzes = models.IntegerField(default=0) #aantal keren als host gekozen
+    roeileeftijd = models.CharField(max_length=20,blank=True)
+    is_lid= models.BooleanField(default=True)           #is roeiend lid;member
+    in_poule = models.BooleanField(default=False)       #wil flexibel roeiern
+    vaart = models.BooleanField(default=False)          #zit in ingedeelde boot op het water
+    pos1 = models.CharField(max_length=18, choices=SCULL,default='sc1')  #aanbod vaardigheid om voorstel te berekenen voor wat nodig is aan in te delen boten
+    pos2 = models.CharField(max_length=18, choices=SCULL,default='sc1') 
+    pos3 = models.CharField(max_length=18, choices=SCULL,default='sc1') 
+    pos4 = models.CharField(max_length=18, choices=SCULL,default='sc1') 
+    pos5 = models.CharField(max_length=318, choices=SCULL,default='st1') 
+    coach = models.CharField(max_length=18, choices=SCULL,default='st1')     
+    keuzes = models.IntegerField(default=0) #aantal keren als host gekozen
+
     def __str__(self):
         return self.name
 

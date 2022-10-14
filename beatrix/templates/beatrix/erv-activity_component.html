@@ -1,52 +1,27 @@
 <div class="activities">
-  {% if request.user.is_authenticated %}
   <div class="activities__header">
-    <h2>Lijst van Deelnemers</h2>
+    <h2>Aangemelde Vaardigheden</h2>
   </div>
   <div>
+    <h3>boeg | pos2 | pos3 | slag | stuur</h3>
     <ul>
-      {% for ee in rooms %}
-      <!-- <li>
-        {{ee.event_text}}
+      <a
+      >{% for t in personen %}
+        <li>{{ forloop.counter }} | {{t.pos1}} | {{t.pos2}} | {{t.pos3}} | {{t.pos4}} | {{t.pos5}}</li>
+
         <hr />
-      </li> -->
-      <!-- <li>{{ee.deelnemers.all.count}} In de groep</li> -->
-
-      <ul>
-        <a
-        {% if request.user == ee.host %}
-          >{% for t in ee.deelnemers.all %}
-          <li>{{ forloop.counter }}. {{t.username}}</li>
-
-          <hr />
-          {% endfor %}</a
-        >
-      </ul>
-        {% endif %}
-      {% endfor %}
+        {% endfor %}</a
+      >
     </ul>
+
   </div>
   <div class="activities__header">
-    <h2>Kandidaat Deelnemers</h2>
-    <ul>
-      {% for pp in personen %}
-      <li>
-        {{forloop.counter}} {{pp.username}}: {{pp.first_name}} {{pp.last_name}}
-        <!-- <a href="{% url 'erv-register' %}" class="btn btn-warning btn-sm"
-          >Registreer</a
-        > -->
-        <hr />
-      </li>
-
-      {% endfor %}
-    </ul>
   </div>
-
-  {% else %}
+  
+  {% if request.user.is_authenticated %}
   <div class="activities__header">
-    <h2>U bent niet ingelogd. Informatie wordt niet getoond</h2>
   </div>
-  {% endif %} {% for message in room_messages %}
+ {% for message in room_messages %}
   <div class="activities__box">
     <div class="activities__boxHeader roomListRoom__header">
       <a
@@ -62,7 +37,6 @@
         </p>
       </a>
 
-      {% if request.user == message.user %}
       <div class="roomListRoom__actions">
         <a href="{% url 'erv-delete-message' message.id %}">
           <svg
@@ -79,16 +53,16 @@
           </svg>
         </a>
       </div>
-      {% endif %}
     </div>
     <div class="erv-activities__boxContent">
       <p>
         reacties op: “<a href="{% url 'erv-room' message.event.id %}"
-          >{{message.room}}</a
+        >{{message.room}}</a
         >”
       </p>
       <div class="activities__boxRoomContent">{{message.body}}</div>
     </div>
   </div>
   {% endfor %}
+  {% endif %}
 </div>
