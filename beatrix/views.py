@@ -703,7 +703,7 @@ def vote(request, event_id):
         # print(len(kandidaten)) #regel niet verwijderen
         return render(request, 'beatrix/erv-detail.html', {
             'event': event,
-            'kandidaten':kandidaten,
+            'kandidaten':kandidaten[0:5],
             'aanwezig':aanwezigen, 
             'hosts':hosts, 
             # 'boten':boten, 
@@ -756,7 +756,7 @@ def vote(request, event_id):
 #         return context
 
 class AanmeldView(ListView):
-    template_name='beatrix/erv-aanmeldview.html'
+    template_name='beatrix/erv-aanmeld-activity.html'
     print('aanmelden')
     queryset=Flexevent.objects.all()
     def get_context_data(self, **kwargs):

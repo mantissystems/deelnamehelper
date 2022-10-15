@@ -1,21 +1,26 @@
+  <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a>
+
 {% for room in rooster %}
 <div class="roomListRoom">
   <div class="roomListRoom__header">
-    <a href="{% url 'results' room.id %}" class="roomListRoom__author">
+    <a
+      href="{% url 'erv-user-profile' room.id %}"
+      class="roomListRoom__author"
+    >
       <div class="avatar avatar--small">
         <img src="{{room.host.avatar.url}}" />
       </div>
-      <span>@{{room.flexhost}}</span>
+      <span>@{{room.name}}</span>
     </a>
     <div class="roomListRoom__actions">
       <span>{{room.created|timesince}} geleden</span>
     </div>
   </div>
   <div class="roomListRoom__content">
-    <a href="{% url 'room' room.id %}">{{room.name}}</a>
+    <a href="{% url 'erv-room' room.id %}">{{room.topic.name}} </a>
   </div>
   <div class="roomListRoom__meta">
-    <a href="{% url 'room' room.id %}" class="roomListRoom__joined">
+    <a href="{% url 'erv-room' room.id %}" class="roomListRoom__joined">
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +42,7 @@
           d="M12 16c3.859 0 7-3.141 7-7s-3.141-7-7-7c-3.859 0-7 3.141-7 7s3.141 7 7 7zM12 4c2.757 0 5 2.243 5 5s-2.243 5-5 5-5-2.243-5-5c0-2.757 2.243-5 5-5z"
         ></path>
       </svg>
-      {{room.participants.all.count}} In de boot
+      {{room.deelnemers.all.count}} In de groep
     </a>
     <p class="roomListRoom__topic">{{room.topic.name}}</p>
   </div>

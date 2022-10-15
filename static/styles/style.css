@@ -27,6 +27,16 @@
   font-size: inherit;
 }
 
+ul li {
+  background:--color-dark;
+  color: --color-light;
+  margin: 5px;
+  margin-left: 35px;
+  outline-style:solid;
+  grid: auto/auto auto;
+  grid-template-columns: auto auto;
+}
+
 html {
   font-size: 56.25%;
 }

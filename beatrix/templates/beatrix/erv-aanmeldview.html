@@ -2,9 +2,10 @@
 {% extends 'erv-base.html' %}
 {% block content %}
 <form>
+<h5>erv-aanmeldview</h5>
 {% csrf_token %}
 {% load static %}
-          <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a>
+          {% comment %} <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a> {% endcomment %}
   <div class="roomListRoom__content">
             <div class="mobile-menuItems">
 

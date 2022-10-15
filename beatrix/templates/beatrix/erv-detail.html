@@ -2,13 +2,10 @@
 {% block content %}
 <form action="{% url 'vote' event.id %}" method="post">
 {% csrf_token %}
-  <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a>
-
-<h5>erv-detail</h5>
    <table class="person-table">
               <thead>
                 <tr>
-                  <th>Hosts {{question.pub_date}}</th>
+                  <th>Lijst van aangemelde Host voor {{event.created|date:"d M Y"}}</th>
                 </tr>
               </thead>
                  <tbody>
@@ -27,10 +24,10 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>AANGEMELD op {{question.pub_date}}</th>
-                  <th>Afmelder </th>
-                  <th><input type="submit" value="Bevestig"> </th>
-                  <th>Host J/N </th>
+                  <th>REEDS AANGEMELD voor {{event.created|date:"d M Y"}}</th>
+                  <th><input type="submit" value="Meld Af || Maak Host J/N"> </th>
+                  {% comment %} <th> == </th> {% endcomment %}
+                  <th>  </th>
                 </tr>
               </thead>
                  <tbody>
@@ -38,9 +35,10 @@
                             <tr>
                         </td>
                         <td>{{t.id }}</td>
-                        <td>{{ forloop.counter }}|{{aa.id}}. {{aa.name}}</td>
+                        <td></td>
                         <td>
                         <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
+                        <td>{{aa.id}}. {{aa.name}}</td>
                         </td>
                         <td>
                         <td>
@@ -57,9 +55,9 @@
               <thead>
                 <tr>
                   <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
-                  <th>Kandidaten(uit {{aantal}}) voor {{question.pub_date}}</th>
-                  <th>Meld Aan </th>
-                  <th><input type="submit" value="Bevestig"> </th>
+                  <th>Vind ( {{aantal}}) Kandidaten voor {{event.created|date:"d M Y"}}</th>
+                  {% comment %} <th>Meld Aan </th> {% endcomment %}
+                  <th><input type="submit" value="Meld Aan"> </th>
                   <th></th>
                 </tr>
               </thead>
@@ -83,7 +81,7 @@
                  <table class="person-table">
               <thead>
                 <tr>
-                  <th>Beschikbare boten op {{question.pub_date}}</th>
+                  <th>Beschikbare boten t voor {{event.created|date:"d M Y"}}</th>
                 </tr>
               </thead>
                  <tbody>
@@ -100,7 +98,7 @@
                 </table> {% endcomment %}
 </form>
 {% block javascript %}
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
 $('#search-input').on('keyup',function(){
     var value = $(this).val()
@@ -119,7 +117,7 @@ $.ajax({
     }
 })
 
-function searchTable1(value, data){
+function searchTable(value, data){
     var filteredData =[]
     for (var i = 0; i < data.length; i++){
         value=value.toLowerCase()
@@ -131,13 +129,14 @@ function searchTable1(value, data){
     return filteredData
 }
 
-function buildTable1(data){
+function buildTable(data){
   
 var table = document.getElementById('myTable')
 table.innerHTML=``
-let lengte = 10;
-for (var i = 0; i < lengte;i++ ){
+//let lengte = 10;
+for (var i = 0; i < data.length;i++ ){
       var row = `<tr> 
+      <td></td>
     <td> ${data[i].id} </td> 
     <td> ${data[i].name} </td> 
     <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].id}"> </td>
