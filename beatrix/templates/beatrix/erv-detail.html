@@ -2,10 +2,15 @@
 {% block content %}
 <form action="{% url 'vote' event.id %}" method="post">
 {% csrf_token %}
+{% comment %} =================== {% endcomment %}
+<div class="mobile">
+<div class="phone">
+<div class="phone-mirror">
+
    <table class="person-table">
               <thead>
                 <tr>
-                  <th>Lijst van aangemelde Host voor {{event.created|date:"d M Y"}}</th>
+                  <th>Lijst van vrijwilliger 'Host' voor {{event.created|date:"d M Y"}}</th>
                 </tr>
               </thead>
                  <tbody>
@@ -22,25 +27,26 @@
                 </table>
                 <table class="person-table">
               <thead>
+                <hr>
                 <tr>
-                  <th>#</th>
-                  <th>REEDS AANGEMELD voor {{event.created|date:"d M Y"}}</th>
-                  <th><input type="submit" value="Meld Af || Maak Host J/N"> </th>
-                  {% comment %} <th> == </th> {% endcomment %}
-                  <th>  </th>
+                  <th>1#</th>
+                  <th>2REEDS AANGEMELD voor {{event.created|date:"d M Y"}}</th>
+                  <th>3<input type="submit" value="Meld Af || Maak Host J/N"> </th>
+                  <th>4</th>
+                  <th>5</th>
                 </tr>
               </thead>
                  <tbody>
                         <td>{% for aa in aanwezig %}
                             <tr>
                         </td>
-                        <td>{{t.id }}</td>
-                        <td></td>
-                        <td>
+                        <td>1{{t.id }}</td>
+                        <td>2</td>
+                        <td>3
                         <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
-                        <td>{{aa.id}}. {{aa.name}}</td>
+                        <td>4{{aa.id}}. {{aa.name}}</td>
                         </td>
-                        <td>
+                        <td> </td>
                         <td>
                         <input type="checkbox" name="hoofdhost" id="host{{ forloop.counter }}" value="{{ aa.id }}">
                         </td>
@@ -53,49 +59,24 @@
                 </table>
     <table class='person-table'>
               <thead>
+                              <hr>
+
                 <tr>
                   <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
                   <th>Vind ( {{aantal}}) Kandidaten voor {{event.created|date:"d M Y"}}</th>
-                  {% comment %} <th>Meld Aan </th> {% endcomment %}
                   <th><input type="submit" value="Meld Aan"> </th>
-                  <th></th>
-                </tr>
               </thead>
 
                     <tbody id = myTable>
                         <td>{% for t in kandidaten %}
-                            <tr>
                         </td>
+                            <tr>
                         <td>{{t.id }}</td>
                         <td>{{ forloop.counter }}. {{t.name}}</td>
-                        <td>
-                        <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}">
-                        </td>
-                        
-
+                      <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>                       
                         {% endfor %}
                         </tr>
                     </tbody>
-
-                {% comment %} </table>
-                 <table class="person-table">
-              <thead>
-                <tr>
-                  <th>Beschikbare boten t voor {{event.created|date:"d M Y"}}</th>
-                </tr>
-              </thead>
-                 <tbody>
-                        <td>{% for bb in boten %}
-                            <tr>
-                        </td>
-                        <td>{{bb.id}}. {{bb.bootnaam}}</td>
-                        </td>
-
-                        {% endfor %}
-                        </tr>
-                    </tbody>
-
-                </table> {% endcomment %}
 </form>
 {% block javascript %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -155,4 +136,7 @@ function Check1(value) {
   
 </script>
 {% endblock javascript %}
+</div>
+</div>
+</div>
 {% endblock %}

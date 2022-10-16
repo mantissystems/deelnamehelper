@@ -12,6 +12,7 @@
   --color-bg: #2d2d39;
   --color-success: #5dd693;
   --color-error: #fc4b0b;
+  --phone-width:460px;
 }
 
 /*========== base styles ==========*/
@@ -781,6 +782,19 @@ a {
 .activities__boxContent {
   font-size: 1.4rem;
 }
+.activities__aanmelden {
+  font-size: 1.4rem;
+  max-width: fit-content;
+}
+.activities__aanmeldContent {
+  font-size: 1.4rem;
+  background: var(--color-bg);
+  /* padding: 1rem; */
+  border-radius: 5px;
+  margin-top: 1rem;
+  /* margin-left: -4.2rem; */
+  width: fit-content;
+}
 
 .activities__boxContent a:hover {
   text-decoration: underline;
@@ -795,6 +809,9 @@ a {
 }
 
 .roomListRoom__actions svg {
+  fill: var(--color-light-gray);
+}
+.roomListRoom__aanmeld svg {
   fill: var(--color-light-gray);
 }
 
@@ -1172,4 +1189,30 @@ a {
   font-weight: 500;
   color: var(--color-main);
   font-weight: 1.4rem;
+}
+.mobile {
+  height: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+}
+.phone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--phone-width);
+  height: flex;
+  background: var(--color-dark);
+  border-radius: 30px;
+  padding: 10px;
+  font-size: inherit;
+}
+.phone-mirror {
+  position: relative;
+  width: var(--phone-width);
+  height: flex;
+  background-color:var(--color-dark-light);
+  border-radius: 30px;
+  font-size: inherit;
 }

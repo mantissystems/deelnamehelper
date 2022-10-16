@@ -355,24 +355,6 @@ def erv_updateRoom(request, pk):
         for l in request.POST.getlist('aanmelding'):
             verwijder=Flexevent.objects.filter(deelnemers__id__in=l)
             event.deelnemers.add(l)
-
-#     try:
-#         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
-#         selected_choice = flexevnt.deelnemers.get(pk=request.POST['aanmelding'])
-#         print('update deelnemers, try')
-#     except (KeyError, User.DoesNotExist):
-#         print('update deelnemer, except')
-#         # Redisplay the form.
-#         return redirect('erv-home')
-#     else:
-#         print('vote event_id, else')
-#         selected_choice.keuzes += 1
-#         selected_choice.save()
-#         # Always return an HttpResponseRedirect after successfully dealing
-#         # with POST data. This prevents data from being posted twice if a
-#         # user hits the Back button.
-#         context = {'form': form, 'topics': topics, 'room': room}
-#     return render(request, 'beatrix/erv-room_form.html', context)
 # 
     context = {'form': form, 
     'topics': topics,
@@ -520,10 +502,6 @@ def erv_topicsPage(request):
     topcs = Topic.objects.all().filter(id__in=tops)
     topics = topcs ##Topic.objects.filter(name__icontains=q)[0:5]
     return render(request, 'beatrix/erv-topics.html', {'topics': topics})
-
-# class PersonenLijstMaken(generics.ListCreateAPIView):
-#     queryset=Person.objects.all()[0:15]
-#     serializer_class=PersoonSerializer
 
 class FlexeventsView(ListView):
     queryset=Flexevent.objects.all()
@@ -720,40 +698,7 @@ def vote(request, event_id):
         # user hits the Back button.
     return HttpResponseRedirect(reverse('vote', args=(event_id,)))
 
-# class FlexdetailView(ListView):
-#     template_name='beatrix/event_detail.html'
-#     # template_name='beatrix/maand_list.html'
-#     queryset=Flexevent.objects.all()
 
-#     def get_context_data(self, **kwargs):
-#         sl_ = self.kwargs.get("slug")
-#         # mnd_ = self.kwargs.get("mnd")
-#         print('flexdetailview:', sl_)
-#         flexevent=Flexevent.objects.get(id=sl_)
-#         # template_name='beatrix/maand_list.html'
-#         year=int(date.today().strftime('%Y'))
-#         month = int(date.today().strftime('%m'))
-#         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-#         einde=monthend[month]
-#         start=date(year,month,1)
-#         end=date(year,month,einde)
-#         rooster=Flexevent.objects.filter(pub_date__range=[start, end])
-#         reedsingedeeld=Flexlid.objects.all()
-#         ri=[]
-#         for f in reedsingedeeld:
-#             ri.append(f)
-#         # print(len(reedsingedeeld))
-#         ri=len(reedsingedeeld)
-#         reedsingedeeld=reedsingedeeld.values_list('member_id', flat=True)
-#         # kandidaten=Person.objects.all().exclude(id__in=reedsingedeeld)
-#         kandidaten=Person.objects.all()[0:ri]
-
-#         context = {
-#         'rooster': rooster,
-#         'flexevent':flexevent,
-#         'deelnemers':kandidaten
-#         } 
-#         return context
 
 class AanmeldView(ListView):
     template_name='beatrix/erv-aanmeld-activity.html'

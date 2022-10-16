@@ -37,15 +37,16 @@
             </div>
             {% endif %}
 
-                     {% for h in rooster %}
         </div>
-        <div class="activities__boxContent">
-                    <a href="{% url 'vote' h.id %}">{{h.pub_date}}</a> 
-    <a href="{% url 'erv-room' h.id %}"></a>
-            <div class="activities__boxRoomContent">{{h.event_text}}</div>
+                     {% for h in rooster %}
+        <div class="activities__aanmelden">
+                    <a href="{% url 'vote' h.id %}">{{h.created|date:"D d M Y"}}</a> 
+                     {% comment %} { value|date:"SHORT_DATE_FORMAT" }} {% endcomment %}
+        <a href="{% url 'erv-room' h.id %}"></a>
+            <div class="activities__aanmeldContent">{{h.event_text}}</div>
                              {% endfor %}   
         </div>
-    </div>
+          </div>
 
 
           </div>
