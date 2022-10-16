@@ -1,0 +1,434 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$UZnggCZGjxePe5vrTIXAdX$Y+1Ev35GiWSf4FX9rFhXYipf8AjToXfG3ypUyoWRG2I=",
+      "last_login": "2022-10-11T22:31:17.680Z",
+      "is_superuser": true,
+      "username": "jozef",
+      "first_name": "",
+      "last_name": "",
+      "email": "info@mantisbv.nl",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:20.554Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Wim",
+      "first_name": "Wim",
+      "last_name": "['Wim', 'Bakker']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.218Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Thom",
+      "first_name": "Thom",
+      "last_name": "['Thom', 'Bakker']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.235Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Anja",
+      "first_name": "Anja",
+      "last_name": "['Anja', 'van', 'Leeuwen']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.252Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Edwin",
+      "first_name": "Edwin",
+      "last_name": "['Edwin', 'vd', 'Linden']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.269Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 7,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Roel",
+      "first_name": "Roel",
+      "last_name": "['Roel', 'van', 'Grinsven']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.285Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Anne",
+      "first_name": "Anne",
+      "last_name": "['Anne', 'van', 'Riesewijk']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.302Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Elsa",
+      "first_name": "Elsa",
+      "last_name": "['Elsa', 'Schilders']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.320Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Frank",
+      "first_name": "Frank",
+      "last_name": "['Frank', 'Heesels']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.337Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Hanneke",
+      "first_name": "Hanneke",
+      "last_name": "['Hanneke', 'Vianen']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.353Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 12,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Henk",
+      "first_name": "Henk",
+      "last_name": "['Henk', 'Kok']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.370Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 13,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Marion",
+      "first_name": "Marion",
+      "last_name": "['Marion', 'Theunissen']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.387Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 14,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Annelies",
+      "first_name": "Annelies",
+      "last_name": "['Annelies', 'van', 'Driel']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.403Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 15,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Brigitte",
+      "first_name": "Brigitte",
+      "last_name": "['Brigitte', 'Tulp']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.420Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 16,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Carla",
+      "first_name": "Carla",
+      "last_name": "['Carla', 'Bakker']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.437Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 17,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Koen",
+      "first_name": "Koen",
+      "last_name": "['Koen', 'Brantjes']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.455Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 18,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Nel",
+      "first_name": "Nel",
+      "last_name": "['Nel', 'Meulendijk']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.472Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 19,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Peter",
+      "first_name": "Peter",
+      "last_name": "['Peter', 'Bremmer']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.488Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 20,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Richard",
+      "first_name": "Richard",
+      "last_name": "['Richard', 'de', 'Croo', 'de', 'Jong']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.504Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 21,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Stephanie",
+      "first_name": "Stephanie",
+      "last_name": "['Stephanie', 'du', 'Croo', 'de', 'Jong']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.519Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 22,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Ton",
+      "first_name": "Ton",
+      "last_name": "['Ton', 'Bakker']",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-10-11T22:16:56.532Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 23,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Ton2",
+      "first_name": "Ton",
+      "last_name": "Bielderman",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 24,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "Willemijn",
+      "first_name": "Willemijn",
+      "last_name": "Nieuwenhuist",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 25,
+    "fields": {
+      "password": "beatrix123",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "angela",
+      "first_name": "Angela",
+      "last_name": "Hessing",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
