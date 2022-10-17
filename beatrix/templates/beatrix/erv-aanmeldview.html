@@ -1,24 +1,42 @@
 {% extends 'erv-base.html' %}
 {% block content %}
 <form>
-  <h5>erv-aanmeldview</h5>
   {% csrf_token %}
   <div class="outer">
     <div class="phone">
+      <h5>erv-aanmeldview</h5>
       <div class="phone-mirror">
+        <table class="beatrix-table">
+          <thead>
+            <tr>
+              <th>Lijst van vrijwilliger 'Host' voor {{event.created|date:"d M Y"}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <td>{% for rr in rooster %}
+              <tr>
+            </td>
+            <td><a href="{% url 'vote' rr.id %}">{{rr.created|date:"d D M Y"}}</a>{{rr.event_text}}
+            <a href="{% url 'erv-room' rr.id %}"></a>            </td>
+
+            {% endfor %}
+            </tr>
+          </tbody>
+
+        </table>
 
         <div class="roomListRoom__content">
           <div class="mobile-menuItems">
 
             <h5>erv-aanmeldview</h5>
 
-            <ul>
+            <!-- <ul>
               {% for h in rooster %}
               <li> {{h.id}} </li>
               <a href="{% url 'vote' h.id %}">{{h.created|date:"d D M Y"}}</a>{{h.event_text}}
               <a href="{% url 'erv-room' h.id %}"></a>
               {% endfor %}
-            </ul>
+            </ul> -->
 
 </form>
 </div>

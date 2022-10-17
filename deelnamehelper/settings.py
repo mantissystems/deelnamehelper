@@ -123,7 +123,7 @@ STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 STATIC_FILES_DIR='/static'
 FIXTURE_DIRS = [
-    BASE_DIR / 'static'
+    BASE_DIR / 'staticfiles'
     
 ]
 

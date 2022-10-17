@@ -13,6 +13,7 @@
   --color-success: #5dd693;
   --color-error: #fc4b0b;
   --phone-width:460px;
+  --phone-beatrix:flex;
 }
 
 /*========== base styles ==========*/
@@ -701,7 +702,7 @@ a {
    }
    
    .beatrix-table thead tr {
-     background-color:var(--color-dark-medium);
+     background-color:var(--color-dark-light);
      color: var(--color-light);
      text-align: left;
      font-weight: bold;

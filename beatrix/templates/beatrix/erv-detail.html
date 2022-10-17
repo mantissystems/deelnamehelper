@@ -5,7 +5,7 @@
   <div class="outer">
     <div class="phone">
       <div class="phone-mirror">
-        <table class="person-table">
+        <table class="beatrix-table">
           <thead>
             <tr>
               <th>Lijst van vrijwilliger 'Host' voor {{event.created|date:"d M Y"}}</th>
@@ -23,7 +23,7 @@
           </tbody>
 
         </table>
-        <table class="person-table">
+        <table class="datum-table">
           <thead>
             <hr>
             <tr>
@@ -76,8 +76,11 @@
               {% endfor %}
             </tr>
           </tbody>
+        </table>
+        </div>
+        </div>
+        </div>
 </form>
-</table>
 limit to max 20 regels(hosts+aangemeld+kandidaten=flexibel; limiteer tot 20)
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
