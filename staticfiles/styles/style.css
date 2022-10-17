@@ -605,7 +605,7 @@ a {
   border-bottom: 1px solid var(--color-dark-medium);
 }
 
-.topics-page .header__search{
+.topics-page .header__search {
   display: block;
 }
 
@@ -748,11 +748,11 @@ a {
     text-align: center;
     padding: 12px;
     text-decoration: none;
-  }
+}
 
   li a:hover {
     background-color: #37c44f;
-  }
+}
 
 td{
     background-color: powderblue
