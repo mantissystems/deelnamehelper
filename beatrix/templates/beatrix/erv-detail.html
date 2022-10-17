@@ -1,139 +1,147 @@
 {% extends 'erv-base.html' %}
 {% block content %}
 <form action="{% url 'vote' event.id %}" method="post">
-{% csrf_token %}
-{% comment %} =================== {% endcomment %}
-<div class="mobile">
-<div class="phone">
-<div class="phone-mirror">
+  {% csrf_token %}
+  <div class="outer">
+    <div class="phone">
+      <div class="phone-mirror">
+        <div class="user-panel.main" id="aantalregels"></div>
+        <table class="person-table">
+          <thead>
+            <tr>
+              <th>Lijst van vrijwilliger 'Host' voor {{event.created|date:"d M Y"}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <td>{% for hh in hosts %}
+              <tr>
+            </td>
+            <td>{{hh.id}}. {{hh.name}}</td>
+            </td>
 
-   <table class="person-table">
-              <thead>
-                <tr>
-                  <th>Lijst van vrijwilliger 'Host' voor {{event.created|date:"d M Y"}}</th>
-                </tr>
-              </thead>
-                 <tbody>
-                        <td>{% for hh in hosts %}
-                            <tr>
-                        </td>
-                        <td>{{hh.id}}. {{hh.name}}</td>
-                        </td>
+            {% endfor %}
+            </tr>
+          </tbody>
 
-                        {% endfor %}
-                        </tr>
-                    </tbody>
+        </table>
+        <table class="person-table">
+          <thead>
+            <hr>
+            <tr>
+              <th>#</th>
+              <th>Lijst van aangemelden op: {{event.created|date:"d M Y"}}</th>
+              <th><input type="submit" value="Meld Af || Maak Host J/N"> </th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <td>{% for aa in aanwezig %}
+              <tr>
+            </td>
+            <td>{{t.id }}</td>
+            <td></td>
+            <td>
+              <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
+            <td>{{aa.id}}. {{aa.name}}</td>
+            </td>
+            <td> </td>
+            <td>
+              <input type="checkbox" name="hoofdhost" id="host{{ forloop.counter }}" value="{{ aa.id }}">
+            </td>
+            </td>
 
-                </table>
-                <table class="person-table">
-              <thead>
-                <hr>
-                <tr>
-                  <th>1#</th>
-                  <th>2REEDS AANGEMELD voor {{event.created|date:"d M Y"}}</th>
-                  <th>3<input type="submit" value="Meld Af || Maak Host J/N"> </th>
-                  <th>4</th>
-                  <th>5</th>
-                </tr>
-              </thead>
-                 <tbody>
-                        <td>{% for aa in aanwezig %}
-                            <tr>
-                        </td>
-                        <td>1{{t.id }}</td>
-                        <td>2</td>
-                        <td>3
-                        <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
-                        <td>4{{aa.id}}. {{aa.name}}</td>
-                        </td>
-                        <td> </td>
-                        <td>
-                        <input type="checkbox" name="hoofdhost" id="host{{ forloop.counter }}" value="{{ aa.id }}">
-                        </td>
-                        </td>
+            {% endfor %}
+            </tr>
+          </tbody>
+          limit to max 10 regels
 
-                        {% endfor %}
-                        </tr>
-                    </tbody>
+        </table>
+        <table class='person-table'>
+          <thead>
+            <hr>
 
-                </table>
-    <table class='person-table'>
-              <thead>
-                              <hr>
+            <tr>
+              <th> <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
+              <th>Vind ( {{aantal}}) Kandidaten voor {{event.created|date:"d M Y"}}</th>
+              <th><input type="submit" value="Meld Aan"> </th>
+          </thead>
 
-                <tr>
-                  <th>    <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
-                  <th>Vind ( {{aantal}}) Kandidaten voor {{event.created|date:"d M Y"}}</th>
-                  <th><input type="submit" value="Meld Aan"> </th>
-              </thead>
-
-                    <tbody id = myTable>
-                        <td>{% for t in kandidaten %}
-                        </td>
-                            <tr>
-                        <td>{{t.id }}</td>
-                        <td>{{ forloop.counter }}. {{t.name}}</td>
-                      <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>                       
-                        {% endfor %}
-                        </tr>
-                    </tbody>
+          <tbody id=myTable>
+            <td>{% for t in kandidaten %}
+            </td>
+            <tr>
+              <td>{{t.id }}</td>
+              <td>{{ forloop.counter }}. {{t.name}}</td>
+              <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>
+              {% endfor %}
+            </tr>
+          </tbody>
 </form>
-{% block javascript %}
+</table>
+limit to max 20 regels(hosts+aangemeld+kandidaten=flexibel; limiteer tot 20)
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+{% block javascript %}
 <script>
-$('#search-input').on('keyup',function(){
-    var value = $(this).val()
-    console.log('Value:', value)
-     var data = searchTable(value,myArray)
-     console.log(data)
-    buildTable(data)
-})
-$.ajax({
-    method:'GET',
-    url:'http://127.0.0.1:8000/api/person/',
-    success:function(response){
+  function fetchBeatrixData() {
+    fetch("http://127.0.0.1:8000/api/aantalregels")
+      .then(response => {
+        return response.json();
+      })
+      .then(regels => {
+        console.log(regels.data);
+      })}
+  fetchBeatrixData();
+
+    $('#search-input').on('keyup', function () {
+      var value = $(this).val()
+      console.log('Value:', value)
+      var data = searchTable(value, myArray)
+      console.log(data)
+      buildTable(data)
+    })
+    $.ajax({
+      method: 'GET',
+      url: 'http://127.0.0.1:8000/api/person/',
+      success: function (response) {
         myArray = response
         buildTable(myArray)
         console.log(myArray)
-    }
-})
 
-function searchTable(value, data){
-    var filteredData =[]
-    for (var i = 0; i < data.length; i++){
-        value=value.toLowerCase()
+      }
+    })
+
+    function searchTable(value, data) {
+      var filteredData = []
+      for (var i = 0; i < data.length; i++) {
+        value = value.toLowerCase()
         var name = data[i].name.toLowerCase()
-        if (name.includes(value)){
-            filteredData.push(data[i])
+        if (name.includes(value)) {
+          filteredData.push(data[i])
         }
+      }
+      return filteredData
     }
-    return filteredData
-}
 
-function buildTable(data){
-  
-var table = document.getElementById('myTable')
-table.innerHTML=``
-//let lengte = 10;
-for (var i = 0; i < data.length;i++ ){
-      var row = `<tr> 
+    function buildTable(data) {
+
+      var table = document.getElementById('myTable')
+      table.innerHTML = ``
+      // let lengte = data.length;
+      let lengte=20;
+      for (var i = 0; i < lengte; i++) {
+        var row = `<tr> 
       <td></td>
     <td> ${data[i].id} </td> 
     <td> ${data[i].name} </td> 
     <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].id}"> </td>
     </tr>`
-  table.innerHTML += row
-}
-}
+        table.innerHTML += row
+      }
+    }
 
-function Check1(value) {
-    console.log('Value:', value)
-    // var testid = $(this).val(testid)
-     console.log('Value:', value.parentelement)
-      document.getElementById('mantis').innerHTML = value.checked;
-      console.log('Value:', value.checked)
-    };
-  
 </script>
 {% endblock javascript %}
 </div>

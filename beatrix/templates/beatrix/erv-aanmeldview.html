@@ -1,24 +1,29 @@
-
 {% extends 'erv-base.html' %}
 {% block content %}
 <form>
-<h5>erv-aanmeldview</h5>
-{% csrf_token %}
-{% load static %}
-          {% comment %} <a class="btn btn--main btn--pill" href="{% url 'erv-home' %}">Home</a> {% endcomment %}
-  <div class="roomListRoom__content">
-            <div class="mobile-menuItems">
+  <h5>erv-aanmeldview</h5>
+  {% csrf_token %}
+  <div class="outer">
+    <div class="phone">
+      <div class="phone-mirror">
 
-<h5>erv-aanmeldview</h5>
-                    <ul>
-                     {% for h in rooster %}
-                    <li> {{h.id}} </li>
-                    <li><a href="{% url 'vote' h.id %}">{{h.pub_date}}</a>{{h.event_text}}</li> 
-    <a href="{% url 'erv-room' h.id %}"></a>
-                             {% endfor %}   
-                  </ul> 
-                  
+        <div class="roomListRoom__content">
+          <div class="mobile-menuItems">
+
+            <h5>erv-aanmeldview</h5>
+
+            <ul>
+              {% for h in rooster %}
+              <li> {{h.id}} </li>
+              <a href="{% url 'vote' h.id %}">{{h.created|date:"d D M Y"}}</a>{{h.event_text}}
+              <a href="{% url 'erv-room' h.id %}"></a>
+              {% endfor %}
+            </ul>
+
 </form>
-  </div>
+</div>
+</div>
+</div>
+</div>
 
-{% endblock  %}
+{% endblock %}

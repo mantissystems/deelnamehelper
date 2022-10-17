@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Flexevent, Person
+from .models import Flexevent, Flexrecurrent, Person
 
 class PersoonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,3 +10,7 @@ class FlexeventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flexevent
         fields='__all__'
+class FlexrecurrentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flexrecurrent
+        fields='__all__'        

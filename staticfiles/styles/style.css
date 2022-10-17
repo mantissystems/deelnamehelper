@@ -12,7 +12,7 @@
   --color-bg: #2d2d39;
   --color-success: #5dd693;
   --color-error: #fc4b0b;
-  --phone-width:460px;
+  --phone-width:flex;
 }
 
 /*========== base styles ==========*/
@@ -23,12 +23,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  text-rendering: optimizeLegibility;
-  /* color: inherit; */
-  font-size: inherit;
-}
+  text-rendering: optimizeLegibility;{% comment %} =================== {% endcomment %}
 
-ul li {
   background:--color-dark;
   color: --color-light;
   margin: 5px;

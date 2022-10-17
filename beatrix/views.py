@@ -29,8 +29,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
-from beatrix.serializers import PersoonSerializer 
-from .models import Bericht, Message, Room, Topic,Choice
+from beatrix.serializers import FlexrecurrentSerializer, PersoonSerializer 
+from .models import Bericht, Flexrecurrent, Message, Room, Topic,Choice
 from .forms import RoomForm,UserForm, erv_RoomForm
 
 def loginPage(request):
@@ -548,17 +548,13 @@ def personenlijst(request):
 
     return Response(serializer.data)
 
-# @api_view(['GET'])
-# def flexEvents(request):
-#     boten=Flexevent.objects.all()
-#     serializer=FlexeventSerializer(boten,many=True)
+@api_view(['GET'])
+def aantalregels(request):
+    regels=Flexrecurrent.objects.all()
+    serializer=FlexrecurrentSerializer(regels,many=True)
 
-#     return Response(serializer.data)
+    return Response(serializer.data)
 
-# @api_view(['POST'])
-# def eventBeheer(request,pk):
-#     event=Flexevent.objects.get(id=pk)
-#     serializer=FlexeventSerializer(instance=event,data=request.data)
 #     if serializer.is_valid():
 #         serializer.save()
 
@@ -633,6 +629,7 @@ def vote(request, event_id):
         afmeldingen.append(af)
     for l in request.POST.getlist('aanmelding'):
         leden.append(l)
+    aantalregels=30
     if len(hosts)>0:
         hh=Person.objects.all().filter(id__in=hosts)[:1]
         uu=User.objects.all().filter(id__in=hosts)[:1]
@@ -686,6 +683,7 @@ def vote(request, event_id):
             'hosts':hosts, 
             # 'boten':boten, 
             'aantal':kandidaten.count(), 
+            'aantalregels':aantalregels,
             'error_message': "Er is geen keuze gemaakt.",
         })
         # onderstaande 4 regels zijn uitgesterd omdat ze te maken hebben met de poll choices, die niet meer actief zijn
@@ -701,7 +699,7 @@ def vote(request, event_id):
 
 
 class AanmeldView(ListView):
-    template_name='beatrix/erv-aanmeld-activity.html'
+    template_name='beatrix/erv-aanmeldview.html'
     print('aanmelden')
     queryset=Flexevent.objects.all()
     def get_context_data(self, **kwargs):
@@ -719,6 +717,7 @@ class AanmeldView(ListView):
         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
         einde=monthend[endmonth]
         x=100
+        aantalregels=10
         start=date(year,beginmonth,1)
         end=date(year,endmonth,einde)
         start=date(year,beginmonth,1)
@@ -726,6 +725,7 @@ class AanmeldView(ListView):
         roostergedeeltelijk=Flexevent.objects.filter(created__range=[start, end])[:x]
         context = {
         'rooster': roostergedeeltelijk,
+        'aantalregels':aantalregels,
         } 
         return context
 

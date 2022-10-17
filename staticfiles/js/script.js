@@ -1,3 +1,56 @@
+$('#search-input').on('keyup',function(){
+  var value = $(this).val()
+  console.log('Value:', value)
+   var data = searchTable(value,myArray)
+   console.log(data)
+  buildTable(data)
+})
+$.ajax({
+  method:'GET',
+  url:'http://127.0.0.1:8000/api/person/',
+  success:function(response){
+      myArray = response
+      buildTable(myArray)
+      console.log(myArray)
+  }
+})
+
+function searchTable(value, data){
+  var filteredData =[]
+  for (var i = 0; i < data.length; i++){
+      value=value.toLowerCase()
+      var name = data[i].name.toLowerCase()
+      if (name.includes(value)){
+          filteredData.push(data[i])
+      }
+  }
+  return filteredData
+}
+
+function buildTable(data){
+
+var table = document.getElementById('myTable')
+table.innerHTML=``
+//let lengte = 10;
+for (var i = 0; i < data.length;i++ ){
+    var row = `<tr> 
+    <td></td>
+  <td> ${data[i].id} </td> 
+  <td> ${data[i].name} </td> 
+  <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].id}"> </td>
+  </tr>`
+table.innerHTML += row
+}
+}
+
+function Check1(value) {
+  console.log('Value:', value)
+  // var testid = $(this).val(testid)
+   console.log('Value:', value.parentelement)
+    document.getElementById('mantis').innerHTML = value.checked;
+    console.log('Value:', value.checked)
+  };
+
 // // Actions:
 
 // const closeButton = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
