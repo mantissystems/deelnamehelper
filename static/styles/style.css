@@ -13,6 +13,7 @@
   --color-success: #5dd693;
   --color-error: #fc4b0b;
   --phone-width:460px;
+   --phone-beatrix:free;
 }
 
 /*========== base styles ==========*/
@@ -1201,7 +1202,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--phone-width);
+  width: var(--phone-beatrix);
   height: flex;
   background: var(--color-dark);
   border-radius: 30px;
@@ -1210,7 +1211,7 @@ a {
 }
 .phone-mirror {
   position: relative;
-  width: var(--phone-width);
+  width: var(--phone-beatrix);
   height: flex;
   background-color:var(--color-dark-light);
   border-radius: 30px;
