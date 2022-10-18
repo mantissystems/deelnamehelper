@@ -46,8 +46,8 @@
 
             <tr>
               <th> <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
-              <th>Vind Kandidaten uit ( {{aantal}}) voor {{event.created|date:"d M Y"}}</th>
               <th><input type="submit" value="Meld Aan"> </th>
+              <th>Vind Kandidaten uit ( {{aantal}}) voor {{event.created|date:"d M Y"}}</th>
           </thead>
 
           <tbody id=myTable>
@@ -72,15 +72,15 @@
 
 {% block javascript %}
 <script>
-  function fetchBeatrixData() {
-    fetch("http://127.0.0.1:8000/api/aantalregels")
-      .then(response => {
-        return response.json();
-      })
-      .then(regels => {
-        console.log(regels.data);
-      })}
-  fetchBeatrixData();
+  // function fetchBeatrixData() {
+  //   fetch("http://127.0.0.1:8000/api/aantalregels")
+  //     .then(response => {
+  //       return response.json();
+  //     })
+  //     .then(regels => {
+  //       console.log(regels.data);
+  //     })}
+  // fetchBeatrixData();
 
     $('#search-input').on('keyup', function () {
       var value = $(this).val()
@@ -117,7 +117,7 @@
       var table = document.getElementById('myTable')
       table.innerHTML = ``
       // let lengte = data.length;
-      let lengte=20;
+      let lengte=5;
       for (var i = 0; i < lengte; i++) {
         var row = `<tr> 
       <td></td>
