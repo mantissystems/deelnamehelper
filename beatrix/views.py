@@ -473,27 +473,33 @@ def erv_activityPage(request):
     end=date(year,month,einde)
     usr=request.user
     users=User.objects.all()
+    aangemelden=Flexlid.objects.all() ##filter(member_id__in=gebruikers)
     ingedeelden=Flexevent.objects.filter(deelnemers__id__in=users)
     flexevents = Flexevent.objects.all().filter(
-        Q(pub_date__range=[start, end]) 
+        Q(created__range=[start, end]) 
         # Q(topic__name__icontains = q) | 
         # Q(name__icontains = q) | 
         # Q(event_text__icontains = q) | 
         # Q(description__icontains = q) 
-         ) # search 
+        ) # search 
+    d=[]
+    ff=Flexlid.objects.none()
     for fl in flexevents:
         d = fl.deelnemers.all()
+        ff=Flexlid.objects.all().filter(flexevent=fl)
+        ff | ff
         d | d
-        deelnemers = d
-    skills=Person.objects.all().values_list('pos1','pos2','pos3','pos4','pos5').filter(
-        Q(id__in=deelnemers) &
+    deelnemers = d
+    aangemeld=ff
+    aangemeldelijst=aangemelden.values_list('member_id',flat=True)
+    skills=Person.objects.all().filter(
+        Q(id__in=aangemeldelijst) &
         Q(pos1__in=['sc1','sc2','sc3'])&
         Q(pos2__in=['sc1','sc2','sc3'])&
         Q(pos3__in=['sc1','sc2','sc3'])&
         Q(pos4__in=['sc1','sc2','sc3'])&
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
-
     room_count = flexevents.count()
     # sessions = Session.objects.filter(expire_date__gte=date.today())
     # uid_list = []
