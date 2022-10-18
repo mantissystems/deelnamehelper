@@ -19,7 +19,7 @@
               ></path>
             </svg>
           </a>
-          <h3>FlexEvent “{{event.dagnaam}}“</h3>
+          <h3>FlexEvent “{{event.created|date:"d D M Y"}}“</h3>
         </div>
         {% if event.host == request.user %}
         <div class="room__topRight">
@@ -67,6 +67,7 @@
           </a>
         </div>
         {% endif %}
+        <hr>
       </div>
       <div class="room__box scroll">
         <div class="room__header scroll">

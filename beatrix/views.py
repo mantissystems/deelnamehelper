@@ -360,18 +360,15 @@ def erv_updateRoom(request, pk):
             verwijder=Flexevent.objects.filter(deelnemers__id__in=l)
             event.deelnemers.add(l)
             v=deelnemers.filter(id__in=l)
-            # print(verwijder)
-            if v:
-                print('verwijder', v)
-        for l in request.POST.getlist('aanmelding'):
-            verwijder=Flexevent.objects.filter(deelnemers__id__in=l)
-            event.deelnemers.add(l)
-# 
+    aangemeld=Flexlid.objects.filter(flexevent=pk).values_list('member_id',flat=True)
+    aanwezig=Person.objects.filter(id__in=aangemeld)
+    print(aanwezig)
     context = {'form': form, 
     'topics': topics,
      'room': room,
      'event': room,  # tbv erv-detail.html
      'kandidaten': kandidaten,
+     'aanwezig': aanwezig,
      }
     return render(request, 'beatrix/erv-room_form.html', context)
 

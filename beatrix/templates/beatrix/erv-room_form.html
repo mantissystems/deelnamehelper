@@ -1,6 +1,7 @@
 <!-- {% extends 'erv-base.html' %} -->
  {% block content %}
 <!-- <main class="create-room layout"> -->
+
   {% include 'beatrix/erv-detail.html' %}
 
   <!-- <main class="outer">
@@ -54,7 +55,7 @@
           <div class="form__group">
             {% comment %} <label for="room_description">Room Description</label>
             {{form.description}} {% endcomment %}
-            <!-- <ul>
+             <ul>
               {% for aa in kandidaten %}
               <li>
                 {{aa.id}}. {{aa.username}} -{{aa.first_name}} {{aa.last_name}}
