@@ -39,7 +39,7 @@ aantalregels,
 
 # app_name = 'beatrix'
 urlpatterns = [
-    # path('', home, name='home'),
+    # path('home', home, name='home'),
     path('', erv_home, name='erv-home'),
     path('beatrix', erv_home, name='erv-home'),
     path('login/', loginPage, name="login"),

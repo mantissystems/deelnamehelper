@@ -151,14 +151,13 @@
     <!--   Start -->
     <div class="participants">
       <h3 class="participants__top">
-        Deelnemers <span>({{event.deelnemers.count}} Aangemeld)</span>
+        Deelnemers <span>({{event.lid.count}} Aangemeld)</span>
       </h3>
       <div class="participants__list scroll">
-        {% comment %} {% include 'beatrix/erv-detail.html' %} {% endcomment %}
-        {% for user in event.deelnemers.all %}
+        {% for user in event.lid.all %}
         <a href="{%  url 'erv-user-profile' user.id %}" class="participant">
           <div class="avatar avatar--medium">
-            {% comment %} <img src="{{user.avatar.url}}" /> {% endcomment %}
+             <img src="{{user.avatar.url}}" /> 
           </div>
 
           {{user.id}}.{{user.name}}

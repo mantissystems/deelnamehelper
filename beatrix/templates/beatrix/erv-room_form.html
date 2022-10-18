@@ -1,6 +1,10 @@
-{% extends 'erv-base.html' %} {% block content %}
-<main class="create-room layout">
-  {% comment %} 5 okt 2022 {% endcomment %}
+<!-- {% extends 'erv-base.html' %} -->
+ {% block content %}
+<!-- <main class="create-room layout"> -->
+  {% include 'beatrix/erv-detail.html' %}
+
+  <!-- <main class="outer">
+    {% comment %} 5 okt 2022 {% endcomment %}
   <div class="container">
     <div class="layout__box">
       <div class="layout__boxHeader">
@@ -50,7 +54,7 @@
           <div class="form__group">
             {% comment %} <label for="room_description">Room Description</label>
             {{form.description}} {% endcomment %}
-            <ul>
+            <!-- <ul>
               {% for aa in kandidaten %}
               <li>
                 {{aa.id}}. {{aa.username}} -{{aa.first_name}} {{aa.last_name}}
@@ -62,7 +66,7 @@
                 value="{{ aa.id }}"
               />
               {% endfor%}
-            </ul>
+            </ul> -->
           </div>
 
           {% comment %}
@@ -102,5 +106,5 @@
       </div>
     </div>
   </div>
-</main>
+</main> -->
 {% endblock content %}

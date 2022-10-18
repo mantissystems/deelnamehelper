@@ -13,7 +13,7 @@
               height="32"
               viewBox="0 0 32 32"
             >
-              <title>arrow-left</title>
+              <title>Terug</title>
               <path
                 d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z"
               ></path>
@@ -50,8 +50,8 @@
           </li>
           {% for topic in topics %}
           <li>
-            <a href="{%url 'erv-home' %}?q={{topic.name}}"
-              >{{topic.name}} <span>{{topic.flexevent_set.count}} </span></a
+            <a href="{%url 'erv-home' %}?q={{topic.description}}"
+              >{{topic.description}} <span>{{topic.lid.count}} </span></a
             >
           </li>
 

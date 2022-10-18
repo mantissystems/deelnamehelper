@@ -14,6 +14,7 @@
   --color-error: #fc4b0b;
   --phone-width:460px;
   --phone-beatrix:flex;
+  --color-beatrix-light: #11b5e7;
 }
 
 /*========== base styles ==========*/
@@ -693,7 +694,8 @@ a {
    .beatrix-table {
      border-collapse: collapse;
      margin: 9px 0;
-     font-size: 0.9em;
+     font-size: 1.1em;
+     height: flex;
      /* min-width: 480px; */
      width: var(--phone-beatrix);
      border-radius: 15px 15px 0 0;
@@ -708,20 +710,20 @@ a {
      font-weight: bold;
    }
    
-   .beatrix-table th,
-   .beatrix-table td {
+   .beatrix-table th {
     color: var(--color-dark-medium);
-    /* background-color: #11b5e7; */
+    background-color: #11b5e7;
     padding: 8px 8px;
    }
    
    .beatrix-table tbody tr {
      border-bottom: 1px solid #dddddd;
-     line-height: 12px;
+     line-height: 14px;
+     width: var(--phone-beatrix);
    }
    
    .beatrix-table tbody tr:nth-of-type(even) {
-     background-color: #f3f3f3;
+     background-color:var(--color-dark-light);
 
    }
    
@@ -731,7 +733,7 @@ a {
    
    .beatrix-table tbody tr.active-row {
      font-weight: bold;
-     color: #009879;
+     color:var(--color-dark-medium);
    }   
    /* diverse styles (te saneren */
    /* tr[data-href]:hover{

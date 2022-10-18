@@ -3,13 +3,14 @@
     <h2>Aangemelde Vaardigheden</h2>
   </div>
   <div>
-    {% if personen %}
+    {% if deelnemers %}
+    
     <h3>boeg | pos2 | pos3 | slag | stuur</h3>
     {% endif %}
     <ul>
       <a
-      >{% for t in personen %}
-        <li>{{ forloop.counter }} | {{t.pos1}} | {{t.pos2}} | {{t.pos3}} | {{t.pos4}} | {{t.pos5}}</li>
+      >{% for t in deelnemers %}
+        <li>{{ forloop.counter }} |{{t.name}} | {{t.pos1}} | {{t.pos2}} | {{t.pos3}} | {{t.pos4}} | {{t.pos5}}</li>
 
         <hr />
         {% endfor %}</a

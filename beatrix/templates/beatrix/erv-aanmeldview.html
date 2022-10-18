@@ -1,10 +1,13 @@
 {% extends 'erv-base.html' %}
 {% block content %}
+<main class="layout layout--3">
+  <div class="container">
+
 <form>
   {% csrf_token %}
   <div class="outer">
     <div class="phone">
-      <h5>erv-aanmeldview</h5>
+      <!-- <h5>erv-aanmeldview</h5> -->
       <div class="phone-mirror">
         <table class="beatrix-table">
           <thead>
@@ -28,7 +31,7 @@
         <div class="roomListRoom__content">
           <div class="mobile-menuItems">
 
-            <h5>erv-aanmeldview</h5>
+            <!-- <h5>erv-aanmeldview</h5> -->
 
             <!-- <ul>
               {% for h in rooster %}
@@ -43,5 +46,6 @@
 </div>
 </div>
 </div>
-
+</div>
+</main>
 {% endblock %}

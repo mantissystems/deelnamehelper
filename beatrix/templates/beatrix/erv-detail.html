@@ -1,35 +1,20 @@
 {% extends 'erv-base.html' %}
 {% block content %}
-<form action="{% url 'vote' event.id %}" method="post">
+<main class="layout layout--3">
+  {% comment %} 5 okt 2022 {% endcomment %}
+<div class="container">
+
+  <form action="{% url 'vote' event.id %}" method="post">
   {% csrf_token %}
-  <div class="outer">
     <div class="phone">
       <div class="phone-mirror">
-        <table class="beatrix-table">
-          <thead>
-            <tr>
-              <th>Lijst van vrijwilliger 'Host' voor {{event.created|date:"d M Y"}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <td>{% for hh in hosts %}
-              <tr>
-            </td>
-            <td>{{hh.id}}. {{hh.name}}</td>
-            </td>
-
-            {% endfor %}
-            </tr>
-          </tbody>
-
-        </table>
         <table class="datum-table">
           <thead>
             <hr>
             <tr>
               <th>#</th>
-              <th>Lijst van aangemelden op: {{event.created|date:"d M Y"}}</th>
-              <th><input type="submit" value="Meld Af || Maak Host J/N"> </th>
+              <th>Aanmeldingen op: {{event.created|date:"d M Y"}}</th>
+              <th><input type="submit" value="Meld Af "> </th>
               <th></th>
               <th></th>
             </tr>
@@ -40,29 +25,28 @@
             </td>
             <td>{{t.id }}</td>
             <td></td>
+            <td>{{aa.id}}. {{aa.name}}</td>
             <td>
               <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
-            <td>{{aa.id}}. {{aa.name}}</td>
             </td>
             <td> </td>
-            <td>
+            <!-- <td>
               <input type="checkbox" name="hoofdhost" id="host{{ forloop.counter }}" value="{{ aa.id }}">
-            </td>
+            </td> -->
             </td>
 
             {% endfor %}
             </tr>
           </tbody>
-          limit to max 10 regels
-
         </table>
         <table class='person-table'>
           <thead>
             <hr>
+            limit to max 20 regels(aangemeld+kandidaten=flexibel; limiteer tot 20)
 
             <tr>
               <th> <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
-              <th>Vind ( {{aantal}}) Kandidaten voor {{event.created|date:"d M Y"}}</th>
+              <th>Vind Kandidaten uit ( {{aantal}}) voor {{event.created|date:"d M Y"}}</th>
               <th><input type="submit" value="Meld Aan"> </th>
           </thead>
 
@@ -70,7 +54,10 @@
             <td>{% for t in kandidaten %}
             </td>
             <tr>
-              <td>{{t.id }}</td>
+              <td> 
+                <!-- {{t.name}} -->
+
+              </td>
               <td>{{ forloop.counter }}. {{t.name}}</td>
               <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>
               {% endfor %}
@@ -81,8 +68,6 @@
         </div>
         </div>
 </form>
-limit to max 20 regels(hosts+aangemeld+kandidaten=flexibel; limiteer tot 20)
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 {% block javascript %}
@@ -148,5 +133,7 @@ limit to max 20 regels(hosts+aangemeld+kandidaten=flexibel; limiteer tot 20)
 {% endblock javascript %}
 </div>
 </div>
+<!-- </div> -->
 </div>
+</main>
 {% endblock %}

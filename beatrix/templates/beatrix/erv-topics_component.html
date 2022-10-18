@@ -1,29 +1,16 @@
 <div class="topics">
   <div class="topics__header">
-    <h2>Events</h2>
+    <h2>Omschrijving</h2>
   </div>
   <ul class="topics__list">
     <li>
       <a href="{% url 'erv-home' %}" class="active"
         >All <span>{{topics.count}}</span></a
       >
-      {% comment %} {% for cc in roostergedeelte %}
-      <tr>
-        <td>{{cc.pub_date}}</td>
-        <td>{{cc.flexhost}}</td>
 
-        <td>
-          {% for t in cc.lid.all %} {% if forloop.counter0 < regels %} {{ t.name
-          }}<br />
-          {% endif %} {% endfor %}
-        </td>
-        {% endfor %} {% endcomment %}
-      </tr>
-    </li>
-
-    {% for tt in topics %}
+    {% for tt in rooster %}
     <li>
-      <a href="{% url 'erv-home' %}?q={{tt.name}}"><span>{{tt.name}}</span></a>
+      <a href="{% url 'erv-home' %}?q={{tt.description}}"><span>{{tt.description}}</span></a>
     </li>
     {% endfor %}
   </ul>

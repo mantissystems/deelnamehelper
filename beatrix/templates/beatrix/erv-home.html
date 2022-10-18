@@ -42,6 +42,7 @@
           <h2>Flexmogelijkheden</h2>
           <p>{{room_count}} Flexmogelijkheden</p>
         </div>
+{% if request.user.is_authenticated %}
 
         <a class="btn btn--main" href="{% url 'erv-create-flex' %}">
           <svg
@@ -58,6 +59,7 @@
           </svg>
           FlexEvent
         </a>
+        {% endif %}
       </div>
 
       {% include 'beatrix/erv-feed_component.html' %}
