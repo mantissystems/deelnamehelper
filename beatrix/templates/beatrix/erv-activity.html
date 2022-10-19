@@ -25,18 +25,40 @@
       <div class="activities-page layout__body">
   </div>
   <div>
-    <h3>boeg | pos2 | pos3 | slag | stuur</h3>
+    Deelnemers:
     <ul>
+      {% for room in events %}
+      <li>
+        {{room}} : 
+        {{room.lid.count}} 
+      </li>
+      {% endfor %}
+    </ul>
+    {% if sc1 %}
+    <!-- <h3>pos1 | pos2 | pos3 | slag | stuur</h3> -->
+    <ul>
+      <hr>
+      <li>|sc1: {{sc1.pos1.count}} |sc2: {{sc2.count}}|st2: {{st2.count}} </li>
+      <li>|sc1: {{sc1.count}}  </li>
+      <li>|sc2: {{sc2.count}} </li>
+      <li>|st2: {{st2.count}} </li>
+      {% endif %}
+    </ul>
+    {% if deelnemers2 %}
+    <h3>boeg | pos2 | pos3 | slag | stuur</h3>
+    {% endif %}
+    <ul>
+      <hr>
       <a
-      >{% for t in personen %}
-        <li>{{ forloop.counter }} | {{t.pos1}} | {{t.pos2}} | {{t.pos3}} | {{t.pos4}} | {{t.pos5}}</li>
-
+      >{% for t in sc1 %}
+        <!-- <li>{{ forloop.counter }} |{{t.name}} | {{t.pos1}} | {{t.pos2}} | {{t.pos3}} | {{t.pos4}} | {{t.pos5}}</li> -->
         <hr />
         {% endfor %}</a
       >
     </ul>
 
   </div>
+
   <div class="activities__header">
   </div>
   
