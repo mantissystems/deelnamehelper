@@ -3,10 +3,20 @@
     <h2>Aangemelde Vaardigheden</h2>
   </div>
   <div>
+    Deelnemers:
+    <ul>
+      {% for room in events %}
+      <li>
+        {{room}} : 
+        {{room.lid.count}} 
+      </li>
+      {% endfor %}
+    </ul>
     {% if sc1 %}
     <!-- <h3>pos1 | pos2 | pos3 | slag | stuur</h3> -->
     <ul>
-      <li>|deelnemers: {{deelnemers.count}} |sc1: {{sc1.pos1.count}} |sc2: {{sc2.count}}|st2: {{st2.count}} </li>
+      <hr>
+      <li>|sc1: {{sc1.pos1.count}} |sc2: {{sc2.count}}|st2: {{st2.count}} </li>
       <li>|sc1: {{sc1.count}}  </li>
       <li>|sc2: {{sc2.count}} </li>
       <li>|st2: {{st2.count}} </li>
@@ -16,6 +26,7 @@
     <h3>boeg | pos2 | pos3 | slag | stuur</h3>
     {% endif %}
     <ul>
+      <hr>
       <a
       >{% for t in sc1 %}
         <!-- <li>{{ forloop.counter }} |{{t.name}} | {{t.pos1}} | {{t.pos2}} | {{t.pos3}} | {{t.pos4}} | {{t.pos5}}</li> -->

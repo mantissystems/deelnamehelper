@@ -158,20 +158,28 @@ def erv_home(request):
         Q(description__icontains = q) 
         ) # search 
     d=[]
+    ll=[]
     sc1=[]
     sc2=[]
     sc3=[]
     ff=Flexlid.objects.none()
     for fl in flexevents:
         d = fl.deelnemers.all()
+        ll=fl.lid.all()
         ff=Flexlid.objects.all().filter(flexevent=fl)
         ff | ff
         d | d
+        ll | ll
     deelnemers = d
     aangemeld=ff
+    leden=ll
     aangemeldelijst=aangemelden.values_list('member_id',flat=True)
+    aangemeldelijst=leden.values_list('id',flat=True)
+    flex=aangemeld.values_list('flexevent',flat=True)
+    print(ll)
     skills=Person.objects.all().filter(
         Q(id__in=aangemeldelijst) &
+        Q(flexevent__in=flex) &
         Q(pos1__in=['sc1','sc2','sc3'])&
         Q(pos2__in=['sc1','sc2','sc3'])&
         Q(pos3__in=['sc1','sc2','sc3'])&
@@ -187,30 +195,25 @@ def erv_home(request):
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
     room_count = flexevents.count()
-    namen=Person.objects.all()
+    # namen=Person.objects.all()
     rooster=Flexevent.objects.all().filter(created__range=[start, end])
-    # rooster=Flexevent.objects.all() #filter(pub_date__range=[(2021,1,1),(2023,12,12)])
-    print(month,einde,start,end,'count=' ,ff.count(),skills.count())
-    # context={
-    #     # 'object_list':results,
-    #    }
+    # print(month,einde,start,end,'count=' ,ff.count(),skills.count())
     context = {
         'rooster':rooster,
-        'namen':namen,
-        'events': flexevents,
-        'rooms': flexevents, 
-        'deelnemers':skills,
+        #'namen':namen,          #alle beatrix leden
+        'events': flexevents,   #te saneren in 3 templates
+        'rooms': flexevents,    #te saneren in 3 templates
+        'deelnemers':skills,    #alle deelnemers en hun skills
         'topics': tops, 
-        'room_count': room_count, 
-        'room_messages': room_messages,
-        'sc1':sc1
+        'room_count': room_count, #te saneren in 3 templates
+        'room_messages': room_messages, #te saneren in 3 templates
+        'sc1':sc1,
+        # 'gebruiker':usr,
         }
     if 'beatrix' in q:
         redirect('aanmelden')            
         return render(request, 'beatrix/maand_list.html', context)
         print(q)
-        # if request.method == 'GET':
-        # q1 = Flexevent.objects.all()
     return render(request, 'beatrix/erv-home.html', context)
 
 def room(request, pk):
@@ -274,16 +277,17 @@ def userProfile(request, pk):
         }
     return render(request, 'beatrix/erv-profile.html', context)
 def erv_userProfile(request, pk):
-    user = User.objects.get(id=pk)
-    events = user.flexevent_set.all()
-    room_messages = user.message_set.all()
+    gebruiker = Person.objects.get(id=pk)
+    user = User.objects.filter(username__in =gebruiker.name)[0:1]
+    # events = user.flexevent_set.all()
+    # room_messages = user.message_set.all()
     tops=Flexevent.objects.values_list('topic', flat=True)
     topcs = Topic.objects.all().filter(id__in=tops)
     topics = topcs
     context = {
         'user': user, 
         'events': events, 
-        'room_messages': room_messages,
+        # 'room_messages': room_messages,
         'topics': topics
         }
     return render(request, 'beatrix/erv-profile.html', context)
@@ -355,26 +359,21 @@ def erv_updateRoom(request, pk):
     topics = Topic.objects.all()
     event = Flexevent.objects.get(id=pk)
     event_messages = event.bericht_set.all()
-    deelnemers = event.deelnemers.all()
-    ingedeelden=deelnemers.values_list('id', flat=True)
-    deelnemers = event.deelnemers.all()
+    # aangemeld=Flexlid.objects.filter(flexevent=pk).values_list('member_id',flat=True)
+    aangemeld=event.lid.all()
+    aanwezig=Person.objects.filter(id__in=aangemeld)
+    # deelnemers = event.deelnemers.all()
+    ingedeelden=aangemeld.values_list('id', flat=True)
+    # deelnemers = event.deelnemers.all()
     kandidaten=User.objects.all().exclude(id__in=ingedeelden)[0:10]
     users=User.objects.all()
-    ing=Flexevent.objects.filter(deelnemers__id__in=users)
+    # ing=Flexevent.objects.filter(deelnemers__id__in=users)
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
-    verwijder=Flexevent.objects.none()
-    flexevnt = get_object_or_404(Flexevent, pk=pk)
-    if request.method == 'POST':
-        topic_name = request.POST.get('topic')
-#  als id in deelnemers, dan verwijderen
-        for l in request.POST.getlist('aanmelding'):
-            verwijder=Flexevent.objects.filter(deelnemers__id__in=l)
-            event.deelnemers.add(l)
-            v=deelnemers.filter(id__in=l)
-    aangemeld=Flexlid.objects.filter(flexevent=pk).values_list('member_id',flat=True)
-    aanwezig=Person.objects.filter(id__in=aangemeld)
-    print(aanwezig)
+    # verwijder=Flexevent.objects.none()
+    # flexevnt = get_object_or_404(Flexevent, pk=pk)
+    # if request.method == 'POST':
+        # topic_name = request.POST.get('topic')
     context = {'form': form, 
     'topics': topics,
      'room': room,

@@ -1,4 +1,5 @@
 {% extends 'erv-base.html' %} {% block content %}
+{% load static %}
 <main class="profile-page layout layout--2">
   <div class="container">
     <!-- Room Start -->
@@ -171,5 +172,5 @@
   </div>
 </main>
 {% comment %}
-<script src="script.js"></script>
+<script src="{% url static 'script.js' %}"></script>
 {% endcomment %} {% endblock content %} Footer
