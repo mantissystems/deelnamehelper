@@ -158,6 +158,9 @@ def erv_home(request):
         Q(description__icontains = q) 
         ) # search 
     d=[]
+    sc1=[]
+    sc2=[]
+    sc3=[]
     ff=Flexlid.objects.none()
     for fl in flexevents:
         d = fl.deelnemers.all()
@@ -173,6 +176,14 @@ def erv_home(request):
         Q(pos2__in=['sc1','sc2','sc3'])&
         Q(pos3__in=['sc1','sc2','sc3'])&
         Q(pos4__in=['sc1','sc2','sc3'])&
+        Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
+        )
+    sc1=Person.objects.all().filter(
+        Q(id__in=aangemeldelijst) &
+        Q(pos1__in=['sc1'])&
+        Q(pos2__in=['sc1'])&
+        Q(pos3__in=['sc1'])&
+        Q(pos4__in=['sc1'])&
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
     room_count = flexevents.count()
@@ -191,7 +202,8 @@ def erv_home(request):
         'deelnemers':skills,
         'topics': tops, 
         'room_count': room_count, 
-        'room_messages': room_messages
+        'room_messages': room_messages,
+        'sc1':sc1
         }
     if 'beatrix' in q:
         redirect('aanmelden')            
@@ -634,7 +646,10 @@ class ResultsView(DetailView):
 
 def vote(request, event_id):
     event = get_object_or_404(Flexevent, pk=event_id)
-    print(event)
+    zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else ''
+    # zoeknaam= request.POST.getlist('zoeknaam')
+    print('event: ', event,'zoeknaam: ', zoeknaam)
+
     leden = []
     afmeldingen=[]
     hosts=[]
@@ -677,26 +692,27 @@ def vote(request, event_id):
     ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
     ingedeelden=aanwezig.values_list('member_id', flat=True)
     zijnhost=ishost.values_list('member_id', flat=True)
-    kandidaten=Person.objects.all().exclude(id__in=ingedeelden)[:5]
-    kandidaten=Person.objects.all()
+    personen=Person.objects.all()
+    kandidaten=Person.objects.all().filter(name__icontains=zoeknaam)[:10]
+    # if len(zoeknaam)>0:
     aanwezigen=Person.objects.all().filter(id__in=ingedeelden)
     hosts=Person.objects.all().filter(id__in=zijnhost) #.update(is_host=True)
     question = get_object_or_404(Flexevent, pk=event_id)
     try:
         # selected_choice = question.choice_set.get(pk=request.POST['choice'])
         selected_choice = question.lid.get(pk=request.POST['aanmelding'])
-        print('vote event_id, try')
+        # print('vote event_id, try')
     except (KeyError, Choice.DoesNotExist):
-        print('vote choice, except')
+        # print('vote choice, except')
         # Redisplay the form.
-        # print(len(aanwezig)) #regel niet verwijderen
-        # print(len(kandidaten)) #regel niet verwijderen
+        # print(len(aanwezig)) ###regel niet verwijderen ###
+        # print(len(kandidaten)) ###regel niet verwijderen ###
         return render(request, 'beatrix/erv-detail.html', {
             'event': event,
-            'kandidaten':kandidaten[0:5],
+            'kandidaten':kandidaten,
             'aanwezig':aanwezigen, 
             'hosts':hosts, 
-            # 'boten':boten, 
+            'personen':personen, 
             'aantal':kandidaten.count(), 
             'aantalregels':aantalregels,
             'error_message': "Er is geen keuze gemaakt.",
@@ -715,7 +731,7 @@ def vote(request, event_id):
 
 class AanmeldView(ListView):
     template_name='beatrix/erv-aanmeldview.html'
-    print('aanmelden')
+    # print('aanmelden')
     queryset=Flexevent.objects.all()
     def get_context_data(self, **kwargs):
         x=0
@@ -731,16 +747,14 @@ class AanmeldView(ListView):
         endmonth = 12 # int(date.today().strftime('%m'))
         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
         einde=monthend[endmonth]
-        x=100
         aantalregels=10
         start=date(year,beginmonth,1)
         end=date(year,endmonth,einde)
         start=date(year,beginmonth,1)
         rooster=Flexevent.objects.filter(created__range=[start, end])
-        roostergedeeltelijk=Flexevent.objects.filter(created__range=[start, end])[:x]
+        roostergedeeltelijk=Flexevent.objects.filter(created__range=[start, end])
         context = {
         'rooster': roostergedeeltelijk,
-        'aantalregels':aantalregels,
         } 
         return context
 

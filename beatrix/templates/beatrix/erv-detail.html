@@ -65,9 +65,9 @@
             limit to max 20 regels(aangemeld+kandidaten=flexibel; limiteer tot 20)
 
             <tr>
-              <th> <input id="search-input" class="form-control" type="text" placeholder='@vind kandidaat'></th>
+              <th> <input id="search-input" name="zoeknaam" class="form-control" type="text" placeholder='@vind kandidaat'></th>
               <th><input type="submit" value="Meld Aan"> </th>
-              <th>Vind Kandidaten uit ( {{aantal}}) voor {{event.created|date:"d M Y"}}</th>
+              <th>Vind Kandidaten uit ( {{personen.count}}) voor {{event.created|date:"d M Y"}}</th>
           </thead>
           </tr>
 
@@ -103,52 +103,52 @@
   //     })}
   // fetchBeatrixData();
 
-    $('#search-input').on('keyup', function () {
-      var value = $(this).val()
-      console.log('Value:', value)
-      var data = searchTable(value, myArray)
-      console.log(data)
-      buildTable(data)
-    })
-    $.ajax({
-      method: 'GET',
-      url: 'http://127.0.0.1:8000/api/person/',
-      success: function (response) {
-        myArray = response
-        buildTable(myArray)
-        console.log(myArray)
+    // $('#search-input').on('keyup', function () {
+    //   var value = $(this).val()
+    //   console.log('Value:', value)
+    //   var data = searchTable(value, myArray)
+    //   console.log(data)
+    //   buildTable(data)
+    // })
+    // $.ajax({
+    //   method: 'GET',
+    //   url: 'http://127.0.0.1:8000/api/person/',
+    //   success: function (response) {
+    //     myArray = response
+    //     buildTable(myArray)
+    //     console.log(myArray)
 
-      }
-    })
+    //   }
+    // })
 
-    function searchTable(value, data) {
-      var filteredData = []
-      for (var i = 0; i < data.length; i++) {
-        value = value.toLowerCase()
-        var name = data[i].name.toLowerCase()
-        if (name.includes(value)) {
-          filteredData.push(data[i])
-        }
-      }
-      return filteredData
-    }
+    // function searchTable(value, data) {
+    //   var filteredData = []
+    //   for (var i = 0; i < data.length; i++) {
+    //     value = value.toLowerCase()
+    //     var name = data[i].name.toLowerCase()
+    //     if (name.includes(value)) {
+    //       filteredData.push(data[i])
+    //     }
+    //   }
+    //   return filteredData
+    // }
 
-    function buildTable(data) {
+    // function buildTable(data) {
 
-      var table = document.getElementById('myTable')
-      table.innerHTML = ``
-      // let lengte = data.length;
-      let lengte=5;
-      for (var i = 0; i < lengte; i++) {
-        var row = `<tr> 
-      <td></td>
-    <td> ${data[i].id} </td> 
-    <td> ${data[i].name} </td> 
-    <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].id}"> </td>
-    </tr>`
-        table.innerHTML += row
-      }
-    }
+    //   var table = document.getElementById('myTable')
+    //   table.innerHTML = ``
+    //   // let lengte = data.length;
+    //   let lengte=5;
+    //   for (var i = 0; i < lengte; i++) {
+    //     var row = `<tr> 
+    //   <td></td>
+    // <td> ${data[i].id} </td> 
+    // <td> ${data[i].name} </td> 
+    // <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].id}"> </td>
+    // </tr>`
+    //     table.innerHTML += row
+    //   }
+    // }
 
 </script>
 {% endblock javascript %}
