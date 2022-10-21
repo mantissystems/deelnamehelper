@@ -113,6 +113,11 @@
     </nav>
   </div>
 </header>
+{% block javascript %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock javascript %}
+
 {% comment %} {% if request.user.is_authenticated %}
 <p>Ingelogd als: {{request.user}}</p>
 {% endcomment %} {% comment %} <a href="{% url 'logout' %}">Logout</a>

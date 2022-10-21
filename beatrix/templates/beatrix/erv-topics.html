@@ -50,8 +50,8 @@
           </li>
           {% for topic in topics %}
           <li>
-            <a href="{%url 'erv-home' %}?q={{topic.description}}"
-              >{{topic.description}} <span>{{topic.lid.count}} </span></a
+            <a href="{%url 'erv-home' %}?q={{topic.name}}"
+              >{{topic.name}} <span>{{topic.lid.count}} </span></a
             >
           </li>
 

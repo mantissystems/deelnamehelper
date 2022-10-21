@@ -1,10 +1,6 @@
-<!-- {% extends 'erv-base.html' %} -->
+{% extends 'erv-base.html' %}
  {% block content %}
-<!-- <main class="create-room layout"> -->
-
-  {% include 'beatrix/erv-detail.html' %}
-
-  <!-- <main class="outer">
+<main class="outer">
     {% comment %} 5 okt 2022 {% endcomment %}
   <div class="container">
     <div class="layout__box">
@@ -56,7 +52,7 @@
             {% comment %} <label for="room_description">Room Description</label>
             {{form.description}} {% endcomment %}
              <ul>
-              {% for aa in kandidaten %}
+              {% for aa in kandidatenn %}
               <li>
                 {{aa.id}}. {{aa.username}} -{{aa.first_name}} {{aa.last_name}}
               </li>
@@ -67,10 +63,9 @@
                 value="{{ aa.id }}"
               />
               {% endfor%}
-            </ul> -->
+            </ul>
           </div>
 
-          {% comment %}
           <div class="form__group">
             <label for="room_topic">Onderwerp</label>
             <input
@@ -90,19 +85,17 @@
               </select>
             </datalist>
           </div>
-          {% endcomment %} {% comment %}
           <div class="form__group">
             <label for="room_name">Flex Event</label>
             {{form.name}}
           </div>
-          {% endcomment %}
 
-          <!-- <div class="form__action">
+          <div class="form__action">
             <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}"
               >Cancel</a
             >
             <button class="btn btn--main" type="submit">Bevestig</button>
-          </div> -->
+          </div>
         </form>
       </div>
     </div>

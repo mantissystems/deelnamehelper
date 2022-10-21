@@ -53,6 +53,7 @@ class Message(models.Model):
         return self.body[0:50]
 
 class Person(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)    
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100,blank=True)
     is_flex = models.BooleanField(default=True)        #wil ingedeeld worden in flexpoule
@@ -75,33 +76,32 @@ class Person(models.Model):
 
 class Flexevent(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    # host = models.ManyToManyField(User,through='Hosts')  ##, on_delete=models.SET_NULL, null=True)
     id = models.AutoField(primary_key=True)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     event_text = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True) # database field (can Empty), form field (can Empty)
     pub_date = models.CharField(max_length=35)
-    # pub_time = models.CharField(max_length=35)
+    datum = models.DateField(auto_now=False)
     pub_time = models.CharField(max_length=35, default='10:00')
-    flexhost = models.CharField(max_length=135, default='-')
-    lid = models.ManyToManyField(Person,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
-    deelnemers = models.ManyToManyField(User, related_name='deelnemer', blank=True)
+    # flexhost = models.CharField(max_length=135, default='-')
+    # lid = models.ManyToManyField(User,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
+    lid = models.ManyToManyField(User, related_name='deelnemer', blank=True)
     created = models.DateTimeField(default=datetime.now, blank=True)
-    # flexhost2 = models.CharField(max_length=135, default='-')
-    # flexpoule = models.CharField(max_length=135, default='groep')
-    # datum = models.DateField(auto_now=False)
 
     def __str__(self):
         return "%s" % (self.event_text)               
 class Flexlid(models.Model):
     flexevent = models.ForeignKey(Flexevent, on_delete=models.CASCADE,null=True)
-    member = models.ForeignKey(Person, on_delete=models.CASCADE,null=True)
+    member = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     is_host = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('member',)    
     def __str__(self):
         return "%s" % (self.flexevent)        
+
 
 class Bericht(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -115,15 +115,6 @@ class Bericht(models.Model):
 
     def __str__(self):
         return self.body[0:50]
-
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
 
 # python .\manage.py makemigrations
 # python .\manage.py migrate

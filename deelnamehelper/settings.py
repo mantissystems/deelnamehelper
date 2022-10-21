@@ -33,7 +33,7 @@ INSTALLED_APPS = [
 
 # AUTH_USER_MODEL = 'beatrix.User'
 MIDDLEWARE = [
-    #'debug_toolbar.middleware.DebugToolbarMiddleware', ## tijdens debug 
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware', ## tijdens debug 
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",  #22-09-22
     'django.contrib.sessions.middleware.SessionMiddleware',

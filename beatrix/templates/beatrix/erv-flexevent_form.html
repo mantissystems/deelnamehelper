@@ -26,7 +26,7 @@
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group">
-            <label for="room_topic">Enter a Topic</label>
+            <label for="room_topic">Activiteit</label>
 
             <input
               required
@@ -45,7 +45,7 @@
             </datalist>
           </div>
           <div class="form__group">
-            <label for="room_description">Room Description</label>
+            <label for="room_description">Omschrijving</label>
             {{form.description}}
             <ul>
               {% for aa in kandidaten %}
@@ -63,7 +63,7 @@
           </div>
 
           <div class="form__group">
-            <label for="room_topic">Onderwerp</label>
+            <label for="room_topic">Doel activiteit</label>
             <input
               required
               type="text"
@@ -83,7 +83,7 @@
           </div>
 
           <div class="form__group">
-            <label for="room_name">Flex Event</label>
+            <label for="room_name">Activiteit</label>
             {{form.name}}
           </div>
 

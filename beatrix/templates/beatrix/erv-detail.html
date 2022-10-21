@@ -45,7 +45,7 @@
             </td>
             <td>{{t.id }}</td>
             <td></td>
-            <td>{{aa.id}}. {{aa.name}}</td>
+            <td>{{aa.id}}. {{aa.username}}</td>
             <td>
               <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
             </td>
@@ -62,12 +62,10 @@
         <table class='person-table'>
           <thead>
             <hr>
-            limit to max 20 regels(aangemeld+kandidaten=flexibel; limiteer tot 20)
-
             <tr>
               <th> <input id="search-input" name="zoeknaam" class="form-control" type="text" placeholder='@vind kandidaat'></th>
               <th><input type="submit" value="Meld Aan"> </th>
-              <th>Vind Kandidaten uit ( {{personen.count}}) voor {{event.created|date:"d M Y"}}</th>
+              <th>Vind Kandidaten uit ( {{users.count}}) voor {{event.created|date:"d M Y"}}</th>
           </thead>
           </tr>
 
@@ -79,7 +77,8 @@
                 {{t}}
 
               </td>
-              <td>{{ forloop.counter }}. {{t.name}}</td>
+              <td>{{ forloop.counter }}. {{t.username}}</td>
+              <td>{{t.first_name}} {{t.last_name}}</td>
               <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>
               {% endfor %}
             </tr>
@@ -89,7 +88,7 @@
         </div>
         </div>
 </form>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
 
 {% block javascript %}
 <script>
