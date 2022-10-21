@@ -237,8 +237,13 @@ def erv_room(request, pk):
     try:
         gebruiker=User.objects.get(id=request.user.id) ## request.user
     except:
-        messages.error(request, 'Message not sent. You are not logged in')
+        messages.error(request, '.You are not logged in')
         # print(request.user)
+        context = {'event': event,
+     'event_messages': event_messages, 
+     'deelnemers': deelnemers,
+     'kandidaten': kandidaten,
+     }   
         return render(request, 'beatrix/erv-room.html', context)
     if request.method == 'POST':
         gebruiker=User.objects.get(id=request.user.id) ## request.user
