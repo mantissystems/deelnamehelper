@@ -109,7 +109,7 @@
                     <div class="avatar avatar--small">
                       <img src="{{message.user.avatar.url}}" />
                     </div>
-                    <span>@{{message.user.username}}</span>
+                    <span>eigenaar: {{message.user.username}}</span>
                   </a>
                   <span class="thread__date"
                     >{{message.created|timesince}} ago</span
@@ -156,6 +156,7 @@
         Deelnemers <span>({{event.lid.count}} Aangemeld)</span>
       </h3>
       <div class="participants__list scroll">
+        <ul>
         {% for user in event.lid.all %}
         <a href="{%  url 'erv-user-profile' user.id %}" class="participant">
           <div class="avatar avatar--medium">
@@ -166,11 +167,12 @@
           <span>{{user.username}}</span>
         </a>
         {% endfor %}
+        </ul>
       </div>
     </div>
     <!--  End -->
   </div>
 </main>
 {% comment %}
-<script src="{% url static 'script.js' %}"></script>
+<!-- <script src="{% url static 'script.js' %}"></script> -->
 {% endcomment %} {% endblock content %} Footer

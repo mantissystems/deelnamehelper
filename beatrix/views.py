@@ -142,11 +142,9 @@ def erv_home(request):
     end=date(year,month,einde)
     usr=request.user
     users=User.objects.all()
-    # gebruikers=Person.objects.all()
     aangemelden=Flexlid.objects.all() ##filter(member_id__in=gebruikers)
-    # ingedeelden=Flexevent.objects.filter(deelnemers__id__in=users)
     flexevents = Flexevent.objects.all().filter(
-        Q(created__range=[start, end]) & 
+        Q(datum__range=[start, end]) & 
         Q(topic__name__icontains = q) | 
         Q(name__icontains = q) | 
         Q(event_text__icontains = q) | 
@@ -157,21 +155,10 @@ def erv_home(request):
     sc1=[]
     sc2=[]
     sc3=[]
-    ff=Flexlid.objects.none()
     for fl in flexevents:
-        # d = fl.deelnemers.all()
         ll=fl.lid.all()
-        # ff=Flexlid.objects.all().filter(flexevent=fl)
-        # ff | ff
-        # d | d
         ll | ll
-    # deelnemers = d
-    # aangemeld=ff
     aangemeld=ll
-    # leden=ll
-    # aangemeldelijst=aangemelden.values_list('member_id',flat=True)
-    # aangemeldelijst=leden.values_list('id',flat=True)
-    # flex=aangemeld.values_list('flexevent',flat=True)
     print(ll)
     aangemeld=User.objects.all().filter(
     Q(id__in=aangemeld)
