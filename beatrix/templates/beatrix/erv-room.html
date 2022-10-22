@@ -85,7 +85,7 @@
               <div class="avatar avatar--small">
                 <img src="{{room.host.avatar.url}}" />
               </div>
-              <span>@{{event.host.username}}</span>
+              <span>host: {{event.host.username}}</span>
             </a>
           </div>
           <!-- <div class="room__details">
@@ -109,7 +109,7 @@
                     <div class="avatar avatar--small">
                       <img src="{{message.user.avatar.url}}" />
                     </div>
-                    <span>eigenaar: {{message.user.username}}</span>
+                    <span>host: {{message.user.username}}</span>
                   </a>
                   <span class="thread__date"
                     >{{message.created|timesince}} ago</span

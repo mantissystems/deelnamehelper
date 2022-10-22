@@ -63,13 +63,13 @@
           </div>
 
           <div class="form__group">
-            <label for="room_topic">Doel activiteit</label>
+            <label for="room_topic">Datum</label>
             <input
               required
               type="text"
-              value="{{room.topic.name}}"
-              name="topic"
-              id="room_topic"
+              value="{{room.topic.datum}}"
+              name="datum"
+              id="room_datum"
               list="topic-list"
             />
             <datalist id="topic-list">
@@ -82,10 +82,10 @@
             </datalist>
           </div>
 
-          <div class="form__group">
+          <!-- <div class="form__group">
             <label for="room_name">Activiteit</label>
             {{form.name}}
-          </div>
+          </div> -->
 
           <div class="form__action">
             <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}"

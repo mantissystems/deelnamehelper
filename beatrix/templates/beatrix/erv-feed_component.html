@@ -8,14 +8,14 @@
       <div class="avatar avatar--small">
         <img src="{{room.host.avatar.url}}" />
       </div>
-      <span>eigenaar: {{room.host.username}}</span>
+      <span>host: {{room.host.username}}</span>
     </a>
     <div class="roomListRoom__actions">
       <span>{{room.created|timesince}} geleden</span>
     </div>
   </div>
   <div class="roomListRoom__content">
-    <a href="{% url 'erv-room' room.id %}">{{room.name}} </a>
+    <a href="{% url 'erv-room' room.id %}">{{room.name}}: {{room.created|date:"d D M Y"}}</a>
   </div>
   <div class="roomListRoom__meta">
     <a href="{% url 'erv-room' room.id %}" class="roomListRoom__joined">

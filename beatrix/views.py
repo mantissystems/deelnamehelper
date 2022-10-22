@@ -135,7 +135,7 @@ def erv_home(request):
     year=int(date.today().strftime('%Y'))
     month = int(date.today().strftime('%m'))
     beginmonth = 1 #int(date.today().strftime('%m'))
-    endmonth = 12 # int(date.today().strftime('%m'))
+    endmonth = month # int(date.today().strftime('%m'))
     monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
     einde=monthend[endmonth]
     start=date(year,beginmonth,1)
@@ -185,8 +185,8 @@ def erv_home(request):
     context = {
         'rooster':rooster,
         #'namen':namen,          #alle beatrix leden
-        'events': flexevents,   #te saneren in 3 templates
-        'rooms': flexevents,    #te saneren in 3 templates
+        'events': flexevents[0:6],   #te saneren in 3 templates
+        'rooms': flexevents[0:6],    #te saneren in 3 templates
         'deelnemers':aangemeld,    #alle deelnemers en hun skills
         'topics': topcs [0:6], 
         'room_count': room_count, #te saneren in 3 templates
@@ -307,9 +307,10 @@ def erv_createRoom(request):
         Flexevent.objects.create(
              host=request.user,
             topic=topic,
-            name=request.POST.get('name'),
+            # name=request.POST.get('name'),
+            name = request.POST.get('topic'),
             description=request.POST.get('description'),
-            datum='2022-10-22',
+            datum=request.POST.get('datum'),
             event_text=topic,
             # flexhost=request.user,
 
@@ -417,8 +418,8 @@ def erv_deleteMessage(request, pk):
 
     message = Bericht.objects.get(id=pk)
 
-    if request.user != message.user:
-        return HttpResponse('U mag hier niet komen!!')
+    # if request.user != message.user:
+    #     return HttpResponse('Geen toestemming. Het is niet uw bericht!!')
 
     if request.method == 'POST':
         message.delete()
@@ -898,10 +899,10 @@ def maak_rooms(tekst,gebruiker):
         # updated=start_date,
         created=start_date,
         )
-        room = Flexevent.objects.all().first()
+        # room = Flexevent.objects.all().first()
         # room_messages = room.message_set.all()
-        participants = room.deelnemers.all()
-        room.deelnemers.add(gebruiker)
+        # participants = room.deelnemers.all()
+        # room.deelnemers.add(gebruiker)
         # message = Bericht.objects.create(
         #     user=gebruiker,
         #     event=room,
@@ -911,7 +912,7 @@ def maak_rooms(tekst,gebruiker):
 
 def maak_activiteiten():
     start_date = datetime.date.today()
-    tomorrow = start_date + datetime.timedelta(days=1)
+    # tomorrow = start_date + datetime.timedelta(days=1)
     dagnaam=datetime.datetime.now().strftime('%A')
     weekdag=datetime.datetime.now().strftime('%w')
     dagnummer=int(weekdag)
@@ -976,13 +977,13 @@ def apiOverview(request):
     api_urls={
     'api/':'api-overview',    
     'api/person':'api/person',    
-    'bootlijst/':'bootlijst',    
     'flexevents/':'flexevents',    
     'flexeventsbeheer/':'flexeventsbeheer',    
-    'bootdetail/<str:pk>/':'bootdetail',    
-    'bootaanmaken/':'bootaanmaken',    
-    'bootbeheer/<str:pk>/':'bootbeheer',    
-    'bootwerfuit/<str:pk>/':'bootwerfuit',    
+    # 'bootlijst/':'bootlijst',    
+    # 'bootdetail/<str:pk>/':'bootdetail',    
+    # 'bootaanmaken/':'bootaanmaken',    
+    # 'bootbeheer/<str:pk>/':'bootbeheer',    
+    # 'bootwerfuit/<str:pk>/':'bootwerfuit',    
 
 
     }

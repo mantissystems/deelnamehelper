@@ -1,21 +1,21 @@
 <div class="topics">
   <div class="topics__header">
-    <h2>Activiteit</h2>
+    <h2>Schema</h2>
   </div>
   <ul class="topics__list">
     <li>
       <a href="{% url 'erv-home' %}" class="active"
-        >All <span>{{room_count}}</span></a
+        >Hele Lijst <span>{{room_count}}</span></a
       >
 
-    {% for tt in topics %}
+    {% for tt in events %}
     <li>
-      <a href="{% url 'erv-home' %}?q={{tt.name}}"><span>{{tt.name}}</span></a>
+      <a href="{% url 'erv-home' %}?q={{tt.name}}"><span>{{tt.datum|date:"D d M Y"}} {{tt.pub_time}}  </span></a>
     </li>
     {% endfor %}
   </ul>
   <a class="btn btn--link" href="{% url 'erv-topics' %}">
-    More
+    Meer
     <svg
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"

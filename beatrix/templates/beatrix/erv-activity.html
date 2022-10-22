@@ -28,8 +28,7 @@
     <ul>
       {% for room in events %}
       <li>
-        {{room}} : 
-        {{room.lid.count}} 
+        {{room}} :{{room.created|date:"d D M Y"}} :  {{room.lid.count}} 
       </li>
       {% endfor %}
     </ul>

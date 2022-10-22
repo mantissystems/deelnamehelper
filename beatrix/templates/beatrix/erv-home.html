@@ -60,8 +60,9 @@
         </a>
         {% endif %}
       </div>
-
+      {% if request.user.is_authenticated %}
       {% include 'beatrix/erv-feed_component.html' %}
+      {% endif %}
     </div>
     <!-- Room List End -->
 
