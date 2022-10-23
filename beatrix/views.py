@@ -159,7 +159,7 @@ def erv_home(request):
         ll=fl.lid.all()
         ll | ll
     aangemeld=ll
-    print(ll)
+    # print(ll)
     aangemeld=User.objects.all().filter(
     Q(id__in=aangemeld)
         )
@@ -699,8 +699,8 @@ class AanmeldView(ListView):
         start=date(year,beginmonth,1)
         end=date(year,endmonth,einde)
         start=date(year,beginmonth,1)
-        rooster=Flexevent.objects.filter(created__range=[start, end])
-        roostergedeeltelijk=Flexevent.objects.filter(created__range=[start, end])
+        rooster=Flexevent.objects.filter(datum__range=[start, end])
+        roostergedeeltelijk=Flexevent.objects.filter(datum__range=[start, end])
         context = {
         'rooster': roostergedeeltelijk,
         } 
@@ -726,7 +726,7 @@ def events(request):
     start=date(year,month,1)
     end=date(year,month,einde)
     namen=Person.objects.all()
-    rooster=Flexevent.objects.filter(created__range=[start, end])
+    rooster=Flexevent.objects.filter(datum__range=[start, end])
     print(month,einde,start,end,rooster)
     context={
         # 'object_list':results,

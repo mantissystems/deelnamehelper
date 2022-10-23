@@ -28,7 +28,7 @@
     <ul>
       {% for room in events %}
       <li>
-        {{room}} :{{room.created|date:"d D M Y"}} :  {{room.lid.count}} 
+        {{room}} :{{room.datum|date:"d D M Y"}} :  {{room.lid.count}} 
       </li>
       {% endfor %}
     </ul>
@@ -75,7 +75,7 @@
         </div>
         <p>
           @{{message.user.username}}
-          <span>{{message.created|timesince}} geleden</span>
+          <span>{{message.datum|timesince}} geleden</span>
         </p>
       </a>
 

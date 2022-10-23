@@ -24,7 +24,7 @@
             </svg>
           </a>
           <h3>
-            FlexEvent {{room.created}} --selecteer leden voor deelname
+            FlexEvent {{room.datum}} --selecteer leden voor deelname
           </h3>
         </div>
 
@@ -33,7 +33,7 @@
             <hr>
             <tr>
               <th>#</th>
-              <th>Aanmeldingen op: {{event.created|date:"d M Y"}}</th>
+              <th>Aanmeldingen op: {{event.datum|date:"d M Y"}}</th>
               <th><input type="submit" value="Meld Af "> </th>
               <th></th>
               <th></th>
@@ -65,7 +65,7 @@
             <tr>
               <th> <input id="search-input" name="zoeknaam" class="form-control" type="text" placeholder='@vind kandidaat'></th>
               <th><input type="submit" value="Meld Aan"> </th>
-              <th>Vind Kandidaten uit ( {{users.count}}) voor {{event.created|date:"d M Y"}}</th>
+              <th>Vind Kandidaten uit ( {{users.count}}) voor {{event.datum|date:"d M Y"}}</th>
           </thead>
           </tr>
 
@@ -92,4 +92,60 @@
 </div>
 </div>
 </main>
+<script>
+
+
+$('#search-input').on('keyup',function(){
+    var value = $(this).val()
+    console.log('Value:', value)
+     var data = searchTable(value,myArray)
+     console.log(data)
+    buildTable(data)
+})
+
+$.ajax({
+    method:'GET',
+    url:'http://127.0.0.1:8000/api/person/',
+    success:function(response){
+        myArray = response
+        buildTable(myArray)
+        // console.log(myArray)
+    }
+})
+
+function searchTable(value, data){
+    var filteredData =[]
+    for (var i = 0; i < data.length; i++){
+        value=value.toLowerCase()
+        var name = data[i].name.toLowerCase()
+        if (name.includes(value)){
+            filteredData.push(data[i])
+        }
+    }
+    return filteredData
+}
+
+function buildTable(data){
+  
+var table = document.getElementById('myTable')
+table.innerHTML=``
+for (var i = 0; i < data.length;i++){
+      var row = `<tr> 
+    <td> ${data[i].id} </td> 
+    <td> ${data[i].name} </td> 
+    <td> <label> <input type="checkbox" value="${data[i].id}" onchange="Check(this)" /> </label> <td id="mantis"> </td>
+    </tr>`
+  table.innerHTML += row
+}
+}
+
+function Check(value) {
+    console.log('Value:', value)
+    // var testid = $(this).val(testid)
+     console.log('Value:', value.parentelement)
+      document.getElementById('mantis').innerHTML = value.checked;
+      console.log('Value:', value.checked)
+    };
+  
+</script>
 {% endblock %}

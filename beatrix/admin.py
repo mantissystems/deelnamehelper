@@ -12,7 +12,7 @@ admin.site.register(Message)
 
 admin.site.register(Flexevent)
 admin.site.register(Person)
-# admin.register(User)
+admin.register(User)
 # class PersonAdmin(admin.ModelAdmin):
 #     list_filter = ('flexhost','bootnaam')
 #     list_display = ('flexhost', 'bootnaam')
