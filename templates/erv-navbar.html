@@ -24,7 +24,7 @@
     </form>
     <nav class="header__menu">
       <!-- Logged In -->
-      {% if request.user.is_authenticated %}
+      <!-- {% if request.user.is_authenticated %} -->
       <div class="header__user">
         <a href="{% url 'update-user' %}">
           <div class="avatar avatar--medium active">
@@ -48,14 +48,14 @@
           </svg>
         </button>
       </div>
-      {% else %}
+      <!-- {% else %} -->
 
       <!-- Not Logged In -->
       <a href="{% url 'erv-login' %}">
         <img src="{% static 'images/avatar.svg' %}" />
         <p>Login</p>
       </a>
-      {% endif %}
+      <!-- {% endif %} -->
 
       <div class="dropdown-menu">
         <a href="{% url 'update-user' %}" class="dropdown-link"

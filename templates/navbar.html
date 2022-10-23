@@ -23,9 +23,10 @@
         <input name="q" placeholder="navigatie van flexroeien" />
       </label>
     </form>
+    
     <nav class="header__menu">
       <!-- Logged In -->
-      {% if request.user.is_authenticated %}
+    
       <div class="header__user">
         <a href="{% url 'erv-update-user' %}">
           <div class="avatar avatar--medium active">
@@ -49,15 +50,13 @@
           </svg>
         </button>
       </div>
-      {% else %}
-
+    
       <!-- Not Logged In -->
       <a href="{% url 'login' %}">
         <img src="{% static 'images/avatar.svg' %}" />
         <p>Login</p>
       </a>
-      {% endif %}
-
+    
       <div class="dropdown-menu">
         <a href="{% url 'erv-update-user' %}" class="dropdown-link"
           ><svg
@@ -115,9 +114,3 @@
   </div>
 </header>
 
-{% comment %} {% if request.user.is_authenticated %}
-<p>Ingelogd als: {{request.user}}</p>
-{% endcomment %} {% comment %} <a href="{% url 'logout' %}">Logout</a>
-{% else %}
-<a href="{% url 'login' %}">Login</a> {% endcomment %} {% comment %} {% endif %}
-{% endcomment %}

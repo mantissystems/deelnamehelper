@@ -2,13 +2,13 @@
 {% block content %}
 <main class="layout layout--3">
   {% comment %} 5 okt 2022 {% endcomment %}
-<div class="container">
-
-  <form action="{% url 'vote' event.id %}" method="post">
-  {% csrf_token %}
-    <div class="phone">
-      <a href="/" class="fa fa-home fa-2x" ></a>
-      <div class="phone-mirror">
+  <div class="container">
+    
+    <form action="{% url 'vote' event.id %}" method="post">
+      {% csrf_token %}
+      <div class="phone">
+        <div class="phone-mirror">
+        <li><a href="/" class="btn btn-warning btn-sm">Home</a></li>
         <div class="layout__boxTitle">
           <a href="{{request.META.HTTP_REFERER}}">
             <svg
