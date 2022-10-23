@@ -4,7 +4,7 @@ from django.shortcuts import render
 import datetime
 from datetime import date
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib.sessions.models import Session
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -24,7 +24,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
-from beatrix.serializers import FlexrecurrentSerializer, PersoonSerializer 
+from beatrix.serializers import FlexrecurrentSerializer, PersoonSerializer, TopicSerializer 
 from .models import Bericht, Flexrecurrent, Message, Room, Topic
 from .forms import RoomForm,UserForm, erv_RoomForm
 
@@ -163,28 +163,11 @@ def erv_home(request):
     aangemeld=User.objects.all().filter(
     Q(id__in=aangemeld)
         )
-    # skills=Person.objects.all().filter(
-        # Q(flexevent__in=flex) &
-        # Q(pos1__in=['sc1','sc2','sc3'])&
-        # Q(pos2__in=['sc1','sc2','sc3'])&
-        # Q(pos3__in=['sc1','sc2','sc3'])&
-        # Q(pos4__in=['sc1','sc2','sc3'])&
-        # Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
-    # sc1=Person.objects.all().filter(
-    #     Q(id__in=aangemeldelijst) &
-    #     Q(pos1__in=['sc1'])&
-    #     Q(pos2__in=['sc1'])&
-    #     Q(pos3__in=['sc1'])&
-    #     Q(pos4__in=['sc1'])&
-    #     Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
-    #     )
     room_count = flexevents.count()
     # namen=Person.objects.all()
     rooster=Flexevent.objects.all().filter(created__range=[start, end])
-    # print(month,einde,start,end,'count=' ,ff.count(),skills.count())
     context = {
         'rooster':rooster,
-        #'namen':namen,          #alle beatrix leden
         'events': flexevents[0:6],   #te saneren in 3 templates
         'rooms': flexevents[0:6],    #te saneren in 3 templates
         'deelnemers':aangemeld,    #alle deelnemers en hun skills
@@ -196,7 +179,7 @@ def erv_home(request):
     if 'beatrix' in q:
         redirect('aanmelden')            
         return render(request, 'beatrix/maand_list.html', context)
-        print(q)
+
     return render(request, 'beatrix/erv-home.html', context)
 
 def room(request, pk):
@@ -300,24 +283,32 @@ def createRoom(request):
 def erv_createRoom(request):
     form = erv_RoomForm()
     topics = Topic.objects.all()
+    datums=Flexevent.objects.all() ###values_list('datum',flat=True)
+    # print(datums.datum)
     if request.method == 'POST':
         topic_name = request.POST.get('topic')
+        tijdstip=request.POST.get('tijdstip')
+        activiteit = request.POST.get('topic')
+        omschrijving=request.POST.get('description')
+        datum=request.POST.get('datum')
+        plandatum = datum #.strftime("%m/%d/%Y")
+
+        omschrijving=plandatum + '; ' + activiteit
         topic, created = Topic.objects.get_or_create(name=topic_name)
 
         Flexevent.objects.create(
              host=request.user,
             topic=topic,
-            # name=request.POST.get('name'),
+            pub_time=request.POST.get('tijdstip'),
             name = request.POST.get('topic'),
-            description=request.POST.get('description'),
+            description=omschrijving, ##request.POST.get('description'),
             datum=request.POST.get('datum'),
             event_text=topic,
             # flexhost=request.user,
 
         )
         return redirect('erv-home')
-
-    context = {'form': form, 'topics': topics}
+    context = {'form': form, 'topics': topics,'datums':datums}
     return render(request, 'beatrix/erv-flexevent_form.html', context)
 
 @login_required(login_url='login')
@@ -363,10 +354,6 @@ def erv_updateRoom(request, pk):
      'aanwezig': aanwezig,
      }
     return render(request, 'beatrix/erv-room_form.html', context)
-    # aangemeld=Flexlid.objects.filter(flexevent=pk).values_list('member_id',flat=True)
-    # deelnemers = event.deelnemers.all()
-    # deelnemers = event.deelnemers.all()
-    # ing=Flexevent.objects.filter(deelnemers__id__in=users)
 
 @login_required(login_url='login')
 def erv_deleteRoom(request, pk):
@@ -441,6 +428,18 @@ def updateUser(request):
 
     return render(request, 'beatrix/update-user.html', {'form': form})
 
+@login_required(login_url='login')
+def erv_updateUser(request):
+    user = request.user
+    form = UserForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
+
+    return render(request, 'beatrix/erv-update-user.html', {'form': form})
 
 def topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -510,9 +509,9 @@ def erv_activityPage(request):
 
 def erv_topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    # topics=Topic.objects.filter(description__contains=q) ##.values_list('topic', flat=True)
+    topics=Flexevent.objects.filter(name__contains=q)[0:6] ##.values_list('topic', flat=True)
     # topcs = Topic.objects.all().filter(id__in=tops)
-    topics = Topic.objects.filter(name__icontains=q)[0:5]
+    # topics = Topic.objects.filter(name__icontains=q)[0:5]
     return render(request, 'beatrix/erv-topics.html', {'topics': topics})
 
 class FlexeventsView(ListView):
@@ -572,29 +571,16 @@ def aantalregels(request):
 
 #     return Response(serializer.data)
 
-# @api_view(['GET'])
-# def bootDetail(request,pk):
-#     boot=Boot.objects.get(id=pk)
-#     serializer=BootSerializer(boot,many=False)
 
-#     return Response(serializer.data)
+@api_view(['GET'])
+def activiteit(request,pk):
+    topic=Flexevent.objects.get(id=pk)
 
-# @api_view(['POST'])
-# def werfin(request):
-#     serializer=BootSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
+    serializer=TopicSerializer(topic,many=False)
+    # if serializer.is_valid():
+    #     serializer.save()
 
-#     return Response(serializer.data)
-
-# @api_view(['POST'])
-# def bootBeheer(request,pk):
-#     boot=Boot.objects.get(id=pk)
-#     serializer=BootSerializer(instance=boot,data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-
-#     return Response(serializer.data)
+    return Response(serializer.data)
 
 # @api_view(['DELETE'])
 # def bootWerfuit(request,pk):
@@ -602,14 +588,6 @@ def aantalregels(request):
 #     boot.delete()
     
 #     return Response('boot verwijderd uit de werf')
-
-# class IndexView(ListView):
-#     template_name = 'beatrix/index.html'
-#     context_object_name = 'latest_question_list'
-
-#     def get_queryset(self):
-#         """Return the last five published questions."""  
-#         return Question.objects.order_by('-pub_date')[:5]
 
 
 class DetailView(DetailView):
@@ -655,62 +633,31 @@ def vote(request, event_id):
     afmeldingen=[]
     hosts=[]
     # for h in request.POST.getlist('hoofdhost'):
-        # hosts.append(h)
     for af in request.POST.getlist('afmelding'):
-        # afmeldingen.append(af)
         event.lid.remove(af)
     for l in request.POST.getlist('aanmelding'):
-        # leden.append(l)
         event.lid.add(l)
     if len(hosts)>0:
         hh=User.objects.all().filter(id__in=hosts)[:1]
         uu=User.objects.all().filter(id__in=hosts)[:1]
-    # print('af,aan', afmeldingen,leden)
     for l in leden:
         try:
             uu=User.objects.get(id=l)
-            # event.deelnemers.add(uu)
         except (KeyError, User.DoesNotExist):
             print('vote deelnemer add, except')
         Flexlid.objects.all().update_or_create(
             member_id=l,
             flexevent_id=event_id,
         )        
-    # for af in afmeldingen:
-    #     event.lid.remove(af)
-        # p = User.objects.get(id=af)
-        # if p:
-        #     m = Flexlid.objects.filter(flexevent_id=event_id,
-        #                                member_id=p,)
-            # print(m)
-            # if m[0].is_host==True:
-                # Flexevent.objects.all().filter(id=event_id).update(flexhost='')
-        #     m.delete()
-
-        # pp=User.objects.get(id=p.id)
-        # pp.keuzes-=1  #op later tijdstip inbouwen
-        # pp.save()
-    # aanwezig=Flexlid.objects.all().filter(flexevent_id=event_id)
     ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
-    # ingedeelden=Flexevent.objects.filter(id__in=aanwezig)
-    # zijnhost=ishost.values_list('member_id', flat=True)
     personen=User.objects.all()
     kandidaten = User.objects.all().filter(
         Q(last_name__icontains = zoeknaam) | 
         Q(first_name__icontains = zoeknaam)
         ) # search 
-    # kandidaten=User.objects.all().filter(username__icontains=zoeknaam)[:10]
-    # if len(zoeknaam)>0:
     aanwezig=event.lid.all()
     aanwezigen=User.objects.all().filter(id__in=aanwezig)
-    # hosts=User.objects.all().filter(id__in=zijnhost) #.update(is_host=True)
-    # question = get_object_or_404(Flexevent, pk=event_id)
-    # try:
-        # selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    # selected_choice = Flexevent.lid.get(pk=request.POST['aanmelding'])
-        # print('vote event_id, try')
     # except (KeyError, Flexlid.DoesNotExist):
-        # print('vote choice, except')
         # Redisplay the form.
         # print(len(aanwezig)) ###regel niet verwijderen ###
         # print(len(kandidaten)) ###regel niet verwijderen ###
@@ -718,14 +665,8 @@ def vote(request, event_id):
             'event': event,
             'kandidaten':kandidaten,
             'aanwezig':aanwezigen, 
-            # 'hosts':hosts, 
-            # 'personen':personen, 
-            # 'aantal':kandidaten.count(), 
-            # 'aantalregels':aantalregels,
             'error_message': "Er is geen keuze gemaakt.",
         })
-        # onderstaande 4 regels zijn uitgesterd omdat ze te maken hebben met de poll choices, die niet meer actief zijn
-    # else:
     print('vote event_id, else')
         # selected_choice.keuzes += 1
         # selected_choice.save()
@@ -776,7 +717,6 @@ def events(request):
     events = Flexevent.objects.all() #.filter(flexhost='',flexhost2='')
     rowers = Person.objects.all() #.filter(is_present=True)
     hosts = Person.objects.all() #.filter(is_host=True)
-    # hosts = Person.objects.all().filter(is_host=True, is_present=True)
     rowers = rowers | hosts  # voeg hosts en roeiers samen
     results=Flexevent.objects.all()
     year=int(date.today().strftime('%Y'))
@@ -787,7 +727,6 @@ def events(request):
     end=date(year,month,einde)
     namen=Person.objects.all()
     rooster=Flexevent.objects.filter(created__range=[start, end])
-    # rooster=Flexevent.objects.all() #filter(pub_date__range=[(2021,1,1),(2023,12,12)])
     print(month,einde,start,end,rooster)
     context={
         # 'object_list':results,
@@ -796,99 +735,17 @@ def events(request):
        }
     return render(request, template_name, context)
 
-# class PersonListView (ListView):
-#     model=Person
-#     queryset = Person.objects.all()           
-#     # template_name='beatrix/personlistview.html'
-#     template_name='person/aanmeldview.html'
-# def get_name(request):
-#     # if this is a POST request we need to process the form data
-#     if request.method == 'POST':
-#         # create a form instance and populate it with data from the request:
-#         form = Personform(request.POST)
-#         if form.is_valid():
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             return HttpResponseRedirect('/')
-
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = Personform()
-
-#     return render(request, 'person_form.html', {'form': form})
-
-# def deelname(request, event_id):
-#     print('deelname')
-#     event = get_object_or_404(Flexevent, pk=event_id)
-#     selected_event = Flexevent.objects.all().filter(id=event_id)
-#     leden = []
-#     afmeldingen=[]
-#     for l in request.POST.getlist('aanmelding'):
-#         leden.append(l)
-#     print(leden)
-#     for af in request.POST.getlist('host'):
-#         afmeldingen.append(af)        
-#     print(afmeldingen)
-#     aanwezig=Person.objects.all().filter(id__in=leden)
-#     for l in leden:
-#         Flexlid.objects.all().update_or_create(
-#             member_id=l,
-#             taak_id=event_id,
-#         )
-#         p=Person.objects.get(id=l)
-#         p.keuzes+=1
-#         p.is_flex=True
-#         p.save()
-#     for af in afmeldingen:
-#         p = Person.objects.get(id=af)
-#         if p:
-#             m = Flexlid.objects.filter(taak=event.id,
-#                                        member_id=p,)
-#             m.delete()
-#         pp=Person.objects.get(id=p.id)
-#         pp.keuzes-=1
-#         pp.save()
-#     return HttpResponseRedirect(reverse('beatrix:kal', args=(event_id,)))
 
 
 def recurrent_event(request):
     template_name = 'beatrix/flexevent_list.html'
-    # start_date = datetime.date.today()
-    # tomorrow = start_date + datetime.timedelta(days=1)
-    # dagnaam=datetime.datetime.now().strftime('%A')
-    # weekdag=datetime.datetime.now().strftime('%w')
-    # dagnummer=int(weekdag)
-    # day_delta = datetime.timedelta(days=1)
-    # trainingsweken=8 #45
-    # for j in range(trainingsweken):
-    #     day_delta = datetime.timedelta(days=7) 
-    #     datum2=start_date + j * day_delta   
-    #     date_time = datum2.strftime("%m/%d/%Y, %H:%M:%S")
-    #     datum = datum2.strftime("%m/%d/%Y")
-    #     print("datum:",datum)	
-
 
     Topic.objects.all().delete()
     Flexevent.objects.all().delete()
-    # Message.objects.all().delete()
     maak_activiteiten() #flexevents; houd tijdelijk niet qctief
-    # tops=[]
-    # tops.append('flexmaandag')
-    # tops.append('flexdinsdag')
-    # tops.append('flexwoensdag')
-    # tops.append('flexdonderdag')
-    # tops.append('flexvrijdag')
-    # gebruiker=User.objects.all().first()
-    # for t in tops:
-    #     Topic.objects.all().update_or_create(
-    #         name=t,
-    #     )
-    #     maak_rooms(t,gebruiker)
     return render(request, template_name, {})
 
 def maak_rooms(tekst,gebruiker):
-        # gebruiker=User.objects.all().first()
         eerste=Topic.objects.all().first()
         start_date = datetime.date.today()
         Flexevent.objects.all().update_or_create(
@@ -896,18 +753,8 @@ def maak_rooms(tekst,gebruiker):
         topic=eerste,
         name=tekst,
         description='omschrijving',
-        # updated=start_date,
         created=start_date,
         )
-        # room = Flexevent.objects.all().first()
-        # room_messages = room.message_set.all()
-        # participants = room.deelnemers.all()
-        # room.deelnemers.add(gebruiker)
-        # message = Bericht.objects.create(
-        #     user=gebruiker,
-        #     event=room,
-        #     body=tekst
-        # )
         return
 
 def maak_activiteiten():
@@ -928,18 +775,6 @@ def maak_activiteiten():
         activiteit='training_' + str(j)
         week=datum2.strftime('%W')
         datum = datum2.strftime("%m/%d/%Y")
-
-        # personen=Person.objects.values_list('name',flat=True)
-        # qs2 = Person.objects.none()
-        # for pp in personen:
-        #     dd = pp.split(' ')
-        #     if len(dd[0]) > 100:
-        #         created = User.objects.update_or_create(
-        #         username=dd[0],
-        #         first_name=dd[0],
-        #         last_name=dd,),
-        #         password='beatrix123'
-        # activiteit=''
         user=User.objects.all().first()
         for t in range(1,7,1):
             topc=Topic.objects.create(name='training_' + str(t))
@@ -958,18 +793,8 @@ def maak_activiteiten():
         gebruikers=User.objects.all()
 
         for f in events:
-            # f.lid.add(user)
-            # Topic.objects.all().update_or_create( name=f.name)
             for p in gebruikers:
                 f.lid.add(p)
-    #     fl=Flexevent.objects.values_list('id',flat=True)
-    #     for f in fl:
-    #         p=Person.objects.all().first()
-    #     f=Flexevent.objects.first()
-    #     Flexlid.objects.all().update_or_create(
-    #     member=p, 
-    #     flexevent=f,
-    # )
 
     return
 @api_view(['GET'])
@@ -979,12 +804,6 @@ def apiOverview(request):
     'api/person':'api/person',    
     'flexevents/':'flexevents',    
     'flexeventsbeheer/':'flexeventsbeheer',    
-    # 'bootlijst/':'bootlijst',    
-    # 'bootdetail/<str:pk>/':'bootdetail',    
-    # 'bootaanmaken/':'bootaanmaken',    
-    # 'bootbeheer/<str:pk>/':'bootbeheer',    
-    # 'bootwerfuit/<str:pk>/':'bootwerfuit',    
-
 
     }
     # return JsonResponse("API BASE POINT",safe=False)

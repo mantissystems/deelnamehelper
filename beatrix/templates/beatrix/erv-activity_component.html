@@ -1,13 +1,13 @@
 <div class="activities">
   <div class="activities__header">
-    <h2>Aangemelde Vaardigheden</h2>
+    <h2>Reeds aangemeld:</h2>
   </div>
   <div>
-    Deelnemers:
+    Deelnemers :
     <ul>
       {% for room in events %}
       <li>
-        {{room}} : 
+        {{room.datum}}: 
         {{room.lid.count}} 
       </li>
       {% endfor %}

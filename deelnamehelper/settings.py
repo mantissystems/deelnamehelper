@@ -29,12 +29,14 @@ INSTALLED_APPS = [
     'beatrix',
     # 'debug_toolbar',
     'rest_framework',
+    'corsheaders',
     ]
 
 # AUTH_USER_MODEL = 'beatrix.User'
 MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware', ## tijdens debug 
     'django.middleware.security.SecurityMiddleware',
+    "corsheaders.middleware.CorsMiddleware",  #23-10-2022
     "whitenoise.middleware.WhiteNoiseMiddleware",  #22-09-22
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -43,7 +45,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+#  internal ips hoort bij debug toolbar
 # INTERNAL_IPS = [
 #     "127.0.0.1",
 # ]
@@ -112,6 +114,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL='/images/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
     
@@ -122,9 +125,10 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 STATIC_FILES_DIR='/static'
+MEDIA_ROOT= BASE_DIR / 'static/images'
 FIXTURE_DIRS = [
     BASE_DIR / 'static'
     
 ]
 
-# CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_ALL_ORIGINS=True

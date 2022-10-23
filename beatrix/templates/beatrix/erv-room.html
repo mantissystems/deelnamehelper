@@ -77,7 +77,7 @@
             <span>{{event.created|timesince}} geleden</span>
           </div>
           <div class="room__hosted">
-            <p>Hosted By</p>
+            <p>Host</p>
             <a
               href="{% url 'erv-user-profile' event.host.id %}"
               class="room__author"
@@ -85,15 +85,15 @@
               <div class="avatar avatar--small">
                 <img src="{{room.host.avatar.url}}" />
               </div>
-              <span>host: {{event.host.username}}</span>
+              <span>{{event.host.username}}</span>
             </a>
           </div>
-          <!-- <div class="room__details">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi, tenetur laudantium? Dicta repellendus
-            rerum consectetur, voluptatem repudiandae eum ea porro cupiditate provident nulla, deserunt, ab ipsum
-            corporis laboriosam deleniti molestias?
-          </div> -->
-          <span class="room__topics">{{event.topic}}</span>
+          <div class="room__details">
+            <p>datum: {{event.datum}}</p>
+            <p>omschrijving: {{event.description}}</p>
+            <p>host: {{event.host}}</p>
+            <span class="room__topics">activiteit: {{event.topic}}</span>
+          </div>
         </div>
 
         <div class="room__conversation">

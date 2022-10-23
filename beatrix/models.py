@@ -55,6 +55,7 @@ class Message(models.Model):
 class Person(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)    
     name = models.CharField(max_length=100)
+    avatar=models.ImageField(null=True,default="avatar.svg")      # install Pillow is needed
     email = models.CharField(max_length=100,blank=True)
     is_flex = models.BooleanField(default=True)        #wil ingedeeld worden in flexpoule
     is_host = models.BooleanField(default=False)        #kan flexhost zijn

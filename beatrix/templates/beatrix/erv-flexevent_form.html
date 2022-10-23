@@ -45,47 +45,43 @@
             </datalist>
           </div>
           <div class="form__group">
-            <label for="room_description">Omschrijving</label>
-            {{form.description}}
-            <ul>
-              {% for aa in kandidaten %}
-              <li>
-                {{aa.id}}. {{aa.username}} -{{aa.first_name}} {{aa.last_name}}
-              </li>
-              <input
-                type="checkbox"
-                name="aanmelding"
-                id="host{{ forloop.counter }}"
-                value="{{ aa.id }}"
-              />
-              {% endfor%}
-            </ul>
-          </div>
+            <label for="room_datum">Datum</label>
 
-          <div class="form__group">
-            <label for="room_topic">Datum</label>
             <input
               required
               type="text"
-              value="{{room.topic.datum}}"
+              value="{{datums.datum}}"
               name="datum"
-              id="room_datum"
-              list="topic-list"
+              list="datum-list"
             />
-            <datalist id="topic-list">
-              <select id="room_topic">
-                {% for topic in topics %}
-                <option value="">Selecteer Onderwerp</option>
-                <option value="{{topic.name}}">{{topic.name}}</option>
+
+            <datalist id="datum-list">
+              <select id="room_datum">
+                {% for topic in topic %}
+                <option value="{{topic.datum}}">{{topic.datum}}</option>
                 {% endfor %}
               </select>
             </datalist>
           </div>
+          <div class="form__group">
+            <label for="room_datum">Tijdstip</label>
 
-          <!-- <div class="form__group">
-            <label for="room_name">Activiteit</label>
-            {{form.name}}
-          </div> -->
+            <input
+              required
+              type="text"
+              value="{{datums.pub_time}}"
+              name="tijdstip"
+              list="tijdstip-list"
+            />
+
+            <datalist id="tijdstip-list">
+              <select id="room_tijdstip">
+                {% for topic in topic %}
+                <option value="{{topic.pub_time}}">{{topic.pub_time}}</option>
+                {% endfor %}
+              </select>
+            </datalist>
+          </div>
 
           <div class="form__action">
             <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}"

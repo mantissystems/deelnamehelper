@@ -19,7 +19,7 @@
               ></path>
             </svg>
           </a>
-          <h3>Bekijk Flex Mogelijkheden</h3>
+          <h3>Bekijk Schema</h3>
         </div>
       </div>
 
@@ -51,7 +51,7 @@
           {% for topic in topics %}
           <li>
             <a href="{%url 'erv-home' %}?q={{topic.name}}"
-              >{{topic.name}} <span>{{topic.lid.count}} </span></a
+              >{{topic.name}} {{topic.datum}} <span>{{topic.lid.count}} </span></a
             >
           </li>
 

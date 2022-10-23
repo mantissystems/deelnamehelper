@@ -19,7 +19,7 @@ class erv_RoomForm(ModelForm):
     class Meta:
         model = Flexevent
         fields = '__all__'
-        # exclude = ['host', 'participants']
+        exclude = ['host', 'lid']
 
 class UserForm(ModelForm):
     class Meta:
