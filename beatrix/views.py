@@ -465,8 +465,10 @@ def erv_activityPage(request):
     end=date(year,month,einde)
     usr=request.user
     users=User.objects.all()
+    aangemelden=Person.objects.all().filter(id__in=users)
+
     flexevents = Flexevent.objects.all().filter(
-        Q(created__range=[start, end]) 
+        Q(datum__range=[start, end]) 
         ) # search 
     ff=Flexevent.objects.none()
     for fl in flexevents:
@@ -494,7 +496,7 @@ def erv_activityPage(request):
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
     room_count = flexevents.count()
-    rooster=Flexevent.objects.all().filter(created__range=[start, end])
+    rooster=Flexevent.objects.all().filter(datum__range=[start, end])
 
     context = {
         'events': flexevents,
@@ -502,6 +504,7 @@ def erv_activityPage(request):
         'personen':skills,
         'topics': topcs, 
         'room_count': room_count, 
+        'sc1':aangemelden,
         'room_messages': room_messages
         }
 
@@ -631,39 +634,37 @@ def vote(request, event_id):
 
     leden = []
     afmeldingen=[]
-    hosts=[]
-    # for h in request.POST.getlist('hoofdhost'):
     for af in request.POST.getlist('afmelding'):
         event.lid.remove(af)
     for l in request.POST.getlist('aanmelding'):
         event.lid.add(l)
-    if len(hosts)>0:
-        hh=User.objects.all().filter(id__in=hosts)[:1]
-        uu=User.objects.all().filter(id__in=hosts)[:1]
-    for l in leden:
-        try:
-            uu=User.objects.get(id=l)
-        except (KeyError, User.DoesNotExist):
-            print('vote deelnemer add, except')
-        # Flexlid.objects.all().update_or_create(
-        #     member_id=l,
-        #     flexevent_id=event_id,
-        # )        
-    # ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
+    # for l in leden:
+    #     try:
+    #         uu=User.objects.get(id=l)
+    #     except (KeyError, User.DoesNotExist):
+    #         print('vote deelnemer add, except')
     personen=User.objects.all()
     kandidaten = User.objects.all().filter(
         Q(last_name__icontains = zoeknaam) | 
-        Q(first_name__icontains = zoeknaam)
+        Q(first_name__icontains = zoeknaam) |
+        Q(person__pos1__icontains=zoeknaam) |
+        Q(person__pos2__icontains=zoeknaam) |
+        Q(person__pos3__icontains=zoeknaam) |
+        Q(person__pos4__icontains=zoeknaam) |
+        Q(person__pos5__icontains=zoeknaam)
         ) # search 
-    aanwezig=event.lid.all()
-    aanwezigen=User.objects.all().filter(id__in=aanwezig)
+    aangemeld=event.lid.all()
+    aanwezigen=User.objects.all().filter(id__in=aangemeld)
+    roeiers=Person.objects.filter(
+        Q(id__in=aanwezigen) &
+        Q(pos1__icontains=zoeknaam)
+        )
     # except (KeyError, Flexlid.DoesNotExist):
-        # Redisplay the form.
-        # print(len(aanwezig)) ###regel niet verwijderen ###
         # print(len(kandidaten)) ###regel niet verwijderen ###
     return render(request, 'beatrix/erv-detail.html', {
             'event': event,
             'users': personen,
+            'roeiers': roeiers,
             'kandidaten':kandidaten,
             'aanwezig':aanwezigen, 
             'error_message': "Er is geen keuze gemaakt.",

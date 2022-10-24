@@ -30,19 +30,20 @@
       <li>
         {{room}} :{{room.datum|date:"d D M Y"}} :  {{room.lid.count}} 
       </li>
+      
       {% endfor %}
     </ul>
     {% if sc1 %}
     <!-- <h3>pos1 | pos2 | pos3 | slag | stuur</h3> -->
     <ul>
       <hr>
-      <li>|sc1: {{sc1.pos1.count}} |sc2: {{sc2.count}}|st2: {{st2.count}} </li>
-      <li>|sc1: {{sc1.count}}  </li>
-      <li>|sc2: {{sc2.count}} </li>
-      <li>|st2: {{st2.count}} </li>
+      <li>sc1: {{sc1.pos1.count}} ,sc2: ,{{sc2.count}} st2: , {{st2.count}} </li>
+      <li>sc1: {{sc1.count}}  </li>
+      <li>sc2: {{sc2.count}} </li>
+      <li>st2: {{st2.count}} </li>
       {% endif %}
     </ul>
-    {% if deelnemers %}
+    {% if deelnemers22 %}
     <h3>boeg | pos2 | pos3 | slag | stuur</h3>
     {% endif %}
     <ul>

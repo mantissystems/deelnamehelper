@@ -25,7 +25,7 @@
             </svg>
           </a>
           <h3>
-            FlexEvent {{room.datum}} --selecteer leden voor deelname
+            FlexEvent {{event.datum|date:"d M Y"}} --{{event.name}}
           </h3>
         </div>
 
@@ -33,7 +33,7 @@
           <thead>
             <hr>
             <tr>
-              <th>Aangemeld: {{event.datum|date:"d M Y"}}</th>
+              <th>Reeds aangemeld:</th>
               <th><input type="submit" value="Meld Af "> </th>
               <th></th>
               <th></th>
@@ -41,11 +41,11 @@
             </tr>
           </thead>
           <tbody>
-            <td>{% for aa in aanwezig %}
-              <tr>
-            </td>
+            {% for aa in aanwezig %}
+            <tr>
+
             <td>{{t.id }}</td>
-            <td>{{aa.id}}. {{aa.username}}</td>
+            <td>{{aa.id}}. {{aa.username}} {{aa.person.pos1}} {{aa.person.pos2}} {{aa.person.pos3}} {{aa.person.pos4}} {{aa.person.pos5}}</td>
             <td>
               <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
             </td>
@@ -79,6 +79,7 @@
               </td>
               <td>{{ forloop.counter }}. {{t.username}}</td>
               <td>{{t.first_name}} {{t.last_name}}</td>
+              <td>{{t.id}}. {{t.username}} {{t.person.pos1}} {{t.person.pos2}} {{t.person.pos3}} {{t.person.pos4}} {{t.person.pos5}}</td>
               <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>
               {% endfor %}
             </tr>
