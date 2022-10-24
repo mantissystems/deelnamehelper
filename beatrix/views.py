@@ -142,7 +142,7 @@ def erv_home(request):
     end=date(year,month,einde)
     usr=request.user
     users=User.objects.all()
-    aangemelden=Flexlid.objects.all() ##filter(member_id__in=gebruikers)
+    aangemelden=Person.objects.all().filter(id__in=users)
     flexevents = Flexevent.objects.all().filter(
         Q(datum__range=[start, end]) & 
         Q(topic__name__icontains = q) | 
@@ -174,7 +174,7 @@ def erv_home(request):
         'topics': topcs [0:6], 
         'room_count': room_count, #te saneren in 3 templates
         'room_messages': room_messages, #te saneren in 3 templates
-        'sc1':sc1,
+        'sc1':aangemelden,
         }
     if 'beatrix' in q:
         redirect('aanmelden')            
@@ -426,7 +426,7 @@ def updateUser(request):
             form.save()
             return redirect('user-profile', pk=user.id)
 
-    return render(request, 'beatrix/update-user.html', {'form': form})
+    return render(request, 'beatrix/erv-update-user.html', {'form': form})
 
 @login_required(login_url='login')
 def erv_updateUser(request):
@@ -645,11 +645,11 @@ def vote(request, event_id):
             uu=User.objects.get(id=l)
         except (KeyError, User.DoesNotExist):
             print('vote deelnemer add, except')
-        Flexlid.objects.all().update_or_create(
-            member_id=l,
-            flexevent_id=event_id,
-        )        
-    ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
+        # Flexlid.objects.all().update_or_create(
+        #     member_id=l,
+        #     flexevent_id=event_id,
+        # )        
+    # ishost=Flexlid.objects.all().filter(flexevent_id=event_id,is_host=True)
     personen=User.objects.all()
     kandidaten = User.objects.all().filter(
         Q(last_name__icontains = zoeknaam) | 
@@ -663,6 +663,7 @@ def vote(request, event_id):
         # print(len(kandidaten)) ###regel niet verwijderen ###
     return render(request, 'beatrix/erv-detail.html', {
             'event': event,
+            'users': personen,
             'kandidaten':kandidaten,
             'aanwezig':aanwezigen, 
             'error_message': "Er is geen keuze gemaakt.",
@@ -695,14 +696,14 @@ class AanmeldView(ListView):
         endmonth = 12 # int(date.today().strftime('%m'))
         monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
         einde=monthend[endmonth]
-        aantalregels=10
+        # aantalregels=10
         start=date(year,beginmonth,1)
         end=date(year,endmonth,einde)
         start=date(year,beginmonth,1)
         rooster=Flexevent.objects.filter(datum__range=[start, end])
         roostergedeeltelijk=Flexevent.objects.filter(datum__range=[start, end])
         context = {
-        'rooster': roostergedeeltelijk,
+        'rooster': rooster,
         } 
         return context
 

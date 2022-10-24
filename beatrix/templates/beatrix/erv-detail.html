@@ -33,9 +33,9 @@
           <thead>
             <hr>
             <tr>
-              <th>#</th>
-              <th>Aanmeldingen op: {{event.datum|date:"d M Y"}}</th>
+              <th>Aangemeld: {{event.datum|date:"d M Y"}}</th>
               <th><input type="submit" value="Meld Af "> </th>
+              <th></th>
               <th></th>
               <th></th>
             </tr>
@@ -45,7 +45,6 @@
               <tr>
             </td>
             <td>{{t.id }}</td>
-            <td></td>
             <td>{{aa.id}}. {{aa.username}}</td>
             <td>
               <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">

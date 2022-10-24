@@ -698,7 +698,7 @@ a {
 .beatrix-table {
   border-collapse: collapse;
   margin: 9px 0;
-  font-size: 1.1em;
+  font-size: 1.0em;
   height: flex;
   /* min-width: 480px; */
   width: var(--phone-beatrix);
