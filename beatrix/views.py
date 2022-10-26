@@ -336,23 +336,21 @@ def erv_updateRoom(request, pk):
     room = Flexevent.objects.get(id=pk)
     form = erv_RoomForm(instance=room)
     topics = Topic.objects.all()
-    event = Flexevent.objects.get(id=pk)
-    event_messages = event.bericht_set.all()
-    aangemeld=event.lid.all()
-    aanwezig=User.objects.filter(id__in=aangemeld)
-    ingedeelden=aangemeld.values_list('id', flat=True)
-    kandidaten=User.objects.all().exclude(id__in=ingedeelden)[0:10]
-    users=User.objects.all()
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
-    context = {'form': form, 
-    'topics': topics,
-     'room': room,
-     'users': users,
-     'event': room,  # tbv erv-detail.html
-     'kandidaten': kandidaten,
-     'aanwezig': aanwezig,
-     }
+
+    if request.method == 'POST':
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        room.name = request.POST.get('name')
+        room.datum = request.POST.get('datum')
+        room.pub_time = request.POST.get('tijdstip')
+        room.topic = topic
+        room.description = request.POST.get('description')
+        room.save()
+        return redirect('erv-home')
+
+    context = {'form': form, 'topics': topics, 'room': room}
     return render(request, 'beatrix/erv-room_form.html', context)
 
 @login_required(login_url='login')
@@ -517,6 +515,13 @@ def erv_topicsPage(request):
     # topics = Topic.objects.filter(name__icontains=q)[0:5]
     return render(request, 'beatrix/erv-topics.html', {'topics': topics})
 
+def erv_SchemaPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics=Flexevent.objects.filter(name__contains=q)[0:6] ##.values_list('topic', flat=True)
+    # topcs = Topic.objects.all().filter(id__in=tops)
+    # topics = Topic.objects.filter(name__icontains=q)[0:5]
+    return render(request, 'beatrix/erv-schema.html', {'topics': topics})
+
 class FlexeventsView(ListView):
     queryset=Flexevent.objects.all()
     
@@ -629,7 +634,7 @@ class ResultsView(DetailView):
 
 def vote(request, event_id):
     event = get_object_or_404(Flexevent, pk=event_id)
-    zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else ''
+    zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else 'sc'
     print('event: ', event,'zoeknaam: ', zoeknaam)
 
     leden = []
@@ -648,6 +653,7 @@ def vote(request, event_id):
         Q(last_name__icontains = zoeknaam) | 
         Q(first_name__icontains = zoeknaam) |
         Q(person__pos1__icontains=zoeknaam) |
+        Q(person__pos1__icontains='sc') |
         Q(person__pos2__icontains=zoeknaam) |
         Q(person__pos3__icontains=zoeknaam) |
         Q(person__pos4__icontains=zoeknaam) |

@@ -24,7 +24,7 @@
         </div>
         {% if event.host == request.user %}
         <div class="room__topRight">
-          <a href="{% url 'detail' event.id %}">
+          <a href="{% url 'erv-update-room' event.id %}">
             <svg
               enable-background="new 0 0 24 24"
               height="32"

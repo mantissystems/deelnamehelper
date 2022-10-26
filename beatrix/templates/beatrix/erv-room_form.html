@@ -6,7 +6,7 @@
     <div class="layout__box">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
-          <a href="{{request.META.HTTP_REFERER}}">
+          <a href="/">
             <svg
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@
             </svg>
           </a>
           <h3>
-            Bewerk FlexEvent {{room.pub_date}} --selecteer leden voor deelname
+            Bewerk FlexEvent {{room.datum}}
           </h3>
         </div>
       </div>
@@ -29,49 +29,44 @@
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group">
-            {% comment %} <label for="room_topic">Enter a Topic</label> {%
-            endcomment %} {% comment %}
+            <label for="room_datum">Datum</label>
+
             <input
               required
-              type="text"
-              value="{{room.topic.name}}"
-              name="topic"
-              list="topic-list"
+              type="date"
+              value="2022-01-01"
+              name="datum"
             />
-            {% endcomment %} {% comment %}
-            <datalist id="topic-list">
-              <select id="room_topic">
+
+            <datalist id="datum-list">
+              <select id="room_datum">
                 {% for topic in topic %}
-                <option value="{{topic.name}}">{{topic.name}}</option>
+                <option value="{{room.datum}}">{{room.datum}}</option>
                 {% endfor %}
               </select>
             </datalist>
-            {% endcomment %}
           </div>
           <div class="form__group">
-            {% comment %} <label for="room_description">Room Description</label>
-            {{form.description}} {% endcomment %}
-             <ul>
-              {% for aa in kandidatenn %}
-              <li>
-                {{aa.id}}. {{aa.username}} -{{aa.first_name}} {{aa.last_name}}
-              </li>
-              <input
-                type="checkbox"
-                name="aanmelding"
-                id="host{{ forloop.counter }}"
-                value="{{ aa.id }}"
-              />
-              {% endfor%}
-            </ul>
+            <label for="room_datum">Tijdstip</label>
+
+            <input
+              required
+              type="time"
+              value="13:30"
+              name="tijdstip"
+              
+            />
+
+
           </div>
+
 
           <div class="form__group">
             <label for="room_topic">Onderwerp</label>
             <input
               required
               type="text"
-              value="{{room.topic.name}}"
+              value="{{room.name}}"
               name="topic"
               id="room_topic"
               list="topic-list"
