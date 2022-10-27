@@ -73,13 +73,10 @@
             <td>{% for t in kandidaten %}
             </td>
             <tr>
-              <td> 
-                {{t}}
+              
+              <td>{{ forloop.counter }}. {{t.id}}.{{t.username}}</td>
 
-              </td>
-              <td>{{ forloop.counter }}. {{t.username}}</td>
-              <td>{{t.first_name}} {{t.last_name}}</td>
-              <td>{{t.id}}. {{t.username}} {{t.person.pos1}} {{t.person.pos2}} {{t.person.pos3}} {{t.person.pos4}} {{t.person.pos5}}</td>
+              <td>  {{t.person.pos1}} {{t.person.pos2}} {{t.person.pos3}} {{t.person.pos4}} {{t.person.pos5}}</td>
               <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>
               {% endfor %}
             </tr>

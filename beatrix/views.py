@@ -483,8 +483,6 @@ def erv_activityPage(request):
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
     room_count = flexevents.count()
-    sessions = Session.objects.filter(expire_date__gte=date.today())
-    uid_list = []
     sc1=Person.objects.all().filter(
         Q(id__in=aangemeld) &
         Q(pos1__in=['sc1'])&
