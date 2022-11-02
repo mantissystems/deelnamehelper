@@ -913,9 +913,10 @@ def maak_activiteiten():
 def apiOverview(request):
     api_urls={
     'api/':'api-overview',    
-    'api/person':'api/person',    
-    'flexevents/':'flexevents',    
-    'flexeventsbeheer/':'flexeventsbeheer',    
+    'api/person':'profiel en additionele roeiinformatie',    
+    'flexevents/':'aanmeldbeheer van een datum event',    
+    'flexevent/<nr>/':'GET en POST data van eventnummer in jsonformaat',    
+    'flexeventbeheer/':'GET en POST data',    
 
     }
     # return JsonResponse("API BASE POINT",safe=False)
