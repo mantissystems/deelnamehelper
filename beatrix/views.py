@@ -693,6 +693,52 @@ def vote(request, event_id):
         # user hits the Back button.
     return HttpResponseRedirect(reverse('vote', args=(event_id,)))
 
+def directvote(request, event_id):
+    event = get_object_or_404(Flexevent, pk=event_id)
+    zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else 'sc'
+    print('event: ', event,'zoeknaam: ', zoeknaam)
+
+    leden = []
+    afmeldingen=[]
+    for af in request.POST.getlist('afmelding'):
+        event.lid.remove(af)
+    for l in request.POST.getlist('aanmelding'):
+        event.lid.add(l)
+    personen=User.objects.all()
+    kandidaten = User.objects.all().filter(
+        Q(last_name__icontains = zoeknaam) | 
+        Q(first_name__icontains = zoeknaam) |
+        Q(person__pos1__icontains=zoeknaam) |
+        Q(person__pos1__icontains='sc') |
+        Q(person__pos2__icontains=zoeknaam) |
+        Q(person__pos3__icontains=zoeknaam) |
+        Q(person__pos4__icontains=zoeknaam) |
+        Q(person__pos5__icontains=zoeknaam)
+        ) # search 
+    aangemeld=event.lid.all()
+    aanwezigen=User.objects.all().filter(id__in=aangemeld)
+    roeiers=Person.objects.filter(
+        Q(id__in=aanwezigen) &
+        Q(pos1__icontains=zoeknaam)
+        )
+    # except (KeyError, Flexlid.DoesNotExist):
+        # print(len(kandidaten)) ###regel niet verwijderen ###
+    return render(request, 'beatrix/erv-home.html', {
+            'event': event,
+            'users': personen,
+            'roeiers': roeiers,
+            'kandidaten':kandidaten,
+            'aanwezig':aanwezigen, 
+            'error_message': "Er is geen keuze gemaakt.",
+        })
+    print('vote event_id, else')
+        # selected_choice.keuzes += 1
+        # selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+    return HttpResponseRedirect(reverse('directvote', args=(event_id,)))
+
 def vote2(request, event_id,usr):
     event = get_object_or_404(Flexevent, pk=event_id)
     zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else 'sc'

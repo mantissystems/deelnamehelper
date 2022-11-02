@@ -8,7 +8,7 @@
       <span>host: {{room.host.username}}</span>
     </a>
     
-    <form action="{% url 'vote' room.id %}" method="post">
+    <form action="{% url 'directvote' room.id %}" method="post">
       {% csrf_token %}
 
       <div class="roomListRoom__actions">
