@@ -20,7 +20,8 @@ erv_topicsPage,
 erv_updateRoom,
 erv_updateUser,
 erv_userProfile,
-events, 
+events,
+flexeventbeheer, 
 home,
 loginPage, logoutUser,
 personenlijst,
@@ -30,6 +31,7 @@ topicsPage, updateRoom, updateUser, userProfile,
 vote, 
 DetailView,
 aantalregels,
+vote2,
 )
 
 urlpatterns = [
@@ -63,12 +65,14 @@ urlpatterns = [
 
     path('recurrent/', recurrent_event, name='recurrent'),
     path('<int:event_id>/aanmelden/',vote, name='vote'),  
+    # path('<str:event_id>/<str:usr>/aanmelden/',vote2, name='vote2'),  
     path('flexevents/', erv_SchemaPage, name="aanmelden"),
     path('<int:pk>/', DetailView.as_view(), name='detail'),
     path('<int:pk>/results/', ResultsView.as_view(), name='results'),
     path('api/person/', personenlijst,name='api-person'),    
     path('api/', apiOverview,name='api-overview'),    
     path('api/aantalregels/', aantalregels,name='api-aantalregels'),    
-    path('activiteit/<str:pk>/', activiteit,name='activiteit'),    
+    path('flexevent/<str:pk>/', activiteit,name='flexevent'),    
+    path('flexeventbeheer', flexeventbeheer,name='flexeventbeheer'),    
     ]
 # https://docs.djangoproject.com/en/3.1/topics/http/urls/

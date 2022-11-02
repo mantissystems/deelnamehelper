@@ -59,14 +59,26 @@
 
 
           </div>
-
-
           <div class="form__group">
             <label for="room_topic">Onderwerp</label>
             <input
               required
               type="text"
-              value="{{room.name}}"
+              value="{{room.description}}"
+              name="description"
+              id="room_description"
+              list="topic-"
+            />
+                <option value="{{topic.name}}">{{topic.name}}</option>
+          </div>
+
+
+          <div class="form__group">
+            <label for="room_topic">Topic</label>
+            <input
+              required
+              type="text"
+              value="{{room.topic}}"
               name="topic"
               id="room_topic"
               list="topic-list"

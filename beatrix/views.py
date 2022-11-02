@@ -144,7 +144,7 @@ def erv_home(request):
     users=User.objects.all()
     aangemelden=Person.objects.all().filter(id__in=users)
     flexevents = Flexevent.objects.all().filter(
-        Q(datum__range=[start, end]) & 
+        # Q(datum__range=[start, end]) & 
         Q(topic__name__icontains = q) | 
         Q(name__icontains = q) | 
         Q(event_text__icontains = q) | 
@@ -453,20 +453,20 @@ def erv_activityPage(request):
     tops=Flexevent.objects.values_list('topic', flat=True)
     topcs = Topic.objects.all().filter(id__in=tops)
     room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
-    year=int(date.today().strftime('%Y'))
-    month = int(date.today().strftime('%m'))
-    beginmonth = 1 #int(date.today().strftime('%m'))
-    endmonth = 12 # int(date.today().strftime('%m'))
-    monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-    einde=monthend[endmonth]
-    start=date(year,beginmonth,1)
-    end=date(year,month,einde)
+    # year=int(date.today().strftime('%Y'))
+    # month = int(date.today().strftime('%m'))
+    # beginmonth = 1 #int(date.today().strftime('%m'))
+    # endmonth = 12 # int(date.today().strftime('%m'))
+    # monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+    # einde=monthend[endmonth]
+    # start=date(year,beginmonth,1)
+    # end=date(year,month,einde)
     usr=request.user
     users=User.objects.all()
     aangemelden=Person.objects.all().filter(id__in=users)
 
     flexevents = Flexevent.objects.all().filter(
-        Q(datum__range=[start, end]) 
+        # Q(datum__range=[start, end]) 
         ) # search 
     ff=Flexevent.objects.none()
     for fl in flexevents:
@@ -492,7 +492,7 @@ def erv_activityPage(request):
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
     room_count = flexevents.count()
-    rooster=Flexevent.objects.all().filter(datum__range=[start, end])
+    rooster=Flexevent.objects.all() #.filter(datum__range=[start, end])
 
     context = {
         'events': flexevents,
@@ -576,6 +576,18 @@ def aantalregels(request):
 #         serializer.save()
 
 #     return Response(serializer.data)
+
+@api_view(['POST'])
+def flexeventbeheer(request):
+    flexevents=Flexevent.objects.all()
+    serializer=FlexrecurrentSerializer(flexevents,many=True)
+
+    return Response(serializer.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -681,7 +693,55 @@ def vote(request, event_id):
         # user hits the Back button.
     return HttpResponseRedirect(reverse('vote', args=(event_id,)))
 
+def vote2(request, event_id,usr):
+    event = get_object_or_404(Flexevent, pk=event_id)
+    zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else 'sc'
+    print('event: ', event,'user: ', usr)
 
+    # leden = []
+    # afmeldingen=[]
+    # for af in request.POST.getlist('afmelding'):
+        # event.lid.remove(af)
+    aan= request.POST.get('aanmelding')
+    if aan: redirect('erv-home')
+        # print(l)
+    event.lid.add(usr)
+    personen=User.objects.all()
+    aanmelder=User.objects.get(pk=usr)
+    print(aanmelder)
+    kandidaten = User.objects.all().filter(
+        Q(last_name__icontains = zoeknaam) | 
+        Q(first_name__icontains = zoeknaam) |
+        Q(person__pos1__icontains=zoeknaam) |
+        Q(person__pos1__icontains='sc') |
+        Q(person__pos2__icontains=zoeknaam) |
+        Q(person__pos3__icontains=zoeknaam) |
+        Q(person__pos4__icontains=zoeknaam) |
+        Q(person__pos5__icontains=zoeknaam)
+        ) # search 
+    aangemeld=event.lid.all()
+    aanwezigen=User.objects.all().filter(id__in=aangemeld)
+    roeiers=Person.objects.filter(
+        Q(id__in=aanwezigen) &
+        Q(pos1__icontains=zoeknaam)
+        )
+    # except (KeyError, Flexlid.DoesNotExist):
+        # print(len(kandidaten)) ###regel niet verwijderen ###
+    return render(request, 'beatrix/erv-home.html', {
+            'event': event,
+            'users': personen,
+            'roeiers': roeiers,
+            'kandidaten':kandidaten,
+            'aanwezig':aanwezigen, 
+            'error_message': "Er is geen keuze gemaakt.",
+        })
+    print('vote event_id, else')
+        # selected_choice.keuzes += 1
+        # selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+    return HttpResponseRedirect(reverse('vote', args=(event_id,)))
 
 class AanmeldView(ListView):
     template_name='beatrix/erv-aanmeldview.html'

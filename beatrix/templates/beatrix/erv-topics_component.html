@@ -10,7 +10,7 @@
 
     {% for tt in events %}
     <li>
-      <a href="{% url 'erv-home' %}?q={{tt.name}}"><span>{{tt.datum|date:"D d M Y"}} {{tt.pub_time}}  </span></a>
+      <a href="{% url 'erv-home' %}?q={{tt.name}}"><span>{{tt.datum|date:"M Y"}}  </span></a>
     </li>
     {% endfor %}
   </ul>

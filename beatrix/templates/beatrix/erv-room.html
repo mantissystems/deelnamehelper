@@ -20,7 +20,7 @@
               ></path>
             </svg>
           </a>
-          <h3>FlexEvent “{{event.created|date:"d D M Y"}}“</h3>
+          <h3>FlexEvent “{{event.datum|date:"d D M Y"}}“</h3>
         </div>
         {% if event.host == request.user %}
         <div class="room__topRight">
@@ -141,12 +141,14 @@
           </div>
         </div>
       </div>
+      {% comment %}
       <div class="room__message">
         <form action="" method="POST">
           {% csrf_token %}
           <input name="body" placeholder="deelnemers bericht geven..." />
         </form>
       </div>
+      {% endcomment %}
     </div>
     <!-- Room End -->
 
@@ -165,7 +167,7 @@
 
           {{user.id}}.{{user.name}}
           <span>{{user.username}}</span>
-        </a>
+        </a><hr>
         {% endfor %}
         </ul>
       </div>
