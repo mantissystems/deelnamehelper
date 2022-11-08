@@ -34,27 +34,25 @@
             <input
               required
               type="date"
-              value="{{room.datum}}"
+              value="{{room.pub_date}}"
               name="datum"
             />
 
-            <datalist id="datum-list">
+<!--             <datalist id="datum-list">
               <select id="room_datum">
                 {% for topic in topic %}
-                <option value="{{room.datum}}">{{room.datum}}</option>
+                <option value="{{room.pub_date}}">{{room.pub_date}}</option>
                 {% endfor %}
               </select>
-            </datalist>
+            </datalist> -->
           </div>
           <div class="form__group">
             <label for="room_datum">Tijdstip</label>
-
             <input
               required
               type="time"
-              value="{{room.tijd}}"
-              name="tijdstip"
-              
+              value="{{room.tijd}}"{{room.tijd}}
+              name="tijdstip"              
             />
 
 

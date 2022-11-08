@@ -122,5 +122,8 @@ class Bericht(models.Model):
 class Flexrecurrent(models.Model):
     regels = models.CharField(max_length=18,default='30')
 
-class Dataimport(models.Model):
-    regel = models.TextField(max_length=540,default='-')
+class Instromer(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name

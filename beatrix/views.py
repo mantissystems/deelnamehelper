@@ -644,53 +644,53 @@ class ResultsView(DetailView):
 
 def vote(request, event_id):
     event = get_object_or_404(Flexevent, pk=event_id)
-    zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else 'sc'
+    zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else ''
     print('event: ', event,'zoeknaam: ', zoeknaam)
-
+    where1= Q(person__pos1__icontains='sc')
+    where2=Q(first_name__icontains = zoeknaam)
+    where3=Q(last_name__icontains = zoeknaam)
+    where4=Q(username__icontains = zoeknaam)
+    where5=Q(person__name__icontains=zoeknaam) 
+    where6=Q(person__pos3__icontains=zoeknaam)
+    where7=Q(person__pos4__icontains=zoeknaam)
+    where8=Q(person__pos5__icontains=zoeknaam)
+    if zoeknaam!='': 
+        print('leeg: ', zoeknaam)
+        where1= Q(person__pos1__icontains='sc')
+        users = User.objects.filter(where1|where2|where3|where4|where5|where6|where7|where8).exclude(is_active=False) #[0:5]
+    else:
+        print('event: ', event,'zoeknaam: ', zoeknaam)
+        users = User.objects.filter(where1|where2|where3|where4|where5|where6|where7|where8).exclude(is_active=False) #[0:5]
+    aantalregels=4
     leden = []
     afmeldingen=[]
     for af in request.POST.getlist('afmelding'):
         event.lid.remove(af)
     for l in request.POST.getlist('aanmelding'):
-        event.lid.add(l)
-    # for l in leden:
-    #     try:
-    #         uu=User.objects.get(id=l)
-    #     except (KeyError, User.DoesNotExist):
-    #         print('vote deelnemer add, except')
-    personen=User.objects.all()
-    kandidaten = User.objects.all().filter(
-        Q(last_name__icontains = zoeknaam) | 
-        Q(first_name__icontains = zoeknaam) |
-        Q(person__pos1__icontains=zoeknaam) |
-        Q(person__pos1__icontains='sc') |
-        Q(person__pos2__icontains=zoeknaam) |
-        Q(person__pos3__icontains=zoeknaam) |
-        Q(person__pos4__icontains=zoeknaam) |
-        Q(person__pos5__icontains=zoeknaam)
-        ) # search 
+        print(l)
+        try:
+            u = User.objects.get(pk=l)
+        except:
+            pass
+        else:
+            event.lid.add(l)
+    # users = User.objects.all().filter(
+    #     Q(last_name__icontains = zoeknaam) | 
+    #     Q(first_name__icontains = zoeknaam) |
+    #     Q(username__icontains = zoeknaam) |
+    #     Q(person__name__icontains=zoeknaam) 
+    # )
     aangemeld=event.lid.all()
     aanwezigen=User.objects.all().filter(id__in=aangemeld)
-    roeiers=Person.objects.filter(
-        Q(id__in=aanwezigen) &
-        Q(pos1__icontains=zoeknaam)
-        )
-    # except (KeyError, Flexlid.DoesNotExist):
-        # print(len(kandidaten)) ###regel niet verwijderen ###
+
     return render(request, 'beatrix/erv-detail.html', {
             'event': event,
-            'users': personen,
-            'roeiers': roeiers,
-            'kandidaten':kandidaten,
+            'users':users,
             'aanwezig':aanwezigen, 
+            'aantalregels':aantalregels,
             'error_message': "Er is geen keuze gemaakt.",
         })
     print('vote event_id, else')
-        # selected_choice.keuzes += 1
-        # selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
     return HttpResponseRedirect(reverse('vote', args=(event_id,)))
 
 def directvote(request, event_id):
@@ -921,3 +921,4 @@ def apiOverview(request):
     }
     # return JsonResponse("API BASE POINT",safe=False)
     return Response(api_urls)
+

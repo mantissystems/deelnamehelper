@@ -161,9 +161,9 @@
         <ul>
         {% for user in event.lid.all %}
         <a href="{%  url 'erv-user-profile' user.id %}" class="participant">
-          <div class="avatar avatar--medium">
+      <!--     <div class="avatar avatar--medium">
              <img src="{{user.avatar.url}}" /> 
-          </div>
+          </div> -->
 
           {{user.id}}.{{user.name}}
           <span>{{user.username}}</span>

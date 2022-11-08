@@ -45,7 +45,8 @@
             <tr>
 
             <td>{{t.id }}</td>
-            <td>{{aa.id}}. {{aa.username}} {{aa.person.pos1}} {{aa.person.pos2}} {{aa.person.pos3}} {{aa.person.pos4}} {{aa.person.pos5}}</td>
+            <td>{{aa.id}} {{aa.person.pos1}} {{aa.last_name}} </td>
+               <!-- {{aa.person.pos2}} {{aa.person.pos3}} {{aa.person.pos4}} {{aa.person.pos5}}</td> -->
             <td>
               <input type="checkbox" name="afmelding" id="host{{ forloop.counter }}" value="{{ aa.id }}">
             </td>
@@ -65,19 +66,21 @@
             <tr>
               <th> <input id="search-input" name="zoeknaam" class="form-control" type="text" placeholder='@vind kandidaat'></th>
               <th><input type="submit" value="Meld Aan"> </th>
-              <th>Vind Kandidaten uit ( {{users.count}}) voor {{event.datum|date:"d M Y"}}</th>
+              <th>Totaal ( {{users.count}}) </th>
+                 <!-- voor {{event.datum|date:"d M Y"}}</th> -->
           </thead>
           </tr>
 
-          <tbody id=myTable>
-            <td>{% for t in kandidaten %}
+          <tbody id=aanmeldingen>
+            <td>{% for t in users %}
             </td>
             <tr>
               
-              <td>{{ forloop.counter }}. {{t.id}}.{{t.username}}</td>
+              <td>{{t.user}}{{t.username}}</td>
 
-              <td>  {{t.person.pos1}} {{t.person.pos2}} {{t.person.pos3}} {{t.person.pos4}} {{t.person.pos5}}</td>
-              <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="{{ t.id }}"> </td>
+              <td>  {{t.person.pos1}} </td>
+                 <!-- {{t.person.pos2}} {{t.person.pos3}} {{t.person.pos4}} {{t.person.pos5}}</td> -->
+              <td> <input type="checkbox" name="aanmelding" id="host{{ 2 }}" value="{{ t.user_id }}"> </td>
               {% endfor %}
             </tr>
           </tbody>
@@ -85,12 +88,14 @@
         </div>
         </div>
         </div>
+        {# {{users.count}} #}
 </form>
 </div>
 </div>
 </div>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script id="aantalregels" type="application/json">{{aantalregels}}</script>
 <script>
 
 
@@ -125,26 +130,20 @@ function searchTable(value, data){
 }
 
 function buildTable(data){
-  
-var table = document.getElementById('myTable')
+  const regels = JSON.parse(document.getElementById('aantalregels').textContent);
+ console.log(regels)
+  var table = document.getElementById('aanmeldingen')
 table.innerHTML=``
-for (var i = 0; i < data.length;i++){
+for (var i = 0; i <= regels;i++){
       var row = `<tr> 
-    <td> ${data[i].id} </td> 
+    <td> ${data[i].user} </td> 
     <td> ${data[i].name} </td> 
-    <td> <label> <input type="checkbox" value="${data[i].id}" onchange="Check(this)" /> </label> <td id="mantis"> </td>
+    <td> <input type="checkbox" name="aanmelding" id="host{{ forloop.counter }}" value="${data[i].user}"> </td>
+    <td> ${data[i].pos1} </td> 
     </tr>`
   table.innerHTML += row
 }
 }
-
-function Check(value) {
-    console.log('Value:', value)
-    // var testid = $(this).val(testid)
-     console.log('Value:', value.parentelement)
-      document.getElementById('mantis').innerHTML = value.checked;
-      console.log('Value:', value.checked)
-    };
   
 </script>
 {% endblock %}
