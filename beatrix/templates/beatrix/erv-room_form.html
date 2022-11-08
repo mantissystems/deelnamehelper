@@ -34,7 +34,7 @@
             <input
               required
               type="date"
-              value="2022-01-01"
+              value="{{room.datum}}"
               name="datum"
             />
 
@@ -52,7 +52,7 @@
             <input
               required
               type="time"
-              value="13:30"
+              value="{{room.tijd}}"
               name="tijdstip"
               
             />
@@ -67,7 +67,6 @@
               value="{{room.description}}"
               name="description"
               id="room_description"
-              list="topic-"
             />
                 <option value="{{topic.name}}">{{topic.name}}</option>
           </div>

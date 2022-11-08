@@ -90,6 +90,7 @@
 </div>
 </div>
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 
 
@@ -103,11 +104,11 @@ $('#search-input').on('keyup',function(){
 
 $.ajax({
     method:'GET',
-    // url:'http://127.0.0.1:8000/api/person/',
+    url:'http://127.0.0.1:8000/api/person/',
     success:function(response){
         myArray = response
         buildTable(myArray)
-        // console.log(myArray)
+        console.log(myArray)
     }
 })
 

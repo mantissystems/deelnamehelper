@@ -5,6 +5,13 @@
     <div class="layout__box">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
+          <div class="form__action">
+            <a class="btn btn--dark" href="/"
+              >Cancel</a
+            >
+
+          </div>
+
           <h3>Login</h3>
         </div>
       </div>
@@ -68,11 +75,18 @@
     <div class="layout__box">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
+          <div class="form__action">
+            <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}"
+              >Cancel</a
+            >
+
+          </div>
+
           <h3>Login</h3>
         </div>
       </div>
       <div class="layout__body">
-        <h2 class="auth__tagline">Vind een roeimaat</h2>
+        <h2 class="auth__tagline">Uw gebruikers naam</h2>
 
         <form class="form" action="" method="POST">
           {% csrf_token %} {{form.as_p}}
