@@ -39,7 +39,7 @@
   <div class="activities__header">
   </div>
   
-  {% if request.user.is_authenticated %}
+  {# {% if request.user.is_authenticated %} #}
   <div class="activities__header">
   </div>
  {% for message in room_messages %}
@@ -85,5 +85,5 @@
     </div>
   </div>
   {% endfor %}
-  {% endif %}
+  {# {% endif %} #}
 </div>

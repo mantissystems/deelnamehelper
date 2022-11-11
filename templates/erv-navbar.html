@@ -145,10 +145,10 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="{% static 'js/script.js' %}"></script>
 {% endblock javascript %}
-
-{% comment %} {% if request.user.is_authenticated %}
-<p>Ingelogd als: {{request.user}}</p>
-{% endcomment %} {% comment %} <a href="{% url 'logout' %}">Logout</a>
-{% else %}
-<a href="{% url 'login' %}">Login</a> {% endcomment %} {% comment %} {% endif %}
-{% endcomment %}
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}

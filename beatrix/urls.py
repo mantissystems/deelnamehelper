@@ -52,7 +52,7 @@ urlpatterns = [
 
     path('erv-create-flex/', erv_createRoom, name='erv-create-flex'),
     path('erv-update-flex/<str:pk>/', erv_updateRoom, name='erv-update-flex'),
-    path('erv_activity/', erv_activityPage, name="erv-activity"),
+    path('erv_activity/', erv_home, name="erv-activity"),
     path('erv-room/<str:pk>/', erv_room, name='erv-room'),    
     path('erv-topics/', erv_topicsPage, name="erv-topics"),
     path('erv-delete-room/<str:pk>/', erv_deleteRoom, name='erv-delete-room'),

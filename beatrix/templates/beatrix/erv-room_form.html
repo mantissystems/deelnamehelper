@@ -29,31 +29,24 @@
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group">
-            <label for="room_datum">Datum</label>
-
-            <input
-              required
+            <label for="room_slot">Datum (yyyy,mm,dd)</label
               type="date"
-              value="{{room.pub_date}}"
-              name="datum"
-            />
-
-<!--             <datalist id="datum-list">
-              <select id="room_datum">
-                {% for topic in topic %}
-                <option value="{{room.pub_date}}">{{room.pub_date}}</option>
-                {% endfor %}
-              </select>
-            </datalist> -->
+                name="datum"
+                value="{{room.datum|date:'Y-M-D'}}"
+                
+                >
+            {{form.datum}}
           </div>
           <div class="form__group">
-            <label for="room_datum">Tijdstip</label>
-            <input
-              required
+            <label for="room_slot">Tijd</label
               type="time"
-              value="{{room.tijd}}"{{room.tijd}}
-              name="tijdstip"              
-            />
+                name="pub_time"
+                value="{{room.pub_time}}"
+                
+                >
+            {{form.pub_time}}
+          </div>
+
 
 
           </div>
@@ -62,14 +55,14 @@
             <input
               required
               type="text"
-              value="{{room.description}}"
-              name="description"
-              id="room_description"
+              value="{{room.topic}}"
+              name="topic"
+              id="room_topic"
             />
                 <option value="{{topic.name}}">{{topic.name}}</option>
           </div>
 
-
+<!-- 
           <div class="form__group">
             <label for="room_topic">Topic</label>
             <input
@@ -88,7 +81,8 @@
                 {% endfor %}
               </select>
             </datalist>
-          </div>
+          </div> -->
+          
           <div class="form__group">
             <label for="room_name">Flex Event</label>
             {{form.name}}

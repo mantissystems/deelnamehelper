@@ -79,7 +79,7 @@ class Flexevent(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     # host = models.ManyToManyField(User,through='Hosts')  ##, on_delete=models.SET_NULL, null=True)
     id = models.AutoField(primary_key=True)
-    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE,null=True) ##SET_NULL, null=True)
     event_text = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True) # database field (can Empty), form field (can Empty)

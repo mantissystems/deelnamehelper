@@ -128,6 +128,12 @@ def home(request):
     return render(request, 'beatrix/home.html', context)
 
 def erv_home(request):
+    try:
+        gebruiker=User.objects.get(id=request.user.id) ## request.user
+    except:
+        messages.error(request, '.U bent niet ingelogd waardoor gegevens niet getoond worden')
+
+        
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     tops=Flexevent.objects.values_list('topic', flat=True)
     topcs = Topic.objects.all() ##.filter(id__in=tops)
@@ -341,12 +347,23 @@ def erv_updateRoom(request, pk):
 
     if request.method == 'POST':
         topic_name = request.POST.get('topic')
-        topic, created = Topic.objects.get_or_create(name=topic_name)
-        room.name = request.POST.get('name')
+        topic, created = Topic.objects.update_or_create(name=topic_name)
+        room.name = request.POST.get('topic')
         room.datum = request.POST.get('datum')
-        room.pub_time = request.POST.get('tijdstip')
+        room.pub_time = request.POST.get('pub_time')
+        # tijdstip= request.POST.get('tijdstip')
+        plandatum = room.datum.format()
+        # if tijdstip==None: 
+        #     tijdstip= "onbekend"
+        # else: tijdstip= request.POST.get('tijdstip')
+        if plandatum==None:
+            plantdatum="onbekend"
+        else:plandatum=room.datum
+        omschrijving="" #plandatum +'; ' + tijdstip + '; ' + topic_name
+        # print(plandatum,tijdstip)
+        # room.pub_time =tijdstip # "11:11:11" #request.POST.get('tijdstip')
         room.topic = topic
-        room.description = request.POST.get('description')
+        room.description = topic_name +'; ' + plandatum #request.POST.get('description')
         room.save()
         return redirect('erv-home')
 
@@ -449,24 +466,30 @@ def activityPage(request):
     room_messages = Message.objects.all()
     return render(request, 'beatrix/activity.html', {'room_messages': room_messages})
 
+@login_required(login_url='login')
 def erv_activityPage(request):
+    try:
+        gebruiker=User.objects.get(id=request.user.id) ## request.user
+    except:
+        messages.error(request, '.U bent niet ingelogd waardoor gegevens niet getoond worden')
     tops=Flexevent.objects.values_list('topic', flat=True)
-    topcs = Topic.objects.all().filter(id__in=tops)
+    # topcs = Topic.objects.all().filter(id__in=tops)
     room_messages = Bericht.objects.all() ##filter(Q(room__topic__name__icontains=q))
-    # year=int(date.today().strftime('%Y'))
-    # month = int(date.today().strftime('%m'))
-    # beginmonth = 1 #int(date.today().strftime('%m'))
-    # endmonth = 12 # int(date.today().strftime('%m'))
-    # monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
-    # einde=monthend[endmonth]
-    # start=date(year,beginmonth,1)
-    # end=date(year,month,einde)
+    year=int(date.today().strftime('%Y'))
+    month = int(date.today().strftime('%m'))
+    beginmonth = 1 #int(date.today().strftime('%m'))
+    endmonth = int(date.today().strftime('%m'))
+    monthend=[0,31,28,31,30,31,30,31,31,30,31,30,31] #jfmamjjasond
+    einde=monthend[endmonth]
+    start=date(year,beginmonth,1)
+    end=date(year,month,einde)
+    print(year,month,einde)
     usr=request.user
     users=User.objects.all()
     aangemelden=Person.objects.all().filter(id__in=users)
 
     flexevents = Flexevent.objects.all().filter(
-        # Q(datum__range=[start, end]) 
+        Q(datum__range=[start, end]) 
         ) # search 
     ff=Flexevent.objects.none()
     for fl in flexevents:
@@ -474,15 +497,16 @@ def erv_activityPage(request):
         ff | ff
     deelnemers = ff
     aangemeld=deelnemers
-    skills=Person.objects.all().filter(
-        Q(id__in=aangemeld) &
-        Q(pos1__in=['sc1','sc2','sc3'])&
-        Q(pos2__in=['sc1','sc2','sc3'])&
-        Q(pos3__in=['sc1','sc2','sc3'])&
-        Q(pos4__in=['sc1','sc2','sc3'])&
-        Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
-        )
+    # skills=Person.objects.all().filter(
+    #     Q(id__in=aangemeld) &
+    #     Q(pos1__in=['sc1','sc2','sc3'])&
+    #     Q(pos2__in=['sc1','sc2','sc3'])&
+    #     Q(pos3__in=['sc1','sc2','sc3'])&
+    #     Q(pos4__in=['sc1','sc2','sc3'])&
+    #     Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
+    #     )
     room_count = flexevents.count()
+    print(room_count)
     sc1=Person.objects.all().filter(
         Q(id__in=aangemeld) &
         Q(pos1__in=['sc1'])&
@@ -492,14 +516,14 @@ def erv_activityPage(request):
         Q(pos5__in=['st1','st2','st3'])  #pos5 = stuur
         )
     room_count = flexevents.count()
-    rooster=Flexevent.objects.all() #.filter(datum__range=[start, end])
+    # rooster=Flexevent.objects.all() #.filter(datum__range=[start, end])
 
     context = {
         'events': flexevents,
-        'rooms': flexevents, 
-        'personen':skills,
-        'topics': topcs, 
-        'room_count': room_count, 
+        # 'rooms': flexevents, 
+        # 'personen':skills,
+        # 'topics': topcs, 
+        # 'room_count': room_count, 
         'sc1':aangemelden,
         'room_messages': room_messages
         }
@@ -696,8 +720,8 @@ def vote(request, event_id):
 def directvote(request, event_id):
     event = get_object_or_404(Flexevent, pk=event_id)
     zoeknaam = request.POST.get('zoeknaam') if request.POST.get('zoeknaam') != None else 'sc'
-    print('event: ', event,'zoeknaam: ', zoeknaam)
-
+    # print('event: ', event,'zoeknaam: ', zoeknaam)
+    events=Flexevent.objects.all()
     leden = []
     afmeldingen=[]
     for af in request.POST.getlist('afmelding'):
@@ -721,10 +745,9 @@ def directvote(request, event_id):
         Q(id__in=aanwezigen) &
         Q(pos1__icontains=zoeknaam)
         )
-    # except (KeyError, Flexlid.DoesNotExist):
-        # print(len(kandidaten)) ###regel niet verwijderen ###
     return render(request, 'beatrix/erv-home.html', {
             'event': event,
+            'events':events,
             'users': personen,
             'roeiers': roeiers,
             'kandidaten':kandidaten,
@@ -732,8 +755,6 @@ def directvote(request, event_id):
             'error_message': "Er is geen keuze gemaakt.",
         })
     print('vote event_id, else')
-        # selected_choice.keuzes += 1
-        # selected_choice.save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
