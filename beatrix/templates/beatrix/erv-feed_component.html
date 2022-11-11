@@ -25,7 +25,7 @@
   </div>
   <div class="roomListRoom__content">
     
-    <a href="{% url 'erv-room' room.id %}">{{room.name}}: {{room.datum|date:"d D M Y"}}</a>
+    <a href="{% url 'erv-room' room.id %}">{{room.name}}: {{room.datum|date:"d D M Y"}} -- {{room.pub_time}} </a>
   </div>
   <div class="roomListRoom__meta">
     <a href="{% url 'erv-room' room.id %}" class="roomListRoom__joined">
@@ -47,9 +47,9 @@
       </svg>
       {{room.lid.count}} Aangemeld
     </a>
-    <p class="roomListRoom__topic">{{room.description}}</p>
+    <!-- <p class="roomListRoom__topic">{{room.datum}}{{room.pub_time}}</p> -->
 
-    <p class="roomListRoom__topic">{{room.topic.name}}</p>
+    <!-- <p class="roomListRoom__topic">{{room.topic.name}}</p> -->
   </div>
 </div>
 {% endfor %}
