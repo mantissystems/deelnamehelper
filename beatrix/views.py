@@ -131,7 +131,8 @@ def erv_home(request):
     try:
         gebruiker=User.objects.get(id=request.user.id) ## request.user
     except:
-        messages.error(request, '.U bent niet ingelogd waardoor gegevens niet getoond worden')
+        messages.error(request, '.U bent niet ingelogd waardoor detail-gegevens niet worden getoond')
+        messages.error(request, ".U kunt via 'Login' registreren of inloggen")
 
         
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -177,7 +178,7 @@ def erv_home(request):
         'events': flexevents[0:6],   #te saneren in 3 templates
         'rooms': flexevents[0:6],    #te saneren in 3 templates
         'deelnemers':aangemeld,    #alle deelnemers en hun skills
-        'topics': topcs [0:6], 
+        'topics': topcs, 
         'room_count': room_count, #te saneren in 3 templates
         'room_messages': room_messages, #te saneren in 3 templates
         'sc1':aangemelden,
@@ -351,17 +352,11 @@ def erv_updateRoom(request, pk):
         room.name = request.POST.get('topic')
         room.datum = request.POST.get('datum')
         room.pub_time = request.POST.get('pub_time')
-        # tijdstip= request.POST.get('tijdstip')
         plandatum = room.datum.format()
-        # if tijdstip==None: 
-        #     tijdstip= "onbekend"
-        # else: tijdstip= request.POST.get('tijdstip')
         if plandatum==None:
             plantdatum="onbekend"
         else:plandatum=room.datum
         omschrijving="" #plandatum +'; ' + tijdstip + '; ' + topic_name
-        # print(plandatum,tijdstip)
-        # room.pub_time =tijdstip # "11:11:11" #request.POST.get('tijdstip')
         room.topic = topic
         room.description = topic_name +'; ' + plandatum #request.POST.get('description')
         room.save()

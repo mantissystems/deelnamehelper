@@ -50,9 +50,11 @@
           </li>
           {% for topic in topics %}
           <li>
-            <a href="{%url 'erv-home' %}?q={{topic.name}}"
-              >{{topic.name}} {{topic.datum}} <span>{{topic.lid.count}} </span></a
-            >
+            <!-- <a href="{%url 'erv-home' %}?q={{topic.name}}"
+              >{{topic.name}} {{topic.datum}} <span>{{topic.room.count}} </span></a
+            > -->
+            <!-- <a href="{%url 'erv-home' %}?q={{topic.name}}">{{topic.name}} <span>{{topic.flexevent_set.count}} </span></a> -->
+            <a href="{% url 'erv-home' %}?q={{topic.name}}">{{ topic.name }} <span>{{topic.flexevent_set.all.count}}</span></a>
           </li>
 
           {% endfor %}

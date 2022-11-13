@@ -7,7 +7,7 @@
     <ul>
       {% for room in events %}
       <li>
-        {{room.datum}}: 
+        {{room.topic}}: 
         {{room.lid.count}} 
       </li>
       {% endfor %}
@@ -17,7 +17,7 @@
     <ul>
       <hr>
       <li>|sc1: {{sc1.pos1.count}} |sc2: {{sc2.count}}|st2: {{st2.count}} </li>
-      <li>|sc1: {{sc1.count}}  </li>
+      <!-- <li>|sc1: {{sc1.count}}  </li> -->
       <li>|sc2: {{sc2.count}} </li>
       <li>|st2: {{st2.count}} </li>
       {% endif %}

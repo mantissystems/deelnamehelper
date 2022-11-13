@@ -86,8 +86,6 @@ class Flexevent(models.Model):
     pub_date = models.CharField(max_length=35)
     datum = models.DateField(auto_now=False)
     pub_time = models.CharField(max_length=35, default='10:00')
-    # flexhost = models.CharField(max_length=135, default='-')
-    # lid = models.ManyToManyField(User,through='Flexlid')  ##, on_delete=models.SET_NULL, null=True)
     lid = models.ManyToManyField(User, related_name='deelnemer', blank=True)
     created = models.DateTimeField(default=datetime.now, blank=True)
 
