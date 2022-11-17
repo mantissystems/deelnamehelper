@@ -21,8 +21,8 @@ SCULL = [
 DVDW = [
             ('--', '--'),
             ('0', 'maandag'),
-            ('ma-wo', 'ma-wo'),
-            ('ma-wo-vr', '0,3,4'),
+            ('1', 'ma-wo'),
+            ('0,3,4', 'ma-wo-vr'),
 ]
 TIJDBLOK = [
             ('--', '--'),

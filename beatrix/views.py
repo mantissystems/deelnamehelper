@@ -881,7 +881,9 @@ def erv_recurrentRoom(request,pk):
     if request.method == 'POST':
         topic_name = request.POST.get('topic')
     if form.is_valid():
+
             form.save()
+            print(form)
             return redirect('erv-home',) # pk=user.id)
 
     context = {'form': form, 'topics': topic, 'room': room}
@@ -919,9 +921,20 @@ def maak_activiteiten():
     # de dagen zijn verdeeld in o en m en iederee o of m in twee blokken van 2 uur beginnend om 09 en om 13
     #0=monday
     #6=sunday
+    instellingen = Recurrent.objects.all().first()
     dagnaam=datetime.datetime.now().strftime('%A')
     weekdag=datetime.datetime.now().strftime('%w')
     dagnummer=int(weekdag)
+    # model._meta.get_all_field_names()     will give you all the model's field names, then you can use 
+    # dvdw=Recurrent._meta.get_field('dagvandeweek') #to work your way to the verbose name, and 
+    blok=getattr(instellingen, 'blok') #to get the value from the model.
+    dvdw=getattr(instellingen, 'dagvandeweek')
+    bool0=getattr(instellingen, 'verwijder_oude_flexevents')
+    bool1=getattr(instellingen, 'verwijder_oude_onderwerpen')
+    bool2=getattr(instellingen, 'resetsequence')
+    trw=getattr(instellingen, 'trainingsweken')
+    print(blok,dvdw,trw,bool0,bool1,bool2)
+    # return
     maak_alle_users_lid=False
     verwijder_oude_flexevents=True
     verwijder_oude_onderwerpen=False
@@ -936,7 +949,7 @@ def maak_activiteiten():
     trainingsweken=4 #kijk 4 weken vooruit - eigenlijk 45 trainingsweken
     user=User.objects.all().first()         ## -- de beheerder en superuser
     onderwerp='flexroeien: '
-    week=[1,2,3,4,5,6,7] #,8,9,10,11,12,13,14]
+    week=[1,2,3,4,5,6,7,8] #,8,9,10,11,12,13,14]
     dagvandeweek=['maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag','zondag','7----','8====''maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag','zondag','16----','17====']
     blok=[0,1,2]                              #ochtend middag
     tijdblok=[' 09:00',' 13:00',' 17:30',' 09:00',' 13:00',' 17:30',' 09:00',' 13:00',' 17:30']   # 1x ochtend 2x middag
@@ -953,20 +966,22 @@ def maak_activiteiten():
                 try:
                     start=date(year,month,i)
                 except ValueError:
-                    start=date(year,month+1,i)
+                    start=date(year,month,i)
+                    print(' == error == ',i,w,start)
                     continue
-                if date(year,month,i).weekday() in (2,4):     #alleen woensdagen en vrijdagen
+                # if date(year,month,i).weekday() in (2,4):     #alleen woensdagen en vrijdagen
+                if date(year,month,i).weekday() in blok:     #alleen woensdagen en vrijdagen
                     print(i,w,dagvandeweek[i] + tijdblok[d])
                     topic_name = onderwerp + tijdblok[d]
                     topic, created = Topic.objects.update_or_create(name=topic_name)
                     Flexevent.objects.all().update_or_create(
-                    event_text=dagvandeweek[w] + tijdblok[d],
+                    event_text=dagvandeweek[i] + tijdblok[d],
                     name=dagvandeweek[w] + tijdblok[d],
                     description=dagvandeweek[i] + tijdblok[d] , 
                     created=date(year,month,i ),
                     pub_time=tijdblok[d],
-                    datum=date(year,month,w),
-                    pub_date=date(year,month,w),
+                    datum=date(year,month,i),
+                    pub_date=date(year,month,i),
                     host=user,
                     topic=topic,
             )
