@@ -22,7 +22,8 @@
           </a>
           <h3>FlexEvent “{{event.datum|date:"d D M Y"}}“</h3>
         </div>
-        {% if event.host == request.user %}
+        {# <!-- {% if event.host == request.user %} --> #}
+        {% if event.host == event.host %}
         <div class="room__topRight">
           <a href="{% url 'erv-update-room' event.id %}">
             <svg

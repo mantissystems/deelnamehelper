@@ -30,9 +30,10 @@ recurrent_event,
 registerPage, room, 
 topicsPage, updateRoom, updateUser, userProfile,
 vote, 
+erv_recurrentRoom,
 DetailView,
 aantalregels,
-vote2,
+# vote2,
 )
 
 urlpatterns = [
@@ -65,6 +66,7 @@ urlpatterns = [
     path('erv-update-user/', erv_updateUser, name="erv-update-user"),
 
     path('recurrent/', recurrent_event, name='recurrent'),
+    path('erv-recurrency/<str:pk>', erv_recurrentRoom, name='erv-recurrency'),
     path('<int:event_id>/aanmelden/',vote, name='vote'),  
     path('<int:event_id>/directaanmelden/',directvote, name='directvote'),  
     # path('<str:event_id>/<str:usr>/aanmelden/',vote2, name='vote2'),  

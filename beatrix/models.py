@@ -18,6 +18,19 @@ SCULL = [
             ('st2', 'st2'),
             ('st3', 'st3'),
 ]
+DVDW = [
+            ('--', '--'),
+            ('0', 'maandag'),
+            ('ma-wo', 'ma-wo'),
+            ('ma-wo-vr', '0,3,4'),
+]
+TIJDBLOK = [
+            ('--', '--'),
+            ('1','09:00'),
+            ('2','13:00'),
+            ('3','17:30'),
+]
+
 class Topic(models.Model):
     name = models.CharField(max_length=200)
 
@@ -119,6 +132,23 @@ class Bericht(models.Model):
 # python .\manage.py migrate
 class Flexrecurrent(models.Model):
     regels = models.CharField(max_length=18,default='30')
+
+class Recurrent(models.Model):
+    name = models.CharField(max_length=18,default='FlexibelRoeien')
+    start=models.CharField(max_length=18,default='30')
+    end=models.CharField(max_length=18,default='30')
+    trainingsweken=models.CharField(max_length=18,default='4')
+    onderwerp=models.CharField(max_length=18,default='flexroeien')
+    dagvandeweek = models.CharField(max_length=18, choices=DVDW,default='0') 
+    blok = models.CharField(max_length=18, choices=TIJDBLOK,default='1') 
+    verwijder_oude_flexevents=models.BooleanField(default=True)
+    resetsequence=models.BooleanField(default=True)
+    verwijder_oude_onderwerpen=models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.name
+
+
 
 class Instromer(models.Model):
     name = models.CharField(max_length=100)

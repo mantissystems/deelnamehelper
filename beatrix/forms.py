@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import Flexevent, Room,User
+from .models import Flexevent, Room,User,Recurrent
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -27,3 +27,9 @@ class UserForm(ModelForm):
         fields = '__all__'
         fields = ['username', 'email']        
         # fields = ['avatar', 'name', 'username', 'email', 'bio']        
+
+class RecurrentForm(ModelForm):
+    class Meta:
+        model = Recurrent
+        fields = '__all__'
+        exclude = ['start', 'end']

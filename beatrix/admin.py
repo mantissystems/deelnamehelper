@@ -2,11 +2,11 @@ from django.contrib import admin
 # from django.contrib.auth.admin import UserAdmin
 from .models import User
 from .models import Flexevent, Person, Topic
-from .models import Room, Message,Person,Instromer
+from .models import Room, Message,Person,Instromer,Recurrent
 
 # admin.site.register(UserAdmin)
 # admin.site.register(Room)
-# admin.site.register(Person)
+admin.site.register(Recurrent)
 admin.site.register(Topic)
 admin.site.register(Message)
 @admin.register(Person)

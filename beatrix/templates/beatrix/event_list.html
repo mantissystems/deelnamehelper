@@ -20,7 +20,7 @@
     {% if events %}
     <ul>
       {% for q in events %}
-      <li><a href="{% url 'beatrix:ploeg_aanwezig' poule.id %}"> {{ q.pub_date }} {{ q.dagnaam }} {{ q.pub_time }}  {{ q.event_text }}  HOSTS:  {{ q.flexhost }}, {{ q.flexhost2 }} {{q.flexpoule}} </a></li>        
+      <li><a href="{% url 'erv-room' q.id %}"> {{ q.pub_date }} {{ q.dagnaam }} {{ q.pub_time }}  {{ q.event_text }}  HOSTS:  {{ q.flexhost }}, {{ q.flexhost2 }} {{q.flexpoule}} </a></li>        
       {% endfor %}
     </ul>
 {% else %}
