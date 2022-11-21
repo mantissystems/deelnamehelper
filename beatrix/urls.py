@@ -1,5 +1,5 @@
 from django.urls import path
-
+from . import views
 from beatrix.views import( 
 AanmeldView,
 FlexeventsView,
@@ -78,5 +78,10 @@ urlpatterns = [
     path('api/aantalregels/', aantalregels,name='api-aantalregels'),    
     path('flexevent/<str:pk>/', activiteit,name='flexevent'),    
     path('flexeventbeheer', flexeventbeheer,name='flexeventbeheer'),    
+    path('topic-list/', views.topicList,name='topic-list'),    
+    path('topic-detail/<str:pk>/', views.topicDetail,name='topic-detail'),    
+    path('topic-update/<str:pk>/', views.topicUpdate,name='topic-update'),    
+    path('topic-create/', views.topicCreate,name='topic-create'),    
+    path('topic-delete/<str:pk>/', views.topicDelete,name='topic-delete'),    
     ]
 # https://docs.djangoproject.com/en/3.1/topics/http/urls/

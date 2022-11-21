@@ -16,11 +16,5 @@ class FlexrecurrentSerializer(serializers.ModelSerializer):
         fields='__all__'        
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Flexevent
+        model = Topic
         fields='__all__'                
-# class AlbumSerializer(serializers.ModelSerializer):
-#     tracks = serializers.StringRelatedField(many=True)
-
-#     class Meta:
-#         model = Album
-#         fields = ['album_name', 'artist', 'tracks']        

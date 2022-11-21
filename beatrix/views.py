@@ -998,12 +998,14 @@ def maak_activiteiten():
 @api_view(['GET'])
 def apiOverview(request):
     api_urls={
-    'api/':'api-overview',    
-    'api/person':'profiel en additionele roeiinformatie',    
-    'flexevents/':'aanmeldbeheer van een datum event',    
-    'flexevent/<nr>/':'GET en POST data van eventnummer in jsonformaat',    
-    'flexeventbeheer/':'GET en POST data',    
-
+        'api/':'api-overview',    
+        'api/person':'profiel en additionele roeiinformatie',    
+        # 'flexevents/':'aanmeldbeheer van een datum event',    
+        'Create':'/task-create/',    
+        'Update':'/task-update/<str:pk>/',    
+        'Delete':'/task-delete/<str:pk>/',    
+        'flexevent/<nr>/':'GET en POST data van eventnummer in jsonformaat',    
+        'flexeventbeheer/':'GET en POST data',    
     }
     # return JsonResponse("API BASE POINT",safe=False)
     return Response(api_urls)
@@ -1021,3 +1023,42 @@ def resetsequence(*args):
     tabel='beatrix_flexevent'
     sql="UPDATE sqlite_sequence SET seq =0 where name='" + tabel + "'"
     cursor.execute(sql)
+
+@api_view(['GET'])
+def topicList(request):
+    topics=Topic.objects.all()
+    serializer=TopicSerializer(topics,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def topicDetail(request,pk):
+    topics=Topic.objects.get(id=pk)
+    serializer=TopicSerializer(topics,many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def topicCreate(request):
+    serializer=TopicSerializer(data=request.data,many=False)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def topicUpdate(request,pk):
+    topic=Topic.objects.get(id=pk)
+    serializer=TopicSerializer(instance=topic, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def topicDelete(request,pk):
+    topic=Topic.objects.get(id=pk)
+    topic.delete()
+    # serializer=TopicSerializer(instance=topic, data=request.data)
+    # if serializer.is_valid():
+    #     serializer.save()
+
+    return Response('onderwerp verwijderd')    
