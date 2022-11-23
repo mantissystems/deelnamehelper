@@ -83,5 +83,8 @@ urlpatterns = [
     path('topic-update/<str:pk>/', views.topicUpdate,name='topic-update'),    
     path('topic-create/', views.topicCreate,name='topic-create'),    
     path('topic-delete/<str:pk>/', views.topicDelete,name='topic-delete'),    
+    path('event-create/', views.eventCreate,name='event-create'),    
+    path('event-list/', views.eventList,name='event-list'),    
+    path('event-delete/<str:pk>/', views.eventDelete,name='event-delete'),    
     ]
 # https://docs.djangoproject.com/en/3.1/topics/http/urls/

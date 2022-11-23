@@ -25,7 +25,7 @@ from collections import namedtuple
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from beatrix.serializers import FlexrecurrentSerializer, PersoonSerializer, TopicSerializer 
+from beatrix.serializers import FlexeventSerializer, FlexrecurrentSerializer, PersoonSerializer, TopicSerializer 
 from .models import Bericht, Flexrecurrent, Message, Room, Topic
 from .forms import RecurrentForm, RoomForm,UserForm, erv_RoomForm
 
@@ -1000,12 +1000,11 @@ def apiOverview(request):
     api_urls={
         'api/':'api-overview',    
         'api/person':'profiel en additionele roeiinformatie',    
-        # 'flexevents/':'aanmeldbeheer van een datum event',    
-        'Create':'/task-create/',    
-        'Update':'/task-update/<str:pk>/',    
-        'Delete':'/task-delete/<str:pk>/',    
-        'flexevent/<nr>/':'GET en POST data van eventnummer in jsonformaat',    
-        'flexeventbeheer/':'GET en POST data',    
+    'topic-list/': 'topic-list',    
+    'topic-detail/<str:pk>/': 'topic-detail',    
+    'topic-update/<str:pk>/': 'topic-update',    
+    'topic-create/':'topic-create',    
+    'topic-delete/<str:pk>/':'topic-delete',    
     }
     # return JsonResponse("API BASE POINT",safe=False)
     return Response(api_urls)
@@ -1039,6 +1038,7 @@ def topicDetail(request,pk):
 @api_view(['POST'])
 def topicCreate(request):
     serializer=TopicSerializer(data=request.data,many=False)
+    print(serializer)
     if serializer.is_valid():
         serializer.save()
 
@@ -1060,5 +1060,24 @@ def topicDelete(request,pk):
     # serializer=TopicSerializer(instance=topic, data=request.data)
     # if serializer.is_valid():
     #     serializer.save()
-
     return Response('onderwerp verwijderd')    
+
+@api_view(['POST'])
+def eventCreate(request):
+    serializer=FlexeventSerializer(data=request.data,many=False)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def eventList(request):
+    events=Flexevent.objects.all()
+    serializer=FlexeventSerializer(events,many=True)
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def eventDelete(request,pk):
+    event=Flexevent.objects.get(id=pk)
+    event.delete()
+    return Response('flexevent verwijderd')    
