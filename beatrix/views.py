@@ -132,7 +132,7 @@ def erv_home(request):
     try:
         gebruiker=User.objects.get(id=request.user.id) ## request.user
     except:
-        messages.error(request, '.U bent niet ingelogd waardoor detail-gegevens niet worden getoond')
+        # messages.error(request, '.U bent niet ingelogd waardoor detail-gegevens niet worden getoond')
         messages.error(request, ".U kunt via 'Login' registreren of inloggen")
 
         

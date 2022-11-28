@@ -1,9 +1,8 @@
-{% for room in events %}
+{% for room in eventssss %}
 <div class="roomListRoom">
-  <div class="roomListRoom__header">
+ <!--  <div class="roomListRoom__header">
     <a href="{% url 'erv-user-profile' room.host.id %}" class="roomListRoom__author">
       <div class="avatar avatar--small">
-        <img src="{{room.host.avatar.url}}" />
       </div>
       <span>host: {{room.host.username}}</span>
     </a>
@@ -12,17 +11,17 @@
       {% csrf_token %}
 
       <div class="roomListRoom__actions">
-        <!-- Rounded switch -->
+        Rounded switch
         <label class="switch">
           <input type="checkbox" name="aanmelding" value="{{ request.user.id}}">
           <span class="slider round"></span>
         </label>
         <input type="submit" value="Meld Aan ">
 
-        <!-- <span>{{room.datum|timesince}} geleden</span> -->
+         <span>{{room.datum|timesince}} geleden</span> -->
       </div>
     </form>
-  </div>
+  </div> 
   <div class="roomListRoom__content">
     
     <a href="{% url 'erv-room' room.id %}">{{room.name}}: {{room.datum|date:"d D M Y"}} -- {{room.pub_time}} </a>

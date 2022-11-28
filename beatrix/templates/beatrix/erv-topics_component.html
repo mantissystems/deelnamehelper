@@ -5,10 +5,9 @@
   <ul class="topics__list">
     <li>
       <a href="{% url 'erv-home' %}" class="active"
-        >Alle <span>{{room_count}}</span></a
-      >
+       >Alle <span>{{room_count}}</span></a >
 
-    {% for topic in topics %}
+    {% for topic in topicssss %}
     <li>
       <a href="{% url 'erv-home' %}?q={{topic.name}}">{{ topic.name }} <span>{{topic.flexevent_set.all.count}}</span></a>
 
