@@ -1081,3 +1081,9 @@ def eventDelete(request,pk):
     event=Flexevent.objects.get(id=pk)
     event.delete()
     return Response('flexevent verwijderd')    
+
+@api_view(['GET', 'POST'])
+def getNote(request,pk):
+    notes = Flexevent.objects.get(id=pk)
+    serializer = FlexeventSerializer(notes, many=False)
+    return Response(serializer.data)
