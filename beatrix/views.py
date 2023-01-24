@@ -9,11 +9,12 @@ from django.contrib.sessions.models import Session
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse,reverse_lazy
-from beatrix.models import( Flexevent,Flexlid,
+from beatrix.models import( Flexevent,Flexlid,Note,
 Person,Recurrent,)
 
 from django.views.generic import(ListView,UpdateView,DetailView)
 from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -25,7 +26,7 @@ from collections import namedtuple
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from beatrix.serializers import FlexeventSerializer, FlexrecurrentSerializer, PersoonSerializer, TopicSerializer 
+from beatrix.serializers import FlexeventSerializer, FlexrecurrentSerializer, PersoonSerializer, TopicSerializer ,NoteSerializer
 from .models import Bericht, Flexrecurrent, Message, Room, Topic
 from .forms import RecurrentForm, RoomForm,UserForm, erv_RoomForm
 
@@ -1062,11 +1063,62 @@ def topicDelete(request,pk):
     #     serializer.save()
     return Response('onderwerp verwijderd')    
 
+
+
 @api_view(['POST'])
 def eventCreate(request):
-    serializer=FlexeventSerializer(data=request.data,many=False)
-    if serializer.is_valid():
-        serializer.save()
+    #  data = request.data
+#     note = Note.objects.create(
+#     )
+    data = request.data
+    print(request)
+    note = Note.objects.create(
+    body=data['body'])
+   
+    serializer = FlexeventSerializer(note, many=False)
+    return Response(serializer.data)
+
+    # body=data['body']
+    # body=getattr(data, 'body')
+    user=User.objects.all().first()         ## -- de beheerder en superuser
+    topic=Topic.objects.all().first()
+    year=2023
+    month=1
+    dagvandeweek='maandag'
+    tijdblok='9-12'
+    i=23
+    note = Flexevent.objects.create(
+    event_text=dagvandeweek + tijdblok,
+    name=dagvandeweek + tijdblok,
+    description='dagvandeweek[i] + tijdblok[d] ', 
+    pub_time=tijdblok,
+    datum=date(year,month,i),
+    pub_date=date(year,month,i),
+    host=user,
+    topic=topic,
+    )
+    serializer = FlexeventSerializer(note, many=False)
+    return Response(serializer.data)
+
+# def createNote(request):
+#     data = request.data
+#     note = Note.objects.create(
+#         body=data['body']
+#     )
+#     serializer = NoteSerializer(note, many=False)
+#     return Response(serializer.data)
+
+@api_view(['POST'])
+def eventCreate_org(request):
+    data = request.data
+    print(data)
+    note = Flexevent.objects.create(
+        # event_text=data['event_text']
+    )
+    serializer=FlexeventSerializer(note,many=False)
+
+    # if serializer.is_valid():
+    #     serializer.save()
 
     return Response(serializer.data)
 
@@ -1076,6 +1128,15 @@ def eventList(request):
     serializer=FlexeventSerializer(events,many=True)
     return Response(serializer.data)
 
+@api_view(['GET','POST'])
+def findNote(request,find):
+    print(request,find)
+    notes = Flexevent.objects.all().order_by('-updated')
+    if find is not None:
+        notes = Flexevent.objects.filter(event_text__icontains=find).order_by('-updated')
+    serializer = FlexeventSerializer(notes, many=True)
+    return Response(serializer.data)
+
 @api_view(['DELETE'])
 def eventDelete(request,pk):
     event=Flexevent.objects.get(id=pk)
@@ -1083,7 +1144,59 @@ def eventDelete(request,pk):
     return Response('flexevent verwijderd')    
 
 @api_view(['GET', 'POST'])
-def getNote(request,pk):
-    notes = Flexevent.objects.get(id=pk)
-    serializer = FlexeventSerializer(notes, many=False)
+def getNotes(request):
+
+    if request.method == 'GET':
+        return getNotesList(request)
+
+    if request.method == 'POST':
+        return createNote(request)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def getNote(request, pk):
+
+    if request.method == 'GET':
+        return getNoteDetail(request, pk)
+
+    if request.method == 'PUT':
+        return updateNote(request, pk)
+
+    if request.method == 'DELETE':
+        return deleteNote(request, pk)
+def getNotesList(request):
+    notes = Note.objects.all().order_by('-updated')
+    serializer = NoteSerializer(notes, many=True)
     return Response(serializer.data)
+
+
+def getNoteDetail(request, pk):
+    notes = Note.objects.get(id=pk)
+    serializer = NoteSerializer(notes, many=False)
+    return Response(serializer.data)
+
+@csrf_exempt
+def createNote(request):
+    data = request.data
+    note = Note.objects.create(
+        body=data['body'],
+        host='wb'
+    )
+    serializer = NoteSerializer(note, many=False)
+    return Response(serializer.data)
+@csrf_exempt
+def updateNote(request, pk):
+    data = request.data
+    note = Note.objects.get(id=pk)
+    serializer = NoteSerializer(instance=note, data=data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return serializer.data
+
+@csrf_exempt
+def deleteNote(request, pk):
+    note = Note.objects.get(id=pk)
+    note.delete()
+    return Response('Note was deleted!')

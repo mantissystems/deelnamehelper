@@ -100,10 +100,13 @@ class Flexevent(models.Model):
     datum = models.DateField(auto_now=False)
     pub_time = models.CharField(max_length=35, default='10:00')
     lid = models.ManyToManyField(User, related_name='deelnemer', blank=True)
-    created = models.DateTimeField(default=datetime.now, blank=True)
+    body = models.TextField(null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "%s" % (self.event_text)               
+        return self.body[0:50]
+
 class Flexlid(models.Model):
     flexevent = models.ForeignKey(Flexevent, on_delete=models.CASCADE,null=True)
     member = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
@@ -155,3 +158,13 @@ class Instromer(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Note(models.Model):
+    body = models.TextField(null=True, blank=True)
+    host = models.CharField(max_length=200,default='wb')
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.body[0:50]
